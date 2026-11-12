@@ -1,0 +1,178 @@
+{
+ "engine_version": "1.0.0",
+ "gates": [
+  {
+   "id": "PRODUCTION_MEASURED",
+   "label": "Reliable measured production data",
+   "requirement": "The production channel is of the measured class, its metering is declared reliable enough, and the assessment window is sufficiently complete. Synthetic, modelled or unknown-origin production never passes outside a demonstration."
+  },
+  {
+   "id": "BASELINE_DOCUMENTED",
+   "label": "Baseline of documented origin",
+   "requirement": "The expected energy comes from a baseline whose method and source are declared."
+  },
+  {
+   "id": "DEVIATION_SIGNIFICANT",
+   "label": "Significant under-performance now",
+   "requirement": "In the assessment window the gap exceeds both the materiality threshold and the combined expanded uncertainty of baseline and metering."
+  },
+  {
+   "id": "SOILING_EVIDENCE_CREDIBLE",
+   "label": "Credible measured soiling evidence",
+   "requirement": "A direct soiling measurement (soiling station, clean/dirty reference pair, or equivalent) of the measured class, recent enough, showing a loss above the credibility floor and above its own uncertainty. A production gap is not soiling evidence."
+  },
+  {
+   "id": "SOILING_CONSISTENT_WITH_GAP",
+   "label": "Soiling measurement consistent with the production gap",
+   "requirement": "The measured soiling loss and the gap left after the other quantified factors agree within the tolerance."
+  },
+  {
+   "id": "NO_UNRESOLVED_TECHNICAL_ISSUE",
+   "label": "No unresolved technical issue",
+   "requirement": "No open outage, under-performing device, availability alert or unresolved fault record in the assessment window."
+  },
+  {
+   "id": "NO_CRITICAL_CONTRADICTION",
+   "label": "No critical contradiction in the evidence",
+   "requirement": "No pair of sources contradict each other in a way that changes the conclusion (for example an inspection finding clean modules while a sensor reports heavy soiling)."
+  },
+  {
+   "id": "RECOVERABLE_ENERGY_ESTIMATED",
+   "label": "Recoverable energy estimated from measured soiling",
+   "requirement": "Cleaning effectiveness and benefit horizon were supplied, and the estimate rests on the credible soiling measurement."
+  },
+  {
+   "id": "ECONOMICS_DECISION_GRADE",
+   "label": "Economic inputs complete and decision-grade",
+   "requirement": "Every cost item and the value of energy were supplied, and the value of energy is a selling price, an avoided purchase cost or an internal valuation - not a consumer-tariff stand-in."
+  },
+  {
+   "id": "ECONOMICS_PROFITABLE",
+   "label": "Cleaning profitable in the conservative case",
+   "requirement": "The net benefit is positive with the low recoverable-energy estimate and the high cost estimate."
+  }
+ ],
+ "principle": "A production gap is an observation, not a diagnosis. CLEAN_NOW requires every gate; anything less is INVESTIGATE or MONITOR.",
+ "rules": [
+  {
+   "applies_when": "Production data are not reliable measured data, or the baseline is not documented.",
+   "id": "R0",
+   "outcome": "INVESTIGATE",
+   "rationale": "Without trustworthy production and a known reference there is no gap to reason about."
+  },
+  {
+   "applies_when": "A technical issue is open in the assessment window.",
+   "id": "R1",
+   "outcome": "INVESTIGATE",
+   "rationale": "Its losses cannot be separated from soiling, and cleaning would not recover them."
+  },
+  {
+   "applies_when": "The evidence contains a critical contradiction.",
+   "id": "R2",
+   "outcome": "INVESTIGATE",
+   "rationale": "A decision resting on one of two contradicting sources would be arbitrary."
+  },
+  {
+   "applies_when": "Every one of the ten gates is passed.",
+   "id": "R3",
+   "outcome": "CLEAN_NOW",
+   "rationale": "Measured under-performance, explained by measured soiling, with nothing else open, and a cleaning that pays even in the conservative case."
+  },
+  {
+   "applies_when": "The deviation is significant, a material part of it is unexplained, and soiling is not credibly measured and consistent with it.",
+   "id": "R4",
+   "outcome": "INVESTIGATE",
+   "rationale": "A production gap alone does not prove soiling."
+  },
+  {
+   "applies_when": "Soiling is credibly measured and matches the deviation, but the recoverable energy or the economic inputs are not decision-grade.",
+   "id": "R5",
+   "outcome": "INVESTIGATE",
+   "rationale": "It cannot yet be shown that cleaning pays."
+  },
+  {
+   "applies_when": "None of the above: no significant deviation, a deviation explained by something cleaning does not change, or a cleaning that would not pay.",
+   "id": "R6",
+   "outcome": "MONITOR",
+   "rationale": "Nothing to act on now; the analysis is repeated after the review interval."
+  },
+  {
+   "applies_when": "A CLEAN_NOW result is re-checked independently against the gates and the provenance of its decisive evidence, and the check fails.",
+   "id": "INTERLOCK",
+   "outcome": "INVESTIGATE",
+   "rationale": "Defence in depth: a programming error in the rules must not be able to issue a cleaning order."
+  }
+ ],
+ "thresholds": [
+  {
+   "default": 2.0,
+   "description": "Coverage factor k applied to standard uncertainties (2 corresponds to about 95 %).",
+   "name": "coverage_factor"
+  },
+  {
+   "default": 0.9,
+   "description": "Minimum share of daylight intervals with both expected and actual data.",
+   "name": "min_data_completeness"
+  },
+  {
+   "default": 7,
+   "description": "Length of the most recent window describing the current state of the plant [days].",
+   "name": "assessment_window_days"
+  },
+  {
+   "default": 2.0,
+   "description": "A measured soiling loss below this is not treated as credible evidence [%].",
+   "name": "soiling_credibility_floor_pct"
+  },
+  {
+   "default": 7,
+   "description": "Maximum age of a spot soiling measurement relative to the period end [days].",
+   "name": "soiling_measurement_max_age_days"
+  },
+  {
+   "default": 3.0,
+   "description": "Allowed disagreement between the measured soiling loss and the gap it should explain [% points].",
+   "name": "consistency_tolerance_pct"
+  },
+  {
+   "default": 6.0,
+   "description": "Daily rainfall assumed to clean the array [mm] (Kimber et al. 2006 use about 6 mm).",
+   "name": "rain_cleaning_threshold_mm"
+  },
+  {
+   "default": 14,
+   "description": "Minimum dry spell before a downward trend is read as possible soiling [days].",
+   "name": "min_dry_days_for_trend"
+  },
+  {
+   "default": 0.99,
+   "description": "Availability below this in the assessment window counts as an open equipment issue.",
+   "name": "availability_alert_fraction"
+  },
+  {
+   "default": 0.9,
+   "description": "A device yielding less than this share of the fleet median is under-performing.",
+   "name": "device_underperformance_ratio"
+  },
+  {
+   "default": 0.02,
+   "description": "Actual energy below this share of expected energy, in daylight, marks an outage interval.",
+   "name": "outage_actual_fraction"
+  },
+  {
+   "default": 10.0,
+   "description": "Excess loss near sunrise or sunset over midday that suggests shading [% points].",
+   "name": "shading_edge_excess_pct"
+  },
+  {
+   "default": 3.0,
+   "description": "A level shift of the performance index larger than this is an abrupt change [% points].",
+   "name": "step_change_min_drop_pct"
+  },
+  {
+   "default": 1.0,
+   "description": "A quantified effect smaller than this share of expected energy is immaterial [%].",
+   "name": "factor_materiality_pct"
+  }
+ ]
+}

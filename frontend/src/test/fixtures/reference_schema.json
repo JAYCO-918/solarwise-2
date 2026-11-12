@@ -1,0 +1,340 @@
+{
+ "baseline_methods": [
+  "OPERATOR_SUPPLIED",
+  "PVGIS_TYPICAL_YEAR",
+  "TELEMETRY_MODEL",
+  "HISTORICAL_CLEAN_REFERENCE",
+  "ENGINEERING_MODEL",
+  "UNKNOWN"
+ ],
+ "energy_value_bases": [
+  "SELLING_PRICE",
+  "AVOIDED_PURCHASE_COST",
+  "INTERNAL_VALUATION",
+  "CONSUMER_TARIFF_PROXY"
+ ],
+ "evidence_types": [
+  "SOILING_MEASUREMENT",
+  "VISUAL_INSPECTION",
+  "INVERTER_FAULT",
+  "SHADING_OBSERVATION",
+  "CURTAILMENT_EVENT",
+  "GRID_OUTAGE",
+  "SENSOR_FAULT",
+  "CLEANING_EVENT",
+  "OTHER"
+ ],
+ "inspection_findings": [
+  "SOILING_HEAVY",
+  "SOILING_LIGHT",
+  "CLEAN",
+  "SHADING",
+  "EQUIPMENT_DAMAGE",
+  "NO_FINDING"
+ ],
+ "irradiance_planes": [
+  "POA",
+  "GHI"
+ ],
+ "limits": {
+  "max_columns": 200,
+  "max_rows": 400000
+ },
+ "metering_boundaries": [
+  "GRID_METER",
+  "INVERTER_AC",
+  "DC_COMBINER",
+  "UNKNOWN"
+ ],
+ "metrics": [
+  {
+   "column": "actual_energy_kwh",
+   "description": "AC energy delivered by the plant during the interval",
+   "dimension": "energy",
+   "maximum": null,
+   "metric": "actual_energy",
+   "minimum": 0.0,
+   "table": "production",
+   "unit": "kWh"
+  },
+  {
+   "column": "expected_energy_kwh",
+   "description": "Baseline (reference) energy for the interval",
+   "dimension": "energy",
+   "maximum": null,
+   "metric": "expected_energy",
+   "minimum": 0.0,
+   "table": "production",
+   "unit": "kWh"
+  },
+  {
+   "column": "baseline_irradiation_kwh_m2",
+   "description": "Irradiation assumed by a baseline that is not adjusted to actual irradiance",
+   "dimension": "irradiation",
+   "maximum": null,
+   "metric": "baseline_irradiation",
+   "minimum": 0.0,
+   "table": "production",
+   "unit": "kWh/m2"
+  },
+  {
+   "column": "availability_fraction",
+   "description": "Capacity-weighted share of the plant technically available",
+   "dimension": "ratio",
+   "maximum": 1.0,
+   "metric": "availability",
+   "minimum": 0.0,
+   "table": "production",
+   "unit": "fraction"
+  },
+  {
+   "column": "curtailed_energy_kwh",
+   "description": "Energy not produced because of grid curtailment, as logged",
+   "dimension": "energy",
+   "maximum": null,
+   "metric": "curtailed_energy",
+   "minimum": 0.0,
+   "table": "production",
+   "unit": "kWh"
+  },
+  {
+   "column": "soiling_ratio",
+   "description": "Output of a soiled reference device relative to a clean one (IEC 61724-1); 1 = clean",
+   "dimension": "ratio",
+   "maximum": 1.05,
+   "metric": "soiling_ratio",
+   "minimum": 0.0,
+   "table": "production",
+   "unit": "fraction"
+  },
+  {
+   "column": "poa_irradiation_kwh_m2",
+   "description": "In-plane (plane-of-array) irradiation during the interval",
+   "dimension": "irradiation",
+   "maximum": null,
+   "metric": "poa_irradiation",
+   "minimum": 0.0,
+   "table": "weather",
+   "unit": "kWh/m2"
+  },
+  {
+   "column": "ghi_kwh_m2",
+   "description": "Global horizontal irradiation during the interval",
+   "dimension": "irradiation",
+   "maximum": null,
+   "metric": "ghi",
+   "minimum": 0.0,
+   "table": "weather",
+   "unit": "kWh/m2"
+  },
+  {
+   "column": "ambient_temp_c",
+   "description": "Ambient air temperature (daylight mean preferred for daily data)",
+   "dimension": "temperature",
+   "maximum": 65.0,
+   "metric": "ambient_temp",
+   "minimum": -60.0,
+   "table": "weather",
+   "unit": "degC"
+  },
+  {
+   "column": "module_temp_c",
+   "description": "Module back-surface temperature (irradiance-weighted for daily data)",
+   "dimension": "temperature",
+   "maximum": 110.0,
+   "metric": "module_temp",
+   "minimum": -60.0,
+   "table": "weather",
+   "unit": "degC"
+  },
+  {
+   "column": "wind_speed_ms",
+   "description": "Wind speed",
+   "dimension": "speed",
+   "maximum": 75.0,
+   "metric": "wind_speed",
+   "minimum": 0.0,
+   "table": "weather",
+   "unit": "m/s"
+  },
+  {
+   "column": "relative_humidity_pct",
+   "description": "Relative humidity",
+   "dimension": "ratio",
+   "maximum": 100.0,
+   "metric": "relative_humidity",
+   "minimum": 0.0,
+   "table": "weather",
+   "unit": "percent"
+  },
+  {
+   "column": "precipitation_mm",
+   "description": "Precipitation depth during the interval",
+   "dimension": "precipitation",
+   "maximum": 500.0,
+   "metric": "precipitation",
+   "minimum": 0.0,
+   "table": "weather",
+   "unit": "mm"
+  },
+  {
+   "column": "actual_energy_kwh",
+   "description": "AC energy delivered by one device (inverter) during the interval",
+   "dimension": "energy",
+   "maximum": null,
+   "metric": "device_energy",
+   "minimum": 0.0,
+   "table": "production",
+   "unit": "kWh"
+  }
+ ],
+ "missing_values": "An empty cell (or JSON null) means 'not observed'. It is never read as zero and never interpolated.",
+ "provenance": [
+  {
+   "meaning": "Recorded by an instrument on the plant: revenue meter, inverter telemetry, pyranometer, reference cell, soiling station.",
+   "value": "MEASURED"
+  },
+  {
+   "meaning": "Computed by a model or taken from satellite or reanalysis products (PVGIS, NASA POWER, a performance simulation).",
+   "value": "MODELLED"
+  },
+  {
+   "meaning": "Generated artificially for demonstration or testing. It may imitate a measurement but describes no real plant.",
+   "value": "SYNTHETIC"
+  },
+  {
+   "meaning": "Origin not declared. Treated as the weakest class.",
+   "value": "UNKNOWN"
+  }
+ ],
+ "soiling_methods": [
+  {
+   "direct": true,
+   "value": "SOILING_STATION"
+  },
+  {
+   "direct": true,
+   "value": "CLEAN_REFERENCE_MODULE"
+  },
+  {
+   "direct": true,
+   "value": "STRING_COMPARISON"
+  },
+  {
+   "direct": true,
+   "value": "IV_CURVE"
+  },
+  {
+   "direct": true,
+   "value": "OPTICAL_SENSOR"
+  },
+  {
+   "direct": false,
+   "value": "VALIDATED_MODEL"
+  },
+  {
+   "direct": false,
+   "value": "VISUAL_ESTIMATE"
+  },
+  {
+   "direct": false,
+   "value": "UNSPECIFIED"
+  }
+ ],
+ "tracking_types": [
+  "FIXED",
+  "SINGLE_AXIS",
+  "DUAL_AXIS"
+ ],
+ "units": {
+  "area": {
+   "accepted": [
+    "m2",
+    "ha",
+    "km2"
+   ],
+   "canonical": "m2"
+  },
+  "energy": {
+   "accepted": [
+    "wh",
+    "kwh",
+    "mwh",
+    "gwh",
+    "j",
+    "kj",
+    "mj"
+   ],
+   "canonical": "kWh"
+  },
+  "irradiance": {
+   "accepted": [
+    "w/m2",
+    "kw/m2"
+   ],
+   "canonical": "W/m2"
+  },
+  "irradiation": {
+   "accepted": [
+    "wh/m2",
+    "kwh/m2",
+    "mj/m2",
+    "j/m2"
+   ],
+   "canonical": "kWh/m2"
+  },
+  "power": {
+   "accepted": [
+    "w",
+    "kw",
+    "mw",
+    "wp",
+    "kwp",
+    "mwp"
+   ],
+   "canonical": "kW"
+  },
+  "precipitation": {
+   "accepted": [
+    "mm",
+    "cm",
+    "in"
+   ],
+   "canonical": "mm"
+  },
+  "ratio": {
+   "accepted": [
+    "fraction",
+    "percent"
+   ],
+   "canonical": "fraction"
+  },
+  "speed": {
+   "accepted": [
+    "m/s",
+    "km/h"
+   ],
+   "canonical": "m/s"
+  },
+  "temperature": {
+   "accepted": [
+    "degc",
+    "k",
+    "degf"
+   ],
+   "canonical": "degC"
+  },
+  "volume": {
+   "accepted": [
+    "l",
+    "m3"
+   ],
+   "canonical": "m3"
+  }
+ },
+ "value_classifications": [
+  "OFFICIAL_REFERENCE",
+  "TECHNICAL_REFERENCE",
+  "USER_ASSUMPTION"
+ ]
+}

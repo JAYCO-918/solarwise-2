@@ -1,0 +1,102 @@
+[
+  {
+    "code": "BLK-01",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-02",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-03",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-04",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-05",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-06",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-07",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-08",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-09",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-10",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-11",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-12",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-13",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-14",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-15",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-16",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-17",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-18",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-19",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  },
+  {
+    "code": "BLK-20",
+    "capacity_kwp": 15000.0,
+    "kind": "INVERTER_BLOCK"
+  }
+]

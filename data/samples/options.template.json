@@ -1,0 +1,26 @@
+{
+  "cleaning": {
+    "cleaning_effectiveness": null,
+    "cleaning_effectiveness_low": null,
+    "cleaning_effectiveness_high": null,
+    "benefit_horizon_days": null,
+    "benefit_horizon_days_low": null,
+    "benefit_horizon_days_high": null,
+    "source_note": "REPLACE - why these values: past cleanings on this plant, contractor data, expected time to the next rain"
+  },
+  "economics": {
+    "currency": "DZD",
+    "energy_value_per_kwh": null,
+    "energy_value_basis": "SELLING_PRICE",
+    "energy_value_source": "REPLACE - the contract or decision the value is taken from",
+    "water_volume_m3": null,
+    "water_price_per_m3": null,
+    "labour_hours": null,
+    "labour_rate_per_hour": null,
+    "equipment_cost": null,
+    "operational_cost": null,
+    "downtime_cost": null,
+    "cost_uncertainty_pct": null,
+    "cost_source": "REPLACE - quotation or internal cost sheet"
+  }
+}

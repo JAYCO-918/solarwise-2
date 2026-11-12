@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>{{ doc.title }} - {{ doc.subtitle }}</title>
+<style>
+  :root { --ink:#16202b; --muted:#5b6876; --line:#d9dee5; --paper:#ffffff; --wash:#f4f6f8;
+          --clean:#0b6b4f; --investigate:#9a5a00; --monitor:#27507a; --sim:#7a1f1f; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--wash); color:var(--ink); font:14px/1.5 "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 32px 28px 56px; background:var(--paper); }
+  h1 { font-size: 22px; margin: 0 0 2px; letter-spacing: -0.01em; }
+  h2 { font-size: 16px; margin: 30px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  h3 { font-size: 14px; margin: 18px 0 6px; }
+  p { margin: 0 0 8px; } ul { margin: 0 0 10px; padding-left: 20px; } li { margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 18px; }
+  .banner { padding: 10px 14px; border: 1px solid var(--line); border-left-width: 6px; margin-bottom: 18px; font-weight: 600; }
+  .banner.sim { border-color: var(--sim); color: var(--sim); background: #fdf3f3; }
+  .decision { padding: 16px 18px; border: 1px solid var(--line); border-left: 8px solid var(--monitor); margin-bottom: 8px; }
+  .decision.CLEAN_NOW { border-left-color: var(--clean); } .decision.INVESTIGATE { border-left-color: var(--investigate); }
+  .decision .label { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+  .decision .tag { font: 600 11px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .note { color: var(--muted); font-size: 12.5px; }
+  table { width: 100%; border-collapse: collapse; margin: 0 0 6px; font-size: 13px; }
+  th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+  th { font-weight: 600; color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; }
+  .facts td:first-child { width: 34%; color: var(--muted); }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; }
+  footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+  @media print { body { background: #fff; } main { padding: 0; max-width: none; } h2 { break-after: avoid; } table { break-inside: auto; } tr { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{ doc.title }}</h1>
+  <div class="subtitle">{{ doc.subtitle }}</div>
+  <div class="banner{% if doc.simulated %} sim{% endif %}">{{ doc.banner }}</div>
+
+  <section class="decision {{ doc.decision }}">
+    <div class="tag">{% if doc.simulated %}Simulated decision{% else %}Decision{% endif %}</div>
+    <div class="label">{{ doc.decision_label }}</div>
+    <p>{{ doc.headline }}</p>
+    <p class="note">{{ doc.authorization_note }}</p>
+  </section>
+
+  <h2>Subject of the assessment</h2>
+  <table class="facts">
+    {% for name, value in doc.facts %}<tr><td>{{ name }}</td><td{% if 'SHA-256' in name %} class="mono"{% endif %}>{{ value }}</td></tr>{% endfor %}
+  </table>
+
+  <h2>Key figures</h2>
+  <table class="facts">
+    {% for name, value in doc.key_figures %}<tr><td>{{ name }}</td><td>{{ value }}</td></tr>{% endfor %}
+  </table>
+
+  {% for block in doc.blocks %}
+  <h2>{{ block.title }}</h2>
+  {% for paragraph in block.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+  {% if block.bullets %}<ul>{% for item in block.bullets %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+  {% endfor %}
+
+  {% for table in doc.tables %}
+  <h2>{{ table.title }}</h2>
+  <table>
+    <thead><tr>{% for column in table.columns %}<th>{{ column }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for row in table.rows %}<tr>{% for cell in row %}<td>{{ cell }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+  </table>
+  {% if table.note %}<p class="note">{{ table.note }}</p>{% endif %}
+  {% endfor %}
+
+  <h2>Diagnostic hypotheses</h2>
+  <p class="note">Each hypothesis is rated by the strength of the evidence for it (strong, moderate, weak, not supported, not evaluable). No probability is stated: the data do not support one.</p>
+  {% for block in doc.hypotheses %}
+  <h3>{{ block.title }}</h3>
+  {% for paragraph in block.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+  {% if block.bullets %}<ul>{% for item in block.bullets %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+  {% endfor %}
+
+  <h2>Explanation</h2>
+  {% for block in doc.explanation %}
+  <h3>{{ block.title }}</h3>
+  {% for paragraph in block.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+  {% if block.bullets %}<ul>{% for item in block.bullets %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+  {% endfor %}
+
+  <h2>Statements that apply to this document</h2>
+  <ul>{% for item in doc.disclaimers %}<li>{{ item }}</li>{% endfor %}</ul>
+
+  <footer>{{ doc.footer }}</footer>
+</main>
+</body>
+</html>

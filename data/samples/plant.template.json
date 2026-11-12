@@ -1,0 +1,22 @@
+{
+  "name": "REPLACE - name of your plant",
+  "capacity_dc_kwp": null,
+  "capacity_ac_kw": null,
+  "latitude": null,
+  "longitude": null,
+  "timezone": "Africa/Algiers",
+  "tracking": "FIXED",
+  "tilt_deg": null,
+  "azimuth_deg": null,
+  "module_temp_coeff_per_c": null,
+  "noct_c": null,
+  "system_loss_fraction": null,
+  "commissioning_date": null,
+  "annual_degradation_rate": null,
+  "is_demonstration": false,
+  "parameter_notes": {
+    "capacity_dc_kwp": "REPLACE - where the figure comes from, for example the as-built documentation with its revision and date",
+    "module_temp_coeff_per_c": "REPLACE - module datasheet reference",
+    "system_loss_fraction": "REPLACE - design study or commissioning test"
+  }
+}

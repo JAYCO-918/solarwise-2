@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --color-ink-50: #f4f7fa;
+  --color-ink-100: #e4eaf1;
+  --color-ink-200: #cdd7e2;
+  --color-ink-300: #a9b9ca;
+  --color-ink-400: #7f93a9;
+  --color-ink-500: #5f758d;
+  --color-ink-600: #485d74;
+  --color-ink-700: #364a5f;
+  --color-ink-800: #233547;
+  --color-ink-900: #13243a;
+  --color-ink-950: #0b1726;
+
+  --color-sun-50: #fffaeb;
+  --color-sun-100: #fff0c2;
+  --color-sun-200: #ffe08a;
+  --color-sun-300: #fbcb4b;
+  --color-sun-400: #f3b524;
+  --color-sun-500: #de9712;
+  --color-sun-600: #b9740b;
+  --color-sun-700: #8f560c;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-ink-900);
+    background: var(--color-ink-50);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  /* Tabular figures wherever numbers are compared. */
+  table,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-sun-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Marking of simulated results: visible without relying on colour alone. */
+  .simulated-stripes {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgb(124 58 237 / 0.1) 0,
+      rgb(124 58 237 / 0.1) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  html {
+    background: #fff;
+  }
+}

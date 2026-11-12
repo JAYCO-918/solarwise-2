@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SolarWise DZ - 5-minute pitch</title>
+<link rel="stylesheet" href="deck.css">
+</head>
+<body>
+<!--ICONS-->
+
+<!-- ============================================================ 1 · TITLE -->
+<section class="slide dark s1" data-name="Title" data-seconds="15">
+  <div class="bg"></div><div class="grid"></div>
+  <div class="lockup" style="left:72px; top:56px"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <h1 data-tx class="tx hero">Know why a solar plant<br>under-performs before<br>deciding to clean it.</h1>
+  <p data-tx class="tx lead">Decision support for photovoltaic plants in the Algerian south. It explains the production gap, then tells whether a cleaning is justified.</p>
+  <div class="pills">
+    <span class="pill lg clean"><svg class="i"><use href="#i-spray-can"/></svg>Clean now</span>
+    <span class="pill lg investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span>
+    <span class="pill lg monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span>
+  </div>
+  <p data-tx class="tx foot">Reference case: El Foulia, 300 MWp, Guemar (El Oued), Algeria.<br>Every figure shown from the demonstration is synthetic.</p>
+  <div class="browser">
+    <div class="bar"><i></i><i></i><i></i><span class="url">solarwise-dz · analysis · confirmed soiling</span></div>
+    <img src="assets/app-analysis.png" alt="The analysis page of SolarWise DZ: a simulated “Clean now” decision">
+  </div>
+  <aside class="notes">
+    <p class="cue">Introduce yourself in one sentence, then:</p>
+    <p>This is SolarWise DZ. It tells the operator of a solar plant why the plant is producing less than expected, before anyone decides to send the cleaning crews.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 2 · THE PROBLEM -->
+<section class="slide s2" data-name="The problem" data-seconds="35">
+  <div data-tx class="tx eyebrow nw">The problem</div>
+  <h2 data-tx class="tx title">Production is down 9 %.<br><span class="accent">Is it dust?</span></h2>
+  <p data-tx class="tx lead">In the Sahara, dust really does cut output. But heat, a fault, shading, curtailment or bad data give the same picture on the meter.</p>
+  <div class="stats">
+    <div class="stat"><div data-tx class="v nw">−8.4 %</div><div data-tx class="c">power after 8 weeks without cleaning, measured at Ouargla ¹</div></div>
+    <div class="stat"><div data-tx class="v nw">300 MWp</div><div data-tx class="c">El Foulia (El Oued), Algeria's largest solar plant, inaugurated in October 2026 ²</div></div>
+    <div class="stat"><div data-tx class="v nw">15,000 MW</div><div data-tx class="c">of solar capacity planned by Algeria for 2035 ²</div></div>
+  </div>
+  <div class="card meter">
+    <div data-tx class="lab nw">Actual against expected energy · last 7 days</div>
+    <div data-tx class="big nw">−9 %</div>
+    <div class="bars"><div class="bar exp">expected</div><div class="bar act">actual</div></div>
+    <div data-tx class="q nw">Six possible causes. One meter reading.</div>
+    <div class="chips">
+      <div class="chip first"><svg class="i"><use href="#i-wind"/></svg><span data-tx class="nw">Dust on the modules</span><b>?</b></div>
+      <div class="chip"><svg class="i"><use href="#i-thermometer-sun"/></svg><span data-tx class="nw">Heat</span><b>?</b></div>
+      <div class="chip"><svg class="i"><use href="#i-zap-off"/></svg><span data-tx class="nw">Inverter fault</span><b>?</b></div>
+      <div class="chip"><svg class="i"><use href="#i-sunrise"/></svg><span data-tx class="nw">Shading</span><b>?</b></div>
+      <div class="chip"><svg class="i"><use href="#i-unplug"/></svg><span data-tx class="nw">Grid curtailment</span><b>?</b></div>
+      <div class="chip"><svg class="i"><use href="#i-file-question-mark"/></svg><span data-tx class="nw">Missing or wrong data</span><b>?</b></div>
+    </div>
+  </div>
+  <div class="stakes band">
+    <div class="stake"><span class="ico"><svg class="i"><use href="#i-droplets"/></svg></span><p data-tx><b>Clean for the wrong reason:</b> water, labour and money are spent, and nothing is recovered.</p></div>
+    <div class="stake"><span class="ico"><svg class="i"><use href="#i-trending-down"/></svg></span><p data-tx><b>Wait when it really is dust:</b> energy is lost every day.</p></div>
+  </div>
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <p data-tx class="tx src">¹ Dida et al., Renewable and Sustainable Energy Reviews 124 (2020), field measurements at Ouargla. ² pv magazine France, 28 October 2026.</p>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>On the 26th of October, Algeria inaugurated El Foulia, its largest solar plant: 300 megawatts in El Oued. And in the Sahara, dust is real. At Ouargla, researchers measured 8 percent less power after only eight weeks without cleaning.</p>
+    <p>Now picture the control room. Production is 9 percent below expected. Is it dust? Maybe. But heat, an inverter fault, shading, grid curtailment or bad data look exactly the same on the meter.</p>
+    <p>Clean for the wrong reason, and you spend water and money for nothing. Wait when it really is dust, and you lose energy every day.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 3 · THE SOLUTION -->
+<section class="slide s3" data-name="The solution" data-seconds="35">
+  <div data-tx class="tx eyebrow nw">Our solution</div>
+  <h2 data-tx class="tx title nw">SolarWise DZ answers three questions, in order.</h2>
+  <p data-tx class="tx inputs nw">It reads production data, soiling measurements, maintenance logs, inspections and your own costs, each with its declared origin.</p>
+
+  <div class="card q" style="left:72px">
+    <span class="num">1</span>
+    <h3 data-tx class="nw">How much is missing?</h3>
+    <p data-tx>Actual energy against a documented baseline. The gap counts only when it exceeds the measurement uncertainty.</p>
+    <div class="out"><svg class="i"><use href="#i-arrow-right"/></svg><span data-tx class="nw">The gap, with its uncertainty</span></div>
+  </div>
+  <svg class="i chev" style="left:429px"><use href="#i-chevron-right"/></svg>
+  <div class="card q" style="left:464px">
+    <span class="num">2</span>
+    <h3 data-tx class="nw">Why?</h3>
+    <p data-tx>Each cause is quantified only from data that measure it: downtime, equipment, curtailment, soiling sensor. The rest stays “unexplained”.</p>
+    <div class="out"><svg class="i"><use href="#i-arrow-right"/></svg><span data-tx class="nw">The causes, with their evidence</span></div>
+  </div>
+  <svg class="i chev" style="left:821px"><use href="#i-chevron-right"/></svg>
+  <div class="card q" style="left:856px">
+    <span class="num">3</span>
+    <h3 data-tx class="nw">Does cleaning pay?</h3>
+    <p data-tx>The energy a cleaning would recover, at its value, against the full cost of cleaning. It must pay even in the conservative case.</p>
+    <div class="out"><svg class="i"><use href="#i-arrow-right"/></svg><span data-tx class="nw">The net benefit, from low to high</span></div>
+  </div>
+
+  <div class="answer band">
+    <div data-tx class="l">One answer,<br>with its reasons</div>
+    <div class="opt" style="left:290px"><span class="pill clean"><svg class="i"><use href="#i-spray-can"/></svg>Clean now</span><p data-tx>Every gate is passed: the cleaning is justified and it pays.</p></div>
+    <div class="opt" style="left:572px"><span class="pill investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span><p data-tx>Something is unknown, open or contradictory. Find out first.</p></div>
+    <div class="opt" style="left:854px"><span class="pill monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span><p data-tx>Nothing to act on now. The analysis is repeated later.</p></div>
+  </div>
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>SolarWise DZ answers three questions, in order.</p>
+    <p>One: how much is really missing, against a documented baseline and beyond the measurement uncertainty.</p>
+    <p>Two: why. Each cause is quantified only from data that actually measure it. What we cannot explain stays “unexplained”.</p>
+    <p>Three: does cleaning pay. The energy we would recover, against the full cost of cleaning.</p>
+    <p>The result is one of three answers: clean now, investigate, or monitor. Always with its reasons.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 4 · WHY: FROM EXPECTED TO ACTUAL -->
+<section class="slide s4" data-name="Why: the bridge" data-seconds="30">
+  <div data-tx class="tx eyebrow nw">Question 2 · Why?</div>
+  <h2 data-tx class="tx title">Every kilowatt-hour of the gap is accounted for,<br>or declared unexplained.</h2>
+
+  <div class="card chart">
+    <div class="ct">From expected to actual energy</div>
+    <div class="cs">Scenario “confirmed soiling”, 23 to 29 June 2026 · gap −0.99 GWh (−8.6 %)</div>
+    <span class="sim"><svg class="i"><use href="#i-flask-conical"/></svg>Simulated</span>
+    <div class="ax">GWh · axis starts at 9.9</div>
+    <div class="plot">
+      <div class="gl" style="bottom:16px"></div><div class="yl" style="bottom:9px">10.0</div>
+      <div class="gl" style="bottom:97px"></div><div class="yl" style="bottom:90px">10.5</div>
+      <div class="gl" style="bottom:177px"></div><div class="yl" style="bottom:170px">11.0</div>
+      <div class="gl" style="bottom:258px"></div><div class="yl" style="bottom:251px">11.5</div>
+
+      <div class="b tot" style="left:14px; bottom:0; height:266px"></div>
+      <div class="v" style="left:0; bottom:271px">11.55 GWh</div>
+      <div class="lv" style="left:110px; width:28px; bottom:265px"></div>
+
+      <div class="b loss" style="left:138px; bottom:262px; height:4px"></div>
+      <div class="v" style="left:124px; bottom:271px">−0.02 GWh<small>0.2 %</small></div>
+      <div class="lv" style="left:234px; width:28px; bottom:261px"></div>
+
+      <div class="b loss" style="left:262px; bottom:104px; height:158px"></div>
+      <div class="v in" style="left:248px; bottom:165px">−0.98 GWh<small>8.5 %</small></div>
+      <div class="lv" style="left:358px; width:28px; bottom:103px"></div>
+
+      <div class="b res" style="left:386px; bottom:103px; height:3px"></div>
+      <div class="v" style="left:372px; bottom:112px">+0.01 GWh<small>0.1 %</small></div>
+      <div class="lv" style="left:482px; width:28px; bottom:105px"></div>
+
+      <div class="b tot" style="left:510px; bottom:0; height:106px"></div>
+      <div class="v" style="left:496px; bottom:112px">10.56 GWh</div>
+
+      <div class="x" style="left:0">Expected</div>
+      <div class="x" style="left:124px">Equipment</div>
+      <div class="x" style="left:248px">Soiling<br>(measured)</div>
+      <div class="x" style="left:372px">Unexplained</div>
+      <div class="x" style="left:496px">Actual</div>
+    </div>
+  </div>
+
+  <div class="ev" style="top:192px"><div data-tx class="fig nw">8.5 %</div><p data-tx><b>Measured</b> by the soiling sensor. It is not deduced from the gap.</p></div>
+  <div class="rule" style="top:304px"></div>
+  <div class="ev" style="top:324px"><div data-tx class="fig nw">8.4 %</div><p data-tx><b>Left for soiling to explain</b> once the equipment losses are removed. The two agree.</p></div>
+  <div class="rule" style="top:436px"></div>
+  <div class="ev" style="top:456px"><div data-tx class="fig nw">0.1 %</div><p data-tx><b>Unexplained.</b> Nothing is hidden inside “soiling”.</p></div>
+  <div class="rule" style="top:556px"></div>
+  <p data-tx class="tx note">Sunshine and temperature are already inside the expected energy. Performance metrics follow IEC 61724-1.</p>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <p data-tx class="tx src">Synthetic demonstration scenario on the El Foulia reference case. It contains no measurement from any real plant.</p>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>Here is the second question, on a simulated case. Expected energy on the left, actual energy on the right.</p>
+    <p>The soiling sensor reads eight and a half percent. The loss left to explain, once equipment is removed, is eight point four. They agree. And only a tenth of a percent stays unexplained.</p>
+    <p>The key point: soiling is measured. It is never guessed from the gap.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 5 · TEN GATES -->
+<section class="slide s5" data-name="Ten gates" data-seconds="35">
+  <div data-tx class="tx eyebrow nw">Question 3 · The decision</div>
+  <h2 data-tx class="tx title nw">A cleaning order has to pass ten gates.</h2>
+
+  <div class="card gates">
+    <div class="grow"><div data-tx class="glab nw">The data</div><div class="gitems">
+      <div class="g"><span class="num">1</span><span data-tx>Reliable measured production data</span></div>
+      <div class="g"><span class="num">2</span><span data-tx>Baseline of documented origin</span></div></div></div>
+    <div class="grow"><div data-tx class="glab nw">The loss</div><div class="gitems">
+      <div class="g"><span class="num">3</span><span data-tx>Significant under-performance now, beyond the uncertainty</span></div></div></div>
+    <div class="grow"><div data-tx class="glab nw">The soiling</div><div class="gitems">
+      <div class="g"><span class="num">4</span><span data-tx>Credible measured soiling evidence</span></div>
+      <div class="g"><span class="num">5</span><span data-tx>Soiling consistent with the production gap</span></div></div></div>
+    <div class="grow"><div data-tx class="glab nw">Nothing else</div><div class="gitems">
+      <div class="g"><span class="num">6</span><span data-tx>No unresolved technical issue</span></div>
+      <div class="g"><span class="num">7</span><span data-tx>No critical contradiction in the evidence</span></div></div></div>
+    <div class="grow"><div data-tx class="glab nw">The money</div><div class="gitems">
+      <div class="g"><span class="num">8</span><span data-tx>Recoverable energy estimated</span></div>
+      <div class="g"><span class="num">9</span><span data-tx>Complete economic inputs</span></div>
+      <div class="g"><span class="num">10</span><span data-tx>Profitable in the conservative case</span></div></div></div>
+  </div>
+
+  <div class="verdict band">
+    <div data-tx class="n nw">10 of 10</div>
+    <div class="p1"><span class="pill lg clean"><svg class="i"><use href="#i-spray-can"/></svg>Clean now</span></div>
+    <p data-tx class="t1">Measured loss, explained by measured soiling, nothing else open, and a cleaning that pays.</p>
+    <hr>
+    <div data-tx class="l nw">Anything less</div>
+    <div class="p2"><span class="pill investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span><span class="pill monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span></div>
+    <p data-tx class="t2">A gate that cannot be evaluated counts as not passed.</p>
+  </div>
+
+  <div class="guar" style="left:72px"><svg class="i"><use href="#i-list-checks"/></svg><span data-tx class="nw">Explicit rules: same data, same answer.</span></div>
+  <div class="guar" style="left:420px"><svg class="i"><use href="#i-history"/></svg><span data-tx class="nw">Every result is stored as issued.</span></div>
+  <div class="guar" style="left:716px"><svg class="i"><use href="#i-shield-check"/></svg><span data-tx class="nw">An independent interlock re-checks every “Clean now”.</span></div>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>Then comes the decision. A cleaning order has to pass ten gates: reliable measured data, a real loss, credible soiling evidence that matches this loss, nothing else open, and economics that hold in the conservative case.</p>
+    <p>Ten out of ten: clean now. Anything less: investigate, or monitor.</p>
+    <p>These are explicit rules, not a black box. Same data, same answer. And an independent check verifies every cleaning order a second time.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 6 · SAME SYMPTOM, DIFFERENT ANSWERS -->
+<section class="slide s6" data-name="Same symptom, different answers" data-seconds="40">
+  <div data-tx class="tx eyebrow nw">What it changes</div>
+  <h2 data-tx class="tx title nw">Six cases with the same 9 % drop. One cleaning order.</h2>
+
+  <div class="card case" style="left:72px; top:150px; --c:var(--teal-700)">
+    <div class="top"><div data-tx class="gap nw">−8.6 %</div><span class="pill clean"><svg class="i"><use href="#i-spray-can"/></svg>Clean now</span></div>
+    <h3 data-tx class="nw">Dust, measured</h3>
+    <p data-tx>The soiling sensor reads 8.5 %. It matches the gap, and the cleaning pays.</p>
+  </div>
+  <div class="card case" style="left:459px; top:150px; --c:var(--ink-500)">
+    <div class="top"><div data-tx class="gap nw">−8.9 %</div><span class="pill monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span></div>
+    <h3 data-tx class="nw">Heat</h3>
+    <p data-tx>Module temperature explains 91 % of the gap. Cleaning would change nothing.</p>
+  </div>
+  <div class="card case" style="left:846px; top:150px; --c:var(--amber-500)">
+    <div class="top"><div data-tx class="gap nw">−10.6 %</div><span class="pill investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div>
+    <h3 data-tx class="nw">Inverter fault</h3>
+    <p data-tx>Part of the plant is not producing. Repair first: cleaning would not recover it.</p>
+  </div>
+  <div class="card case" style="left:72px; top:356px; --c:var(--amber-500)">
+    <div class="top"><div data-tx class="gap nw">−9.2 %</div><span class="pill investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div>
+    <h3 data-tx class="nw">Morning shading</h3>
+    <p data-tx>The sensor shows a clean array and 8.7 % stays unexplained. Check on site.</p>
+  </div>
+  <div class="card case" style="left:459px; top:356px; --c:var(--ink-500)">
+    <div class="top"><div data-tx class="gap nw">−10.1 %</div><span class="pill monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span></div>
+    <h3 data-tx class="nw">Grid curtailment</h3>
+    <p data-tx>The grid limited the output. Cleaning would not bring that energy back.</p>
+  </div>
+  <div class="card case" style="left:846px; top:356px; --c:var(--amber-500)">
+    <div class="top"><div data-tx class="gap nw">−8.6 %</div><span class="pill investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div>
+    <h3 data-tx class="nw">Conflicting evidence</h3>
+    <p data-tx>An inspection reports heavy soiling, the sensor reads 1 %. Resolve it first.</p>
+  </div>
+
+  <p data-tx class="tx punch">A rule of thumb, “gap above 5 %: clean”,<br>would have sent the cleaning crews six times.</p>
+  <div class="simnote"><span class="sim"><svg class="i"><use href="#i-flask-conical"/></svg>Simulated</span><span data-tx class="t nw">Gap over the last 7 days of each scenario</span></div>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <p data-tx class="tx src">Synthetic demonstration scenarios on the El Foulia reference case. They contain no measurement from any real plant.</p>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>So what does it change? Here are six simulated cases, all with about nine percent less production. A simple threshold would clean six times.</p>
+    <p>SolarWise DZ says clean once: when the dust is measured and the cleaning pays.</p>
+    <p>Heat, or curtailment: cleaning changes nothing, so we monitor. An inverter fault: repair it first. Shading, or evidence that contradicts itself: investigate.</p>
+    <p>Five needless cleanings avoided. And each time, the operator knows what to do instead.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 7 · DOES CLEANING PAY? -->
+<section class="slide s7" data-name="Does cleaning pay?" data-seconds="30">
+  <div data-tx class="tx eyebrow nw">Does cleaning pay?</div>
+  <h2 data-tx class="tx title nw">Same cleaning cost. Opposite answers.</h2>
+
+  <div class="card eco" style="left:72px">
+    <div class="hd"><span class="ico" style="background:var(--sun-50); color:var(--sun-600); border:1px solid var(--sun-200)"><svg class="i"><use href="#i-sun"/></svg></span>
+      <div><h3 data-tx class="nw">Dry weeks ahead</h3><p data-tx>Soiling measured at 8.5 %.<br>Benefit counted over 30 days.</p></div></div>
+    <span class="pill clean"><svg class="i"><use href="#i-spray-can"/></svg>Clean now</span>
+    <div class="rows">
+      <div class="row"><div data-tx class="lb nw">Cost of the cleaning</div><div class="br"><i style="width:56px"></i><span data-tx class="nw">4.5 M DZD</span></div></div>
+      <div class="row"><div data-tx class="lb nw">Energy recovered</div><div class="br"><i class="rec" style="width:236px"></i><span data-tx class="nw">18.9 M DZD</span></div></div>
+    </div>
+    <div class="res"><div data-tx class="fig nw" style="color:var(--teal-700)">+14.4 M DZD</div><p data-tx><b>Net benefit.</b> Still +5.0 M DZD in the conservative case.</p></div>
+    <div class="gate"><svg class="i"><use href="#i-list-checks"/></svg><span data-tx class="nw"><b>10 gates of 10 passed.</b> The cleaning is justified.</span></div>
+  </div>
+
+  <div class="card eco" style="left:652px">
+    <div class="hd"><span class="ico" style="background:var(--sky-50); color:var(--sky-800); border:1px solid var(--sky-300)"><svg class="i"><use href="#i-cloud-rain"/></svg></span>
+      <div><h3 data-tx class="nw">Rain expected within days</h3><p data-tx>Soiling measured at 5.4 %.<br>Benefit counted over 3 days.</p></div></div>
+    <span class="pill monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span>
+    <div class="rows">
+      <div class="row"><div data-tx class="lb nw">Cost of the cleaning</div><div class="br"><i style="width:56px"></i><span data-tx class="nw">4.5 M DZD</span></div></div>
+      <div class="row"><div data-tx class="lb nw">Energy recovered</div><div class="br"><i class="rec" style="width:15px"></i><span data-tx class="nw">1.2 M DZD</span></div></div>
+    </div>
+    <div class="res"><div data-tx class="fig nw" style="color:var(--rose-700)">−3.3 M DZD</div><p data-tx><b>Net loss.</b> Still −1.1 M DZD in the optimistic case.</p></div>
+    <div class="gate"><svg class="i"><use href="#i-list-checks"/></svg><span data-tx class="nw"><b>9 gates of 10 passed.</b> Gate 10 fails: the cleaning does not pay.</span></div>
+  </div>
+
+  <div class="fine" style="left:72px"><svg class="i"><use href="#i-scale"/></svg><p data-tx>The test is conservative: low recoverable energy against high cost. The net benefit must stay positive.</p></div>
+  <div class="fine" style="left:464px"><svg class="i"><use href="#i-sliders-horizontal"/></svg><p data-tx>No price is built in. The operator enters water, labour, equipment, downtime and the value of a kWh.</p></div>
+  <div class="fine" style="left:856px"><svg class="i"><use href="#i-flask-conical"/></svg><p data-tx>Simulated scenarios with illustrative assumptions (5 DZD per kWh). These are not market prices.</p></div>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <p data-tx class="tx src">Synthetic demonstration scenarios on the El Foulia reference case. Benefit and cost in the base case, in Algerian dinars.</p>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>And even real dust does not always justify a cleaning. The cleaning cost is the same in both cases.</p>
+    <p>On the left, dry weeks ahead: the cleaning recovers about four times its cost. Clean now.</p>
+    <p>On the right, rain is expected within days: the cleaning would lose money. So we wait.</p>
+    <p>The prices are the operator's own: nothing is built in. The figures here are illustrative.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 8 · TRUST -->
+<section class="slide s8" data-name="Four rules" data-seconds="25">
+  <div data-tx class="tx eyebrow nw">Why you can trust the answer</div>
+  <h2 data-tx class="tx title nw">Four rules the software never breaks.</h2>
+
+  <div class="card rule4" style="left:72px; top:150px"><span class="ico"><svg class="i"><use href="#i-search"/></svg></span>
+    <div><h3 data-tx class="nw">A gap is not a diagnosis</h3><p data-tx>Lower production is an observation. It never proves soiling by itself.</p></div></div>
+  <div class="card rule4" style="left:652px; top:150px"><span class="ico"><svg class="i"><use href="#i-badge-check"/></svg></span>
+    <div><h3 data-tx class="nw">Every value has an origin</h3><p data-tx>Measured, modelled, synthetic or unknown: declared with the data and shown with every figure. Only measured data can justify a cleaning.</p></div></div>
+  <div class="card rule4" style="left:72px; top:320px"><span class="ico"><svg class="i"><use href="#i-list-checks"/></svg></span>
+    <div><h3 data-tx class="nw">Rules decide. AI only explains.</h3><p data-tx>A deterministic rule engine decides. An optional language model may only rephrase the explanation, and its text is checked against the engine's figures.</p></div></div>
+  <div class="card rule4" style="left:652px; top:320px"><span class="ico"><svg class="i"><use href="#i-circle-off"/></svg></span>
+    <div><h3 data-tx class="nw">Missing stays missing</h3><p data-tx>A value that was not observed is never replaced by zero and never interpolated.</p></div></div>
+
+  <div class="card proof">
+    <div data-tx class="c1 nw">In the application</div>
+    <p data-tx class="c2">Every decision shows the origin of the evidence it rests on.</p>
+    <img src="assets/app-evidence.png" alt="In the application: the evidence a decision rests on, each item with its origin">
+  </div>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>Why trust the answer? Because of four rules the software never breaks.</p>
+    <p>A gap is not a diagnosis. Every value carries its origin, and only measured data can justify a cleaning. Rules decide: an AI model may only rephrase the explanation. And a missing value stays missing: it is never replaced by zero.</p>
+    <p class="cue">If you are short of time, this is the slide to shorten: read the four titles only.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 9 · WHERE WE ARE -->
+<section class="slide s9" data-name="Where we are" data-seconds="25">
+  <div data-tx class="tx eyebrow nw">Where we are</div>
+  <h2 data-tx class="tx title nw">A working application, not a mock-up.</h2>
+
+  <div class="browser light-shadow">
+    <div class="bar"><i></i><i></i><i></i><span class="url">solarwise-dz · analysis · decision</span></div>
+    <img src="assets/app-decision.png" alt="The decision page of the application: decision, reasons, next steps and evidence">
+  </div>
+
+  <div class="st" style="top:142px"><div data-tx class="n nw">10</div><p data-tx><b>demonstration scenarios</b>, each one giving the decision it should</p></div>
+  <div class="st" style="top:242px"><div data-tx class="n nw">868</div><p data-tx><b>automated tests</b>: 788 on the engine and the API, 80 on the interface</p></div>
+  <div class="st" style="top:342px"><div data-tx class="n nw">43</div><p data-tx><b>API operations</b> behind a web interface, with accounts and roles</p></div>
+  <div class="st" style="top:442px"><div data-tx class="n nw">4</div><p data-tx><b>report formats</b>: PDF, HTML, CSV and JSON. Every result is stored as issued</p></div>
+  <div class="honest"><svg class="i"><use href="#i-flask-conical"/></svg><span data-tx>Validated on synthetic scenarios. It has not yet been run on the data of a real plant.</span></div>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>And this is a working application, not a mock-up. A web interface and an API. Ten demonstration scenarios. More than eight hundred automated tests. Reports in four formats.</p>
+    <p>We are also clear about its limit: so far, it has been validated on synthetic data only.</p>
+    <p class="cue">If you may show the live demonstration, do it here: open the demonstration, then the plant, then the analysis “Confirmed soiling”.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 10 · NEXT STEPS -->
+<section class="slide s10" data-name="Next steps and what we ask" data-seconds="25">
+  <div data-tx class="tx eyebrow nw">Next steps</div>
+  <h2 data-tx class="tx title nw">From demonstration to a pilot plant.</h2>
+
+  <div class="line"></div>
+  <div class="step" style="left:72px"><span class="num">1</span><h3 data-tx class="nw">Pilot</h3><p data-tx>Run on the real production exports of one plant.</p></div>
+  <div class="step" style="left:364px"><span class="num">2</span><h3 data-tx class="nw">Calibrate</h3><p data-tx>Tune thresholds and uncertainties with the operator's engineers.</p></div>
+  <div class="step" style="left:656px"><span class="num">3</span><h3 data-tx class="nw">Connect</h3><p data-tx>Soiling stations and weather feeds. The PVGIS and NASA POWER connectors are already built.</p></div>
+  <div class="step" style="left:948px"><span class="num">4</span><h3 data-tx class="nw">Scale</h3><p data-tx>More plants, an interface in Arabic and French, planning of cleaning campaigns.</p></div>
+
+  <div class="ask band">
+    <div data-tx class="cap nw" style="left:40px">What we are looking for</div>
+    <div data-tx class="a2">One plant's historical data, and an operator ready to test it with us.</div>
+    <div class="sep"></div>
+    <div data-tx class="cap nw" style="left:740px">What the operator gets</div>
+    <p data-tx class="b2">An evidence file for every cleaning decision: what was measured, what was assumed, and whether the cleaning pays.</p>
+  </div>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p>So the next step is a pilot. One plant's historical data, to calibrate the thresholds with its engineers. Then soiling stations, weather feeds, and more plants.</p>
+    <p>That is what we are looking for today: an operator ready to test it with us.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ 11 · CLOSE -->
+<section class="slide dark s1 s11" data-name="Close" data-seconds="5">
+  <div class="bg"></div><div class="grid"></div>
+  <div class="lockup" style="left:72px; top:56px"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <h2 data-tx class="tx big nw">Clean when the evidence says so.</h2>
+  <p data-tx class="tx sub nw">How much is missing. Why. Whether cleaning pays.</p>
+  <div class="pills">
+    <span class="pill lg clean"><svg class="i"><use href="#i-spray-can"/></svg>Clean now</span>
+    <span class="pill lg investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span>
+    <span class="pill lg monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span>
+  </div>
+  <p data-tx class="tx thanks nw">Thank you.</p>
+  <p data-tx class="tx foot nw">Demonstration on synthetic data · El Foulia reference case, 300 MWp, El Oued</p>
+  <aside class="notes">
+    <p>SolarWise DZ. Clean when the evidence says so. Thank you.</p>
+    <p class="cue">Leave this slide on the screen during the questions. The slides after it are backups.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ BACKUP 1 · THE RULES -->
+<section class="slide bk b1" data-backup data-name="Backup: the rules, in order" data-seconds="0">
+  <div data-tx class="tx eyebrow nw">Backup · The decision rules</div>
+  <h2 data-tx class="tx title nw">The rules are applied in this order. The first that applies decides.</h2>
+  <div class="card tbl">
+    <div class="tr th"><div data-tx class="nw">Rule</div><div data-tx class="nw">Applies when</div><div data-tx class="nw">Outcome</div><div data-tx class="nw">Why</div></div>
+    <div class="tr"><div data-tx class="id nw">R0</div><div data-tx class="tx1">Production data are not reliable measured data, or the baseline is not documented.</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2">Without trustworthy production and a known reference there is no gap to reason about.</div></div>
+    <div class="tr"><div data-tx class="id nw">R1</div><div data-tx class="tx1">A technical issue is open in the assessment window.</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2">Its losses cannot be separated from soiling, and cleaning would not recover them.</div></div>
+    <div class="tr"><div data-tx class="id nw">R2</div><div data-tx class="tx1">The evidence contains a critical contradiction.</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2">A decision resting on one of two contradicting sources would be arbitrary.</div></div>
+    <div class="tr"><div data-tx class="id nw">R3</div><div data-tx class="tx1">Every one of the ten gates is passed.</div><div><span class="pill sm clean"><svg class="i"><use href="#i-spray-can"/></svg>Clean now</span></div><div data-tx class="tx2">Measured loss, explained by measured soiling, nothing else open, and a cleaning that pays.</div></div>
+    <div class="tr"><div data-tx class="id nw">R4</div><div data-tx class="tx1">The deviation is significant and largely unexplained, and soiling is not credibly measured.</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2">A production gap alone does not prove soiling.</div></div>
+    <div class="tr"><div data-tx class="id nw">R5</div><div data-tx class="tx1">Soiling is measured and matches the deviation, but the economic inputs are not decision-grade.</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2">It cannot yet be shown that cleaning pays.</div></div>
+    <div class="tr"><div data-tx class="id nw">R6</div><div data-tx class="tx1">None of the above: no significant deviation, a cause that cleaning does not change, or a cleaning that would not pay.</div><div><span class="pill sm monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span></div><div data-tx class="tx2">Nothing to act on now. The analysis is repeated after the review interval.</div></div>
+    <div class="tr"><div data-tx class="id nw">Interlock</div><div data-tx class="tx1">A “Clean now” is checked a second time, independently, against the gates and the origin of its evidence, and the check fails.</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2">A programming error in the rules must not be able to issue a cleaning order.</div></div>
+  </div>
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <p data-tx class="tx src">Rule engine version 1.0.0. The same table is published by the application under “Rules and data”.</p>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p class="cue">Use it when someone asks “how exactly is the decision taken?” or “why not machine learning?”.</p>
+    <p>The rules are checked in this order, and the first that applies decides. Only rule R3 can order a cleaning, and it needs all ten gates. A second, independent check must agree before the order goes out.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ BACKUP 2 · HOW IT IS BUILT -->
+<section class="slide bk b2" data-backup data-name="Backup: how it is built" data-seconds="0">
+  <div data-tx class="tx eyebrow nw">Backup · Architecture</div>
+  <h2 data-tx class="tx title nw">From a file to a decision, in five steps.</h2>
+
+  <div class="card box" style="left:72px"><span class="ico"><svg class="i"><use href="#i-file-spreadsheet"/></svg></span><h3 data-tx class="nw">Data in</h3><p data-tx>CSV or JSON files. Each column is declared: unit, origin, source.</p></div>
+  <svg class="i arr" style="left:278px"><use href="#i-arrow-right"/></svg>
+  <div class="card box" style="left:306px"><span class="ico"><svg class="i"><use href="#i-clipboard-check"/></svg></span><h3 data-tx class="nw">Validation</h3><p data-tx>Units, gaps, duplicates, completeness. Missing stays missing.</p></div>
+  <svg class="i arr" style="left:512px"><use href="#i-arrow-right"/></svg>
+  <div class="card box" style="left:540px"><span class="ico"><svg class="i"><use href="#i-layers"/></svg></span><h3 data-tx class="nw">Engines</h3><p data-tx>Gap, attribution, diagnosis, recoverable energy, economics.</p></div>
+  <svg class="i arr" style="left:746px"><use href="#i-arrow-right"/></svg>
+  <div class="card box" style="left:774px"><span class="ico"><svg class="i"><use href="#i-list-checks"/></svg></span><h3 data-tx class="nw">Rule engine</h3><p data-tx>Ten gates, rules R0 to R6, and the safety interlock.</p></div>
+  <svg class="i arr" style="left:980px"><use href="#i-arrow-right"/></svg>
+  <div class="card box" style="left:1008px"><span class="ico"><svg class="i"><use href="#i-file-text"/></svg></span><h3 data-tx class="nw">Results</h3><p data-tx>Decision, explanation, reports in PDF, HTML, CSV and JSON.</p></div>
+
+  <div class="fact" style="top:366px"><div data-tx class="k nw">Built with</div><div data-tx class="t">Python, FastAPI, SQLAlchemy, PostgreSQL or SQLite · React, TypeScript, ECharts</div></div>
+  <div class="fact" style="top:432px"><div data-tx class="k nw">Optional connections</div><div data-tx class="t">PVGIS typical year, NASA POWER weather, a language model that rephrases the explanation. All can stay switched off.</div></div>
+  <div class="fact" style="top:498px"><div data-tx class="k nw">Access</div><div data-tx class="t">Sign-up, which can be switched off. Roles for each plant: owner, editor, viewer. Sign-ins and changes are recorded.</div></div>
+  <div class="fact" style="top:564px"><div data-tx class="k nw">Verified by</div><div data-tx class="t">788 tests on the engine and the API, 80 on the interface, static typing and linting on both sides.</div></div>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p class="cue">Use it for technical questions: stack, deployment, security.</p>
+    <p>A file goes in with a declaration of each column. It is validated, then five engines compute the gap, the causes, the diagnosis, the recoverable energy and the economics. The rule engine decides. The result is stored as issued and can be exported as a report.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ BACKUP 3 · THE TEN SCENARIOS -->
+<section class="slide bk b3" data-backup data-name="Backup: the ten demonstration scenarios" data-seconds="0">
+  <div data-tx class="tx eyebrow nw">Backup · Demonstration</div>
+  <h2 data-tx class="tx title nw">The ten demonstration scenarios and what the engine answers.</h2>
+  <div class="card tbl">
+    <div class="tr th"><div data-tx class="nw">#</div><div data-tx class="nw">Scenario</div><div data-tx class="nw">Gap, last 7 days</div><div data-tx class="nw">Decision</div><div data-tx class="nw">Rule and reason</div></div>
+    <div class="tr"><div data-tx class="id nw">1</div><div data-tx class="tx1 nw">Normal operation</div><div data-tx class="gapv nw">0.5 %</div><div><span class="pill sm monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span></div><div data-tx class="tx2 nw">R6 · production is in line with the baseline</div></div>
+    <div class="tr"><div data-tx class="id nw">2</div><div data-tx class="tx1 nw">Confirmed soiling</div><div data-tx class="gapv nw">8.6 %</div><div><span class="pill sm clean"><svg class="i"><use href="#i-spray-can"/></svg>Clean now</span></div><div data-tx class="tx2 nw">R3 · every gate is passed</div></div>
+    <div class="tr"><div data-tx class="id nw">3</div><div data-tx class="tx1 nw">Temperature effect</div><div data-tx class="gapv nw">8.9 %</div><div><span class="pill sm monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span></div><div data-tx class="tx2 nw">R6 · explained by a cause that cleaning does not address</div></div>
+    <div class="tr"><div data-tx class="id nw">4</div><div data-tx class="tx1 nw">Inverter fault</div><div data-tx class="gapv nw">10.6 %</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2 nw">R1 · a technical issue is open</div></div>
+    <div class="tr"><div data-tx class="id nw">5</div><div data-tx class="tx1 nw">Morning shading</div><div data-tx class="gapv nw">9.2 %</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2 nw">R4 · a significant loss is not explained</div></div>
+    <div class="tr"><div data-tx class="id nw">6</div><div data-tx class="tx1 nw">Grid curtailment</div><div data-tx class="gapv nw">10.1 %</div><div><span class="pill sm monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span></div><div data-tx class="tx2 nw">R6 · explained by a cause that cleaning does not address</div></div>
+    <div class="tr"><div data-tx class="id nw">7</div><div data-tx class="tx1 nw">Missing data</div><div data-tx class="gapv nw">6.5 %</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2 nw">R0 · the data are not sufficient to support a decision</div></div>
+    <div class="tr"><div data-tx class="id nw">8</div><div data-tx class="tx1 nw">Conflicting evidence</div><div data-tx class="gapv nw">8.6 %</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2 nw">R2 · the evidence contradicts itself</div></div>
+    <div class="tr"><div data-tx class="id nw">9</div><div data-tx class="tx1 nw">Synthetic data, no role declared</div><div data-tx class="gapv nw">8.6 %</div><div><span class="pill sm investigate"><svg class="i"><use href="#i-search"/></svg>Investigate</span></div><div data-tx class="tx2 nw">R0 · the production data are not measured data</div></div>
+    <div class="tr"><div data-tx class="id nw">10</div><div data-tx class="tx1 nw">Unprofitable cleaning</div><div data-tx class="gapv nw">5.8 %</div><div><span class="pill sm monitor"><svg class="i"><use href="#i-eye"/></svg>Monitor</span></div><div data-tx class="tx2 nw">R6 · soiling is measured, but cleaning now would cost more than it recovers</div></div>
+  </div>
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <p data-tx class="tx src">Synthetic scenarios, 1 May to 29 June 2026, generated from a fixed seed. Every decision is marked simulated in the application.</p>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p class="cue">Use it when someone asks what the demonstration contains, or wants to see a case you did not show.</p>
+    <p>Scenario 9 uses the same numbers as scenario 2, but the file does not say that they stand for measurements. The answer changes from “clean now” to “investigate”: data of unknown origin can never justify a cleaning.</p>
+  </aside>
+</section>
+
+<!-- ============================================================ BACKUP 4 · LIMITS -->
+<section class="slide bk b4" data-backup data-name="Backup: limits, stated plainly" data-seconds="0">
+  <div data-tx class="tx eyebrow nw">Backup · Limits</div>
+  <h2 data-tx class="tx title nw">What the solution does not do yet, stated plainly.</h2>
+
+  <div class="lim" style="top:146px"><span class="ico"><svg class="i"><use href="#i-flask-conical"/></svg></span><div><h3 data-tx class="nw">Tested on synthetic scenarios only</h3><p data-tx>No measurement from El Foulia or from any other plant has been used. The name, the location and the nominal capacity are public information; everything else is an illustrative assumption.</p></div></div>
+  <div class="lim" style="top:240px"><span class="ico"><svg class="i"><use href="#i-sliders-horizontal"/></svg></span><div><h3 data-tx class="nw">Thresholds are documented defaults</h3><p data-tx>The 7-day window, the 2 % floor for a credible soiling reading and the other thresholds must be calibrated with each operator.</p></div></div>
+  <div class="lim" style="top:334px"><span class="ico"><svg class="i"><use href="#i-gauge"/></svg></span><div><h3 data-tx class="nw">No direct soiling measurement, no cleaning order</h3><p data-tx>Without a soiling station, a clean reference module or an equivalent measurement, the answer is “Investigate”. This is by design.</p></div></div>
+  <div class="lim" style="top:428px"><span class="ico"><svg class="i"><use href="#i-trending-down"/></svg></span><div><h3 data-tx class="nw">The projections are not a validated forecast</h3><p data-tx>The application shows simple reference projections for orientation. They never enter a decision.</p></div></div>
+  <div class="lim" style="top:522px"><span class="ico"><svg class="i"><use href="#i-satellite-dish"/></svg></span><div><h3 data-tx class="nw">Weather services are context, not evidence</h3><p data-tx>PVGIS and NASA POWER data help to build a baseline. They do not measure the dust on the modules.</p></div></div>
+
+  <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
+  <div class="pageno"></div>
+  <aside class="notes">
+    <p class="cue">Use it when someone asks about real data, accuracy or validation. Saying these limits yourself is stronger than being asked.</p>
+    <p>We have not used real plant data yet: that is exactly what the pilot is for. And the software will never order a cleaning without a direct soiling measurement.</p>
+  </aside>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

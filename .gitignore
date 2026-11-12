@@ -1,0 +1,43 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+*.tsbuildinfo
+
+# Local runtime state (never commit databases, uploads or secrets)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+var/
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# presentation build
+presentation/.work/
+presentation/src/.build.html
+
+# browser checks
+frontend/e2e/shots/
+
+# Personal notes that are not part of the project
+private/

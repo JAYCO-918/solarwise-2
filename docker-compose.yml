@@ -1,0 +1,45 @@
+# SolarWise DZ with PostgreSQL.
+#
+#   cp .env.example .env      # then set SOLARWISE_SECRET_KEY and POSTGRES_PASSWORD in it
+#   docker compose up --build
+#   -> http://localhost:8000
+#
+# Both values are required; "docker compose" stops with a message when one is missing.
+name: solarwise
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: solarwise
+      POSTGRES_USER: solarwise
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U solarwise -d solarwise"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    # Not published: only the application reaches the database.
+
+  app:
+    build: .
+    image: solarwise-dz:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      SOLARWISE_ENVIRONMENT: production
+      SOLARWISE_SECRET_KEY: ${SOLARWISE_SECRET_KEY:?set SOLARWISE_SECRET_KEY in .env (at least 32 characters)}
+      # The password is part of a URL: use letters, digits, "-" and "_" only (see .env.example).
+      DATABASE_URL: postgresql+psycopg://solarwise:${POSTGRES_PASSWORD}@db:5432/solarwise
+    ports:
+      - "${SOLARWISE_PORT:-8000}:8000"
+
+volumes:
+  db-data:

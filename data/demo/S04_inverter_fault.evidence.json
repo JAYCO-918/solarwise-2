@@ -1,0 +1,28 @@
+[
+  {
+    "reference": "DEMO-FAULT-07",
+    "evidence_type": "INVERTER_FAULT",
+    "observed_start": "2026-06-14T07:00:00+01:00",
+    "tag": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for an inverter alarm log"
+    },
+    "description": "Inverter tripped and did not restart (synthetic record).",
+    "device_code": "BLK-07",
+    "resolved": false
+  },
+  {
+    "reference": "DEMO-FAULT-13",
+    "evidence_type": "INVERTER_FAULT",
+    "observed_start": "2026-06-14T07:00:00+01:00",
+    "tag": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for an inverter alarm log"
+    },
+    "description": "Inverter tripped and did not restart (synthetic record).",
+    "device_code": "BLK-13",
+    "resolved": false
+  }
+]

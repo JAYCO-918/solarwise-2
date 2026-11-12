@@ -1,0 +1,2505 @@
+{
+ "context": "DEMONSTRATION",
+ "created_at": "2026-07-01T08:00:00Z",
+ "dataset_id": 2,
+ "dataset_name": "Demo scenario - Confirmed soiling",
+ "dataset_sha256": "7932d4daf1be604a129dc67639bcade0876a038885e31778f9e8f576b318872d",
+ "decision": "CLEAN_NOW",
+ "diagnostic_status": "SINGLE_EXPLANATION",
+ "engine_version": "1.0.0",
+ "gap_pct": 4.695485253500727,
+ "headline": "SIMULATED DECISION - Clean now: measured soiling explains the loss and cleaning pays even in the conservative case. Not an operational instruction.",
+ "id": 2,
+ "operational_authorization": false,
+ "options": {
+  "baseline": {
+   "clean_reference_end": null,
+   "clean_reference_start": null,
+   "method": "AUTO",
+   "model_uncertainty_pct": null,
+   "pvgis_monthly": null,
+   "pvgis_source": null
+  },
+  "cleaning": {
+   "benefit_horizon_days": 30.0,
+   "benefit_horizon_days_high": 45.0,
+   "benefit_horizon_days_low": 21.0,
+   "cleaning_effectiveness": 0.9,
+   "cleaning_effectiveness_high": 0.98,
+   "cleaning_effectiveness_low": 0.8,
+   "projected_daily_clean_energy_kwh": null,
+   "source_note": "Illustrative demonstration assumption (no rain expected during the dry season)."
+  },
+  "economics": {
+   "cost_classification": "USER_ASSUMPTION",
+   "cost_source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+   "cost_uncertainty_pct": 20.0,
+   "currency": "DZD",
+   "downtime_cost": 0.0,
+   "downtime_energy_kwh": null,
+   "energy_value_basis": "INTERNAL_VALUATION",
+   "energy_value_classification": "USER_ASSUMPTION",
+   "energy_value_per_kwh": 5.0,
+   "energy_value_source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+   "equipment_cost": 1500000.0,
+   "labour_cost": null,
+   "labour_hours": 6000.0,
+   "labour_rate_per_hour": 400.0,
+   "operational_cost": 500000.0,
+   "water_cost": null,
+   "water_price_per_m3": 80.0,
+   "water_volume_m3": 1500.0
+  },
+  "period_end": null,
+  "period_start": null,
+  "thresholds": {
+   "assessment_window_days": 7,
+   "availability_alert_fraction": 0.99,
+   "consistency_tolerance_pct": 3.0,
+   "coverage_factor": 2.0,
+   "device_underperformance_ratio": 0.9,
+   "factor_materiality_pct": 1.0,
+   "gap_materiality_pct": 3.0,
+   "gap_severe_pct": 10.0,
+   "min_data_completeness": 0.9,
+   "min_dry_days_for_trend": 14,
+   "outage_actual_fraction": 0.02,
+   "rain_cleaning_threshold_mm": 6.0,
+   "shading_edge_excess_pct": 10.0,
+   "soiling_credibility_floor_pct": 2.0,
+   "soiling_measurement_max_age_days": 7,
+   "step_change_min_drop_pct": 3.0
+  }
+ },
+ "period_end": "2026-06-29",
+ "period_start": "2026-05-01",
+ "plant_id": 1,
+ "reason_code": "CLEANING_JUSTIFIED",
+ "result": {
+  "attribution": {
+   "cell_temperature_basis": {
+    "MEASURED_MODULE_TEMPERATURE": 60
+   },
+   "curtailment_capped_slots": 0,
+   "daily": [
+    {
+     "actual_kwh": 1554518.3,
+     "availability": 0.998,
+     "cell_temp_c": 50.72,
+     "curtailment_kwh": null,
+     "day": "2026-06-16",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3372.595000000003,
+     "expected_kwh": 1686297.5,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9237003358744638,
+     "poa_irradiation_kwh_m2": 7.1657,
+     "pre_soiling_expected_kwh": 1682924.905,
+     "precipitation_mm": 0.0,
+     "residual_kwh": 4038.4545205000322,
+     "soiling_kwh": 124368.15047949995,
+     "soiling_ratio": 0.9261,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1686297.5
+    },
+    {
+     "actual_kwh": 1512197.5,
+     "availability": 0.9979999999999999,
+     "cell_temp_c": 44.06999999999999,
+     "curtailment_kwh": null,
+     "day": "2026-06-17",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3263.455400000003,
+     "expected_kwh": 1631727.7,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9286034403361687,
+     "poa_irradiation_kwh_m2": 6.7841,
+     "pre_soiling_expected_kwh": 1628464.2445999999,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -6845.152291760081,
+     "soiling_kwh": 123111.89689175999,
+     "soiling_ratio": 0.9244,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1631727.7
+    },
+    {
+     "actual_kwh": 1549310.4,
+     "availability": 0.998,
+     "cell_temp_c": 47.90999999999999,
+     "curtailment_kwh": null,
+     "day": "2026-06-18",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3349.0184000000027,
+     "expected_kwh": 1674509.2,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9270867132058288,
+     "poa_irradiation_kwh_m2": 7.053,
+     "pre_soiling_expected_kwh": 1671160.1816,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -4155.69609264005,
+     "soiling_kwh": 126005.47769264004,
+     "soiling_ratio": 0.9246,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1674509.2
+    },
+    {
+     "actual_kwh": 1045498.7,
+     "availability": 0.9980000000000001,
+     "cell_temp_c": 44.43,
+     "curtailment_kwh": null,
+     "day": "2026-06-19",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 2255.471000000002,
+     "expected_kwh": 1127735.5,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9289358078871783,
+     "poa_irradiation_kwh_m2": 4.7034,
+     "pre_soiling_expected_kwh": 1125480.029,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -4992.413189499872,
+     "soiling_kwh": 84973.74218950002,
+     "soiling_ratio": 0.9245,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1127735.5
+    },
+    {
+     "actual_kwh": 1600161.0,
+     "availability": 0.998,
+     "cell_temp_c": 46.39000000000001,
+     "curtailment_kwh": null,
+     "day": "2026-06-20",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3457.0308000000027,
+     "expected_kwh": 1728515.4,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9275981778761948,
+     "poa_irradiation_kwh_m2": 7.2489,
+     "pre_soiling_expected_kwh": 1725058.3691999998,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -5689.549348440021,
+     "soiling_kwh": 130586.91854843996,
+     "soiling_ratio": 0.9243,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1728515.4
+    },
+    {
+     "actual_kwh": 1571595.7,
+     "availability": 0.9979999999999999,
+     "cell_temp_c": 44.84,
+     "curtailment_kwh": null,
+     "day": "2026-06-21",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3436.090400000003,
+     "expected_kwh": 1718045.2,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9165912459001437,
+     "poa_irradiation_kwh_m2": 7.1566,
+     "pre_soiling_expected_kwh": 1714609.1095999999,
+     "precipitation_mm": 0.0,
+     "residual_kwh": 8245.133585439995,
+     "soiling_kwh": 134768.27601456,
+     "soiling_ratio": 0.9214,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1718045.2
+    },
+    {
+     "actual_kwh": 1557609.8,
+     "availability": 0.998,
+     "cell_temp_c": 47.44,
+     "curtailment_kwh": null,
+     "day": "2026-06-22",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3389.123400000003,
+     "expected_kwh": 1694561.7,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9210235676429191,
+     "poa_irradiation_kwh_m2": 7.1405,
+     "pre_soiling_expected_kwh": 1691172.5766,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -2069.264043320203,
+     "soiling_kwh": 135632.0406433201,
+     "soiling_ratio": 0.9198,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1694561.7
+    },
+    {
+     "actual_kwh": 1526410.0,
+     "availability": 0.998,
+     "cell_temp_c": 46.73,
+     "curtailment_kwh": null,
+     "day": "2026-06-23",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3326.440200000003,
+     "expected_kwh": 1663220.1,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.919583005205235,
+     "poa_irradiation_kwh_m2": 6.9985,
+     "pre_soiling_expected_kwh": 1659893.6598,
+     "precipitation_mm": 0.0,
+     "residual_kwh": 2352.0606758000795,
+     "soiling_kwh": 131131.59912419994,
+     "soiling_ratio": 0.921,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1663220.1
+    },
+    {
+     "actual_kwh": 1507887.1,
+     "availability": 0.998,
+     "cell_temp_c": 47.06,
+     "curtailment_kwh": null,
+     "day": "2026-06-24",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3277.6972000000032,
+     "expected_kwh": 1638848.6,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9219331900675092,
+     "poa_irradiation_kwh_m2": 6.8963,
+     "pre_soiling_expected_kwh": 1635570.9028,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -6596.568319879938,
+     "soiling_kwh": 134280.3711198799,
+     "soiling_ratio": 0.9179,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1638848.6
+    },
+    {
+     "actual_kwh": 1500981.5,
+     "availability": 0.998,
+     "cell_temp_c": 49.13,
+     "curtailment_kwh": null,
+     "day": "2026-06-25",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3300.524800000003,
+     "expected_kwh": 1650262.4,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9113638406582589,
+     "poa_irradiation_kwh_m2": 6.9594,
+     "pre_soiling_expected_kwh": 1646961.8752,
+     "precipitation_mm": 0.0,
+     "residual_kwh": 8459.058620799799,
+     "soiling_kwh": 137521.3165792,
+     "soiling_ratio": 0.9165,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1650262.4
+    },
+    {
+     "actual_kwh": 1522640.5,
+     "availability": 0.998,
+     "cell_temp_c": 45.74,
+     "curtailment_kwh": null,
+     "day": "2026-06-26",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3324.839600000003,
+     "expected_kwh": 1662419.8,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.917753676759345,
+     "poa_irradiation_kwh_m2": 6.9794,
+     "pre_soiling_expected_kwh": 1659094.9604,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -6559.525186480023,
+     "soiling_kwh": 143013.9855864801,
+     "soiling_ratio": 0.9138,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1662419.8
+    },
+    {
+     "actual_kwh": 1460242.5,
+     "availability": 0.9979999999999999,
+     "cell_temp_c": 46.36,
+     "curtailment_kwh": null,
+     "day": "2026-06-27",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3199.007200000003,
+     "expected_kwh": 1599503.6,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9147643291802223,
+     "poa_irradiation_kwh_m2": 6.6917,
+     "pre_soiling_expected_kwh": 1596304.5928,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -5370.494122080039,
+     "soiling_kwh": 141432.58692208002,
+     "soiling_ratio": 0.9114,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1599503.6
+    },
+    {
+     "actual_kwh": 1455976.7,
+     "availability": 0.9980000000000001,
+     "cell_temp_c": 51.14,
+     "curtailment_kwh": null,
+     "day": "2026-06-28",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3200.635200000003,
+     "expected_kwh": 1600317.6,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9116280974338817,
+     "poa_irradiation_kwh_m2": 6.8369,
+     "pre_soiling_expected_kwh": 1597116.9648000002,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -44.87488831975497,
+     "soiling_kwh": 141185.13968832008,
+     "soiling_ratio": 0.9116,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1600317.6
+    },
+    {
+     "actual_kwh": 1582750.8,
+     "availability": 0.998,
+     "cell_temp_c": 45.85,
+     "curtailment_kwh": null,
+     "day": "2026-06-29",
+     "degradation_kwh": 0.0,
+     "downtime_kwh": 0.0,
+     "equipment_kwh": 3474.069200000003,
+     "expected_kwh": 1737034.6,
+     "irradiance_kwh": 0.0,
+     "outage": false,
+     "performance_index": 0.9130057888832964,
+     "poa_irradiation_kwh_m2": 7.2913,
+     "pre_soiling_expected_kwh": 1733560.5308,
+     "precipitation_mm": 0.0,
+     "residual_kwh": -1743.5959103999194,
+     "soiling_kwh": 152553.32671039994,
+     "soiling_ratio": 0.912,
+     "temperature_kwh": 0.0,
+     "weather_adjusted_expected_kwh": 1737034.6
+    }
+   ],
+   "notes": [],
+   "period": {
+    "actual_kwh": 94312202.9,
+    "contributions": [
+     {
+      "basis": "N/A",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "N/A",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a weather-adjusted performance model"
+       },
+       "unit": "kWh",
+       "value": null
+      },
+      "explanation": "The baseline already reflects the irradiance actually received.",
+      "factor": "IRRADIANCE",
+      "missing_inputs": [],
+      "share_of_expected_pct": null,
+      "status": "ACCOUNTED_IN_BASELINE"
+     },
+     {
+      "basis": "N/A",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "N/A",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a weather-adjusted performance model"
+       },
+       "unit": "kWh",
+       "value": null
+      },
+      "explanation": "The baseline already reflects the temperatures actually experienced.",
+      "factor": "TEMPERATURE",
+      "missing_inputs": [],
+      "share_of_expected_pct": null,
+      "status": "ACCOUNTED_IN_BASELINE"
+     },
+     {
+      "basis": "N/A",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "N/A",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a weather-adjusted performance model"
+       },
+       "unit": "kWh",
+       "value": null
+      },
+      "explanation": "The baseline already includes age-related degradation.",
+      "factor": "DEGRADATION",
+      "missing_inputs": [],
+      "share_of_expected_pct": null,
+      "status": "ACCOUNTED_IN_BASELINE"
+     },
+     {
+      "basis": "CALCULATED",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "CALCULATED",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "expected energy of daylight intervals with (near-)zero production",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise attribution"
+       },
+       "unit": "kWh",
+       "value": 0.0
+      },
+      "explanation": "0 interval(s) produced less than 2 % of the energy expected in daylight. This shows that the plant did not produce, not why (grid outage, trip, maintenance or a data fault).",
+      "factor": "DOWNTIME",
+      "missing_inputs": [],
+      "share_of_expected_pct": 0.0,
+      "status": "QUANTIFIED"
+     },
+     {
+      "basis": "CALCULATED",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "CALCULATED",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "expected x (1 - availability)",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise attribution"
+       },
+       "unit": "kWh",
+       "value": 197917.59740000014
+      },
+      "explanation": "Energy not produced because part of the plant was unavailable, from the logged capacity-weighted availability.",
+      "factor": "EQUIPMENT_AVAILABILITY",
+      "missing_inputs": [],
+      "share_of_expected_pct": 0.20000000000000023,
+      "status": "QUANTIFIED"
+     },
+     {
+      "basis": "N/A",
+      "coverage": 0.0,
+      "energy": {
+       "basis": "N/A",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": null,
+        "method": null,
+        "provenance": "UNKNOWN",
+        "source": "origin not declared"
+       },
+       "unit": "kWh",
+       "value": null
+      },
+      "explanation": "No curtailment log; curtailed energy, if any, remains inside the unexplained residual.",
+      "factor": "CURTAILMENT",
+      "missing_inputs": [
+       "curtailment log (energy or set-points)"
+      ],
+      "share_of_expected_pct": null,
+      "status": "NOT_QUANTIFIED"
+     },
+     {
+      "basis": "DIRECT_MEASUREMENT",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "DIRECT_MEASUREMENT",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "pre-soiling expected x (1 - soiling ratio)",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise attribution"
+       },
+       "unit": "kWh",
+       "value": 4553781.5671362
+      },
+      "explanation": "Loss corresponding to the observed soiling ratio, on days with a reading. It is not inferred from the production gap.",
+      "factor": "SOILING",
+      "missing_inputs": [],
+      "share_of_expected_pct": 4.601694469777554,
+      "status": "QUANTIFIED"
+     }
+    ],
+    "end": "2026-06-29",
+    "expected_kwh": 98958798.69999997,
+    "gap_kwh": 4646595.799999967,
+    "matched_slots": 60,
+    "mean_availability": 0.9980000000000006,
+    "measured_soiling_loss_pct": 4.610916302382315,
+    "outage_slots": 0,
+    "pre_soiling_expected_kwh": 98760881.10260002,
+    "pre_soiling_gap_kwh": 4448678.202600017,
+    "pre_soiling_gap_on_soiling_slots_pct": 4.504494241984744,
+    "pre_soiling_gap_pct": 4.504494241984744,
+    "residual_kwh": -105103.36453620158,
+    "residual_pct": -0.10642206039759054,
+    "soiling_coverage": 1.0,
+    "start": "2026-05-01",
+    "weather_adjusted_expected_kwh": 98958798.69999997
+   },
+   "window": {
+    "actual_kwh": 10556889.1,
+    "contributions": [
+     {
+      "basis": "N/A",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "N/A",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a weather-adjusted performance model"
+       },
+       "unit": "kWh",
+       "value": null
+      },
+      "explanation": "The baseline already reflects the irradiance actually received.",
+      "factor": "IRRADIANCE",
+      "missing_inputs": [],
+      "share_of_expected_pct": null,
+      "status": "ACCOUNTED_IN_BASELINE"
+     },
+     {
+      "basis": "N/A",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "N/A",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a weather-adjusted performance model"
+       },
+       "unit": "kWh",
+       "value": null
+      },
+      "explanation": "The baseline already reflects the temperatures actually experienced.",
+      "factor": "TEMPERATURE",
+      "missing_inputs": [],
+      "share_of_expected_pct": null,
+      "status": "ACCOUNTED_IN_BASELINE"
+     },
+     {
+      "basis": "N/A",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "N/A",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a weather-adjusted performance model"
+       },
+       "unit": "kWh",
+       "value": null
+      },
+      "explanation": "The baseline already includes age-related degradation.",
+      "factor": "DEGRADATION",
+      "missing_inputs": [],
+      "share_of_expected_pct": null,
+      "status": "ACCOUNTED_IN_BASELINE"
+     },
+     {
+      "basis": "CALCULATED",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "CALCULATED",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "expected energy of daylight intervals with (near-)zero production",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise attribution"
+       },
+       "unit": "kWh",
+       "value": 0.0
+      },
+      "explanation": "0 interval(s) produced less than 2 % of the energy expected in daylight. This shows that the plant did not produce, not why (grid outage, trip, maintenance or a data fault).",
+      "factor": "DOWNTIME",
+      "missing_inputs": [],
+      "share_of_expected_pct": 0.0,
+      "status": "QUANTIFIED"
+     },
+     {
+      "basis": "CALCULATED",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "CALCULATED",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "expected x (1 - availability)",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise attribution"
+       },
+       "unit": "kWh",
+       "value": 23103.213400000022
+      },
+      "explanation": "Energy not produced because part of the plant was unavailable, from the logged capacity-weighted availability.",
+      "factor": "EQUIPMENT_AVAILABILITY",
+      "missing_inputs": [],
+      "share_of_expected_pct": 0.20000000000000023,
+      "status": "QUANTIFIED"
+     },
+     {
+      "basis": "N/A",
+      "coverage": 0.0,
+      "energy": {
+       "basis": "N/A",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": null,
+        "method": null,
+        "provenance": "UNKNOWN",
+        "source": "origin not declared"
+       },
+       "unit": "kWh",
+       "value": null
+      },
+      "explanation": "No curtailment log; curtailed energy, if any, remains inside the unexplained residual.",
+      "factor": "CURTAILMENT",
+      "missing_inputs": [
+       "curtailment log (energy or set-points)"
+      ],
+      "share_of_expected_pct": null,
+      "status": "NOT_QUANTIFIED"
+     },
+     {
+      "basis": "DIRECT_MEASUREMENT",
+      "coverage": 1.0,
+      "energy": {
+       "basis": "DIRECT_MEASUREMENT",
+       "note": null,
+       "std_uncertainty": null,
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "pre-soiling expected x (1 - soiling ratio)",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise attribution"
+       },
+       "unit": "kWh",
+       "value": 981118.32573056
+      },
+      "explanation": "Loss corresponding to the observed soiling ratio, on days with a reading. It is not inferred from the production gap.",
+      "factor": "SOILING",
+      "missing_inputs": [],
+      "share_of_expected_pct": 8.493349463936996,
+      "status": "QUANTIFIED"
+     }
+    ],
+    "end": "2026-06-29",
+    "expected_kwh": 11551606.7,
+    "gap_kwh": 994717.5999999996,
+    "matched_slots": 7,
+    "mean_availability": 0.9980000000000001,
+    "measured_soiling_loss_pct": 8.510370204345687,
+    "outage_slots": 0,
+    "pre_soiling_expected_kwh": 11528503.4866,
+    "pre_soiling_gap_kwh": 971614.3866000008,
+    "pre_soiling_gap_on_soiling_slots_pct": 8.427931584783261,
+    "pre_soiling_gap_pct": 8.427931584783261,
+    "residual_kwh": -9503.939130559796,
+    "residual_pct": -0.08243861956243125,
+    "soiling_coverage": 1.0,
+    "start": "2026-06-23",
+    "weather_adjusted_expected_kwh": 11551606.7
+   }
+  },
+  "baseline": {
+   "baseline_irradiation_plane": null,
+   "descriptor": {
+    "degradation_adjusted": true,
+    "description": "Synthetic stand-in for an expected-energy model driven by measured in-plane irradiation and module temperature.",
+    "irradiance_adjusted": true,
+    "method": "TELEMETRY_MODEL",
+    "reference_cell_temp_c": null,
+    "soiling_allowance_fraction": 0.0,
+    "temperature_adjusted": true
+   },
+   "limitations": [
+    "The baseline is a model output, not a measured clean-condition performance of this plant: part of any gap may be model error."
+   ],
+   "meta": {
+    "boundary": "GRID_METER",
+    "metric": "expected_energy",
+    "notes": null,
+    "original_unit": null,
+    "plane": null,
+    "soiling_method": null,
+    "tag": {
+     "emulates": "MODELLED",
+     "method": null,
+     "provenance": "SYNTHETIC",
+     "source": "Synthetic stand-in for a weather-adjusted performance model"
+    },
+    "uncertainty_abs": null,
+    "uncertainty_pct": 2.0,
+    "unit": "kWh"
+   },
+   "method": "TELEMETRY_MODEL",
+   "notes": [
+    "Expected energy taken from the dataset as supplied."
+   ],
+   "parameters": {},
+   "status": "OK"
+  },
+  "cleaning_assumptions": {
+   "benefit_horizon_days": 30.0,
+   "benefit_horizon_days_high": 45.0,
+   "benefit_horizon_days_low": 21.0,
+   "cleaning_effectiveness": 0.9,
+   "cleaning_effectiveness_high": 0.98,
+   "cleaning_effectiveness_low": 0.8,
+   "projected_daily_clean_energy_kwh": null,
+   "source_note": "Illustrative demonstration assumption (no rain expected during the dry season)."
+  },
+  "context": "DEMONSTRATION",
+  "dataset_name": "Demo scenario - Confirmed soiling",
+  "devices": {
+   "active_in_window": 0,
+   "evaluable": false,
+   "findings": [],
+   "flagged_devices": 0,
+   "loss_fraction_by_day": {},
+   "lost_energy_kwh": 0.0,
+   "n_days": 0,
+   "n_devices": 0,
+   "notes": [],
+   "reason": "device-level energy is available for 0 device(s); at least 4 are needed for a fleet comparison",
+   "tag": {
+    "emulates": null,
+    "method": null,
+    "provenance": "UNKNOWN",
+    "source": "origin not declared"
+   }
+  },
+  "diagnostics": {
+   "conflicts": [],
+   "deviation_now": true,
+   "deviation_period": true,
+   "headline": "Soiling of the module surface accounts for the deviation: A direct soiling measurement shows a loss of 8.5 %, in line with the deviation observed in production.",
+   "hypotheses": [
+    {
+     "active_in_window": true,
+     "category": "SOILING",
+     "competing_explanations": [
+      "Equipment under-performance developing gradually (tracker drift, string failures accumulating).",
+      "Drift or soiling of the irradiance sensor that feeds the baseline.",
+      "A dust-storm deposition event, which appears as an abrupt rather than gradual loss."
+     ],
+     "estimated_loss": {
+      "basis": "DIRECT_MEASUREMENT",
+      "note": null,
+      "std_uncertainty": null,
+      "tag": {
+       "emulates": "MODELLED",
+       "method": "pre-soiling expected x (1 - soiling ratio)",
+       "provenance": "SYNTHETIC",
+       "source": "SolarWise attribution"
+      },
+      "unit": "kWh",
+      "value": 4553781.5671362
+     },
+     "estimated_loss_share_of_gap_pct": 98.00253267426946,
+     "evidence": [
+      {
+       "code": "SOIL-RATIO",
+       "direction": "SUPPORTS",
+       "effective_class": "MEASURED",
+       "kind": "DIRECT_MEASUREMENT",
+       "statement": "Soiling ratio 0.915 -> soiling loss 8.5 % (+/- 1.0 % points at k = 2) (soiling station, last reading 2026-06-29, 7 reading day(s) in the assessment window).",
+       "tag": {
+        "emulates": "MEASURED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a soiling station (clean / soiled reference cells)"
+       },
+       "unit": "%",
+       "value": 8.510370204345687
+      },
+      {
+       "code": "SOIL-GAP-CONSISTENCY",
+       "direction": "SUPPORTS",
+       "effective_class": "MODELLED",
+       "kind": "CALCULATED",
+       "statement": "Deviation left for soiling to explain: 8.4 %; measured soiling loss 8.5 %; difference -0.1 % points (tolerance 4.2).",
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "pre-soiling gap vs measured soiling loss",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise diagnostics"
+       },
+       "unit": "% points",
+       "value": -0.08243861956242604
+      },
+      {
+       "code": "SOIL-TREND",
+       "direction": "SUPPORTS",
+       "effective_class": "MODELLED",
+       "kind": "PATTERN",
+       "statement": "Performance index drifts by -0.150 % points/day (95 % interval -0.157 .. -0.142) over 60 day(s) since 2026-05-01 (period start).",
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "Theil-Sen on daily performance index",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise trend analysis"
+       },
+       "unit": "% points/day",
+       "value": -0.15015247272941898
+      },
+      {
+       "code": "SOIL-INSPECTION",
+       "direction": "SUPPORTS",
+       "effective_class": "MEASURED",
+       "kind": "DOCUMENT",
+       "statement": "Inspection DEMO-INSP-0626 (2026-06-26): soiling heavy - qualitative, not quantified.",
+       "tag": {
+        "emulates": "MEASURED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for an inspection report"
+       },
+       "unit": null,
+       "value": null
+      }
+     ],
+     "missing_evidence": [],
+     "recommended_investigation": [],
+     "rules": [
+      "S1: credible measured soiling ratio, consistent with the deviation it should explain"
+     ],
+     "summary": "A direct soiling measurement shows a loss of 8.5 %, in line with the deviation observed in production.",
+     "support": "STRONG",
+     "title": "Soiling of the module surface",
+     "uncertainty_note": "Current soiling loss 8.5 % with declared standard uncertainty 0.5 % points -> 7.5 .. 9.5 % at k = 2. Representativeness of the sensor location is not included."
+    },
+    {
+     "active_in_window": false,
+     "category": "TEMPERATURE",
+     "competing_explanations": [
+      "A wrong or outdated temperature coefficient in the plant configuration.",
+      "Module temperature sensor detached from the module or reading ambient air."
+     ],
+     "estimated_loss": null,
+     "estimated_loss_share_of_gap_pct": null,
+     "evidence": [
+      {
+       "code": "TEMP-BASELINE",
+       "direction": "CONTRADICTS",
+       "effective_class": "MODELLED",
+       "kind": "CONTEXT",
+       "statement": "Baseline declared temperature-adjusted (energy-weighted cell temperature over the period: 43.6 degC).",
+       "tag": {
+        "emulates": "MODELLED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a weather-adjusted performance model"
+       },
+       "unit": null,
+       "value": null
+      }
+     ],
+     "missing_evidence": [],
+     "recommended_investigation": [],
+     "rules": [
+      "T1: the baseline is adjusted to actual temperature"
+     ],
+     "summary": "The baseline already reflects the temperatures actually experienced, so heat cannot explain a gap against it - unless the temperature input itself is wrong.",
+     "support": "NOT_SUPPORTED",
+     "title": "Operating temperature above the baseline's reference",
+     "uncertainty_note": null
+    },
+    {
+     "active_in_window": false,
+     "category": "INVERTER",
+     "competing_explanations": [
+      "Planned maintenance or a grid-side constraint affecting only part of the plant.",
+      "Uneven soiling or shading of the blocks connected to the affected devices.",
+      "A metering or communication fault on the affected devices (energy produced but not recorded)."
+     ],
+     "estimated_loss": {
+      "basis": "CALCULATED",
+      "note": null,
+      "std_uncertainty": null,
+      "tag": {
+       "emulates": "MODELLED",
+       "method": "expected x (1 - availability)",
+       "provenance": "SYNTHETIC",
+       "source": "SolarWise attribution"
+      },
+      "unit": "kWh",
+      "value": 197917.59740000014
+     },
+     "estimated_loss_share_of_gap_pct": 4.2594106722173155,
+     "evidence": [
+      {
+       "code": "INV-AVAILABILITY",
+       "direction": "CONTRADICTS",
+       "effective_class": "MEASURED",
+       "kind": "LOGGED",
+       "statement": "Logged availability: 99.8 % over the period, 99.8 % in the assessment window; energy not produced: 197.9 MWh (0.2 % of expected).",
+       "tag": {
+        "emulates": "MEASURED",
+        "method": null,
+        "provenance": "SYNTHETIC",
+        "source": "Synthetic stand-in for a SCADA availability log"
+       },
+       "unit": "%",
+       "value": 99.80000000000005
+      }
+     ],
+     "missing_evidence": [
+      "Device-level (inverter) energy, to compare each device with the fleet."
+     ],
+     "recommended_investigation": [],
+     "rules": [
+      "I4: equipment data available and showing no anomaly; no abrupt change"
+     ],
+     "summary": "Available equipment data show no anomaly.",
+     "support": "NOT_SUPPORTED",
+     "title": "Inverter or other equipment fault",
+     "uncertainty_note": null
+    },
+    {
+     "active_in_window": false,
+     "category": "SHADING",
+     "competing_explanations": [
+      "Tracker stalled or mis-positioned at low sun.",
+      "Baseline error at low sun elevation (angle-of-incidence and spectral effects).",
+      "Heavier angular losses of a soiled array at high incidence angles (would affect both ends of the day)."
+     ],
+     "estimated_loss": null,
+     "estimated_loss_share_of_gap_pct": null,
+     "evidence": [],
+     "missing_evidence": [
+      "Sub-daily (hourly or finer) production data: shading shows in the shape of the day, not in daily totals.",
+      "A documented site observation at the affected time of day."
+     ],
+     "recommended_investigation": [],
+     "rules": [
+      "H5: daily data only and no site observation"
+     ],
+     "summary": "Shading cannot be assessed from daily totals and no site observation is recorded.",
+     "support": "NOT_EVALUABLE",
+     "title": "Shading of part of the array",
+     "uncertainty_note": null
+    },
+    {
+     "active_in_window": false,
+     "category": "CURTAILMENT_DOWNTIME",
+     "competing_explanations": [
+      "Inverter clipping at the AC rating (a design property, not curtailment).",
+      "A telemetry gap recorded as zero production."
+     ],
+     "estimated_loss": null,
+     "estimated_loss_share_of_gap_pct": null,
+     "evidence": [],
+     "missing_evidence": [
+      "Curtailment log (curtailed energy or active-power set-points from the grid operator).",
+      "Sub-daily production data, in which curtailment appears as a flat-topped profile."
+     ],
+     "recommended_investigation": [],
+     "rules": [
+      "C5: no curtailment log and no sub-daily data (no outage found in production)"
+     ],
+     "summary": "No outage interval was found; curtailment cannot be assessed without a log or sub-daily data.",
+     "support": "NOT_EVALUABLE",
+     "title": "Curtailment or downtime",
+     "uncertainty_note": null
+    },
+    {
+     "active_in_window": false,
+     "category": "INSUFFICIENT_DATA",
+     "competing_explanations": [],
+     "estimated_loss": null,
+     "estimated_loss_share_of_gap_pct": null,
+     "evidence": [
+      {
+       "code": "DATA-COVERAGE",
+       "direction": "CONTRADICTS",
+       "effective_class": "MODELLED",
+       "kind": "CALCULATED",
+       "statement": "60 of 60 daylight interval(s) have both expected and actual data (100.0 %); 0 lack actual energy, 0 lack expected energy.",
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "expected - actual, summed over intervals where both exist",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise gap engine"
+       },
+       "unit": "%",
+       "value": 100.0
+      },
+      {
+       "code": "DATA-FACTORS",
+       "direction": "SUPPORTS",
+       "effective_class": "UNKNOWN",
+       "kind": "CONTEXT",
+       "statement": "Factors that could not be quantified and therefore remain inside the residual: curtailment.",
+       "tag": {
+        "emulates": null,
+        "method": null,
+        "provenance": "UNKNOWN",
+        "source": "origin not declared"
+       },
+       "unit": null,
+       "value": null
+      }
+     ],
+     "missing_evidence": [
+      "[SHADING] Sub-daily (hourly or finer) production data: shading shows in the shape of the day, not in daily totals.",
+      "[SHADING] A documented site observation at the affected time of day.",
+      "[CURTAILMENT_DOWNTIME] Curtailment log (curtailed energy or active-power set-points from the grid operator).",
+      "[CURTAILMENT_DOWNTIME] Sub-daily production data, in which curtailment appears as a flat-topped profile."
+     ],
+     "recommended_investigation": [
+      "Add the missing inputs listed to narrow down the cause."
+     ],
+     "rules": [
+      "D2: material deviation while two or more hypotheses cannot be evaluated"
+     ],
+     "summary": "A deviation exists but several possible causes cannot be evaluated with the data at hand.",
+     "support": "MODERATE",
+     "title": "Insufficient data",
+     "uncertainty_note": null
+    },
+    {
+     "active_in_window": false,
+     "category": "UNCLASSIFIED",
+     "competing_explanations": [
+      "Any factor listed as not quantified (see the attribution table).",
+      "Baseline model error or a biased irradiance sensor.",
+      "Module degradation or defects (PID, hot spots, cracked cells) not visible in plant-level data."
+     ],
+     "estimated_loss": null,
+     "estimated_loss_share_of_gap_pct": null,
+     "evidence": [
+      {
+       "code": "RESIDUAL",
+       "direction": "CONTRADICTS",
+       "effective_class": "MODELLED",
+       "kind": "CALCULATED",
+       "statement": "Unexplained residual: -0.1 % of pre-soiling expected energy in the assessment window; -105.1 MWh (-0.1 %) over the period.",
+       "tag": {
+        "emulates": "MODELLED",
+        "method": "expected - quantified factors - actual",
+        "provenance": "SYNTHETIC",
+        "source": "SolarWise attribution"
+       },
+       "unit": "%",
+       "value": -0.08243861956243125
+      }
+     ],
+     "missing_evidence": [],
+     "recommended_investigation": [],
+     "rules": [
+      "U2: no material residual"
+     ],
+     "summary": "Quantified factors account for the deviation within the materiality threshold.",
+     "support": "NOT_SUPPORTED",
+     "title": "Unclassified loss",
+     "uncertainty_note": null
+    }
+   ],
+   "leading": [
+    "SOILING"
+   ],
+   "soiling_evidence": {
+    "above_floor": true,
+    "age_days": 0,
+    "available": true,
+    "consistent_with_gap": true,
+    "credible": true,
+    "effective_class": "MEASURED",
+    "gap_minus_soiling_pct": -0.08243861956242604,
+    "gap_to_explain_pct": 8.427931584783261,
+    "loss_pct": 8.510370204345687,
+    "measured_class": true,
+    "method": "SOILING_STATION",
+    "notes": [],
+    "observed_on": "2026-06-29",
+    "quantified": true,
+    "readings_in_window": 7,
+    "recent": true,
+    "reference": "soiling_ratio channel",
+    "soiling_ratio": 0.9148962979565431,
+    "source": "TIME_SERIES",
+    "std_uncertainty_pct": 0.5,
+    "tag": {
+     "emulates": "MEASURED",
+     "method": null,
+     "provenance": "SYNTHETIC",
+     "source": "Synthetic stand-in for a soiling station (clean / soiled reference cells)"
+    },
+    "tolerance_pct": 4.22317339782255
+   },
+   "status": "SINGLE_EXPLANATION",
+   "technical_issues": [],
+   "unexplained_residual_material": false,
+   "unexplained_residual_pct": -0.08243861956243125,
+   "unresolved_technical_issue": false
+  },
+  "disclaimers": [
+   "SYNTHETIC DEMONSTRATION DATASET. Every value was computed by the SolarWise DZ scenario generator from a seeded pseudo-random sequence. It contains no measurement from the El Foulia plant or from any other plant and does not describe the actual operation of any plant. The plant name, location and nominal capacity are public reference information; all technical parameters are illustrative assumptions.",
+   "Demonstration evaluation. Decisions are simulated and are not operational instructions.",
+   "This analysis uses synthetic data. Synthetic values are not measurements and do not describe the operation of any real plant.",
+   "Weather data are context for the analysis. They do not measure dust accumulation on the modules."
+  ],
+  "economic_inputs": {
+   "cost_classification": "USER_ASSUMPTION",
+   "cost_source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+   "cost_uncertainty_pct": 20.0,
+   "currency": "DZD",
+   "downtime_cost": 0.0,
+   "downtime_energy_kwh": null,
+   "energy_value_basis": "INTERNAL_VALUATION",
+   "energy_value_classification": "USER_ASSUMPTION",
+   "energy_value_per_kwh": 5.0,
+   "energy_value_source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+   "equipment_cost": 1500000.0,
+   "labour_cost": null,
+   "labour_hours": 6000.0,
+   "labour_rate_per_hour": 400.0,
+   "operational_cost": 500000.0,
+   "water_cost": null,
+   "water_price_per_m3": 80.0,
+   "water_volume_m3": 1500.0
+  },
+  "economics": {
+   "assumptions": [
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Energy value",
+     "source": "Illustrative demonstration assumption - not a market price, tariff or contractual value. [INTERNAL_VALUATION]",
+     "unit": "DZD/kWh",
+     "value": 5.0
+    },
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Water cost",
+     "source": "Illustrative demonstration assumption - not a market price, tariff or contractual value. (1500 m3 x 80)",
+     "unit": "DZD",
+     "value": 120000.0
+    },
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Labour cost",
+     "source": "Illustrative demonstration assumption - not a market price, tariff or contractual value. (6000 h x 400)",
+     "unit": "DZD",
+     "value": 2400000.0
+    },
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Equipment cost",
+     "source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+     "unit": "DZD",
+     "value": 1500000.0
+    },
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Operational cost",
+     "source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+     "unit": "DZD",
+     "value": 500000.0
+    },
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Downtime cost",
+     "source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+     "unit": "DZD",
+     "value": 0.0
+    },
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Cost uncertainty",
+     "source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+     "unit": "%",
+     "value": 20.0
+    }
+   ],
+   "break_even_energy_kwh": 904000.0,
+   "break_even_soiling_loss_pct": 2.032964388160073,
+   "cost": {
+    "items": [
+     {
+      "amount": 120000.0,
+      "basis": "COMPUTED",
+      "detail": "1500 m3 x 80",
+      "name": "water"
+     },
+     {
+      "amount": 2400000.0,
+      "basis": "COMPUTED",
+      "detail": "6000 h x 400",
+      "name": "labour"
+     },
+     {
+      "amount": 1500000.0,
+      "basis": "SUPPLIED",
+      "detail": null,
+      "name": "equipment"
+     },
+     {
+      "amount": 500000.0,
+      "basis": "SUPPLIED",
+      "detail": null,
+      "name": "operational"
+     },
+     {
+      "amount": 0.0,
+      "basis": "SUPPLIED",
+      "detail": null,
+      "name": "downtime"
+     }
+    ],
+    "missing": [],
+    "partial_total": 4520000.0,
+    "total": 4520000.0
+   },
+   "currency": "DZD",
+   "decision_grade": true,
+   "energy_value_basis": "INTERNAL_VALUATION",
+   "energy_value_per_kwh": 5.0,
+   "formulae": [
+    "gross benefit = recoverable energy x energy value",
+    "total cost = water + labour + equipment + operational + downtime",
+    "net benefit = gross benefit - total cost",
+    "ROI = net benefit / total cost x 100",
+    "break-even energy = total cost / energy value"
+   ],
+   "horizon_days": 30.0,
+   "missing_inputs": [],
+   "payback_days": 7.166425217748947,
+   "scenarios": [
+    {
+     "description": "Low recoverable energy and high cost.",
+     "gross_benefit": 10389999.490374722,
+     "name": "CONSERVATIVE",
+     "net_benefit": 4965999.490374722,
+     "profitable": true,
+     "recoverable_energy_kwh": 2077999.8980749445,
+     "roi_pct": 91.55603780189384,
+     "total_cost": 5424000.0
+    },
+    {
+     "description": "Central recoverable energy and cost.",
+     "gross_benefit": 18921567.710517947,
+     "name": "BASE",
+     "net_benefit": 14401567.710517947,
+     "profitable": true,
+     "recoverable_energy_kwh": 3784313.542103589,
+     "roi_pct": 318.6187546574767,
+     "total_cost": 4520000.0
+    },
+    {
+     "description": "High recoverable energy and low cost.",
+     "gross_benefit": 34536705.85879164,
+     "name": "OPTIMISTIC",
+     "net_benefit": 30920705.858791642,
+     "profitable": true,
+     "recoverable_energy_kwh": 6907341.171758329,
+     "roi_pct": 855.108016006406,
+     "total_cost": 3616000.0
+    }
+   ],
+   "status": "COMPLETE",
+   "verdict": "PROFITABLE",
+   "warnings": [
+    "The energy value is a user assumption, not an official or contractual reference."
+   ]
+  },
+  "engine_version": "1.0.0",
+  "evidence": {
+   "decisive_evidence": [
+    {
+     "effective_class": "MEASURED",
+     "label": "Actual energy",
+     "tag": {
+      "emulates": "MEASURED",
+      "method": null,
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for revenue-meter energy"
+     }
+    },
+    {
+     "effective_class": "MODELLED",
+     "label": "Expected energy (baseline)",
+     "tag": {
+      "emulates": "MODELLED",
+      "method": null,
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for a weather-adjusted performance model"
+     }
+    },
+    {
+     "effective_class": "MEASURED",
+     "label": "Soiling measurement",
+     "tag": {
+      "emulates": "MEASURED",
+      "method": null,
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for a soiling station (clean / soiled reference cells)"
+     }
+    }
+   ],
+   "gates": [
+    {
+     "detail": "Actual energy: SYNTHETIC (emulates MEASURED) (Synthetic stand-in for revenue-meter energy); completeness 100 % over the period, 100 % in the assessment window.",
+     "id": "PRODUCTION_MEASURED",
+     "label": "Reliable measured production data",
+     "passed": true
+    },
+    {
+     "detail": "Baseline: TELEMETRY_MODEL, SYNTHETIC (emulates MODELLED) (Synthetic stand-in for a weather-adjusted performance model).",
+     "id": "BASELINE_DOCUMENTED",
+     "label": "Baseline of documented origin",
+     "passed": true
+    },
+    {
+     "detail": "Gap in the assessment window: 8.6 % (combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %).",
+     "id": "DEVIATION_SIGNIFICANT",
+     "label": "Significant under-performance now",
+     "passed": true
+    },
+    {
+     "detail": "Soiling loss 8.5 % from soiling_ratio channel [SYNTHETIC (emulates MEASURED)], last reading 2026-06-29 (0 day(s) before the period end).",
+     "id": "SOILING_EVIDENCE_CREDIBLE",
+     "label": "Credible measured soiling evidence",
+     "passed": true
+    },
+    {
+     "detail": "Deviation left for soiling to explain 8.4 % vs measured soiling loss 8.5 %: difference -0.1 % points (tolerance 4.2).",
+     "id": "SOILING_CONSISTENT_WITH_GAP",
+     "label": "Soiling measurement consistent with the production gap",
+     "passed": true
+    },
+    {
+     "detail": "No equipment, outage or sensor issue is open in the assessment window.",
+     "id": "NO_UNRESOLVED_TECHNICAL_ISSUE",
+     "label": "No unresolved technical issue",
+     "passed": true
+    },
+    {
+     "detail": "No critical contradiction was found.",
+     "id": "NO_CRITICAL_CONTRADICTION",
+     "label": "No critical contradiction in the evidence",
+     "passed": true
+    },
+    {
+     "detail": "Recoverable over 30 days: 2,078.0 .. 6,907.3 MWh (central 3,784.3 MWh).",
+     "id": "RECOVERABLE_ENERGY_ESTIMATED",
+     "label": "Recoverable energy estimated from measured soiling",
+     "passed": true
+    },
+    {
+     "detail": "All cost items and a decision-grade energy value were supplied.",
+     "id": "ECONOMICS_DECISION_GRADE",
+     "label": "Economic inputs complete and decision-grade",
+     "passed": true
+    },
+    {
+     "detail": "Conservative net benefit 4,965,999 DZD (PROFITABLE).",
+     "id": "ECONOMICS_PROFITABLE",
+     "label": "Cleaning profitable in the conservative case",
+     "passed": true
+    }
+   ],
+   "quality": "HIGH",
+   "quality_checks": [
+    {
+     "detail": "Allows the gap to be tested against measurement uncertainty, not only against a threshold.",
+     "label": "Uncertainty declared for baseline and metering",
+     "met": true
+    },
+    {
+     "detail": "Without it soiling can only be suspected, never quantified.",
+     "label": "Direct soiling measurement of the measured class",
+     "met": true
+    },
+    {
+     "detail": "Separates equipment losses from losses on the DC side.",
+     "label": "Equipment data (availability log or device-level energy)",
+     "met": true
+    },
+    {
+     "detail": "Needed to see shading and curtailment in the shape of the day.",
+     "label": "Sub-daily time resolution",
+     "met": false
+    },
+    {
+     "detail": "Contradicting sources lower the trust in every one of them.",
+     "label": "No critical contradiction",
+     "met": true
+    }
+   ],
+   "quality_note": "The grade counts which kinds of evidence are available. It describes how well a cause can be investigated with the data at hand; it is not a probability that a diagnosis is right.",
+   "reasons_production_unreliable": [],
+   "synthetic_evidence_present": true
+  },
+  "explanation": {
+   "generated_by": "DETERMINISTIC_ENGINE",
+   "provenance_statement": "Evidence used - Actual energy: SYNTHETIC (emulates MEASURED) (counts as MEASURED here); Expected energy (baseline): SYNTHETIC (emulates MODELLED) (counts as MODELLED here); Soiling measurement: SYNTHETIC (emulates MEASURED) (counts as MEASURED here). This is a demonstration evaluation: synthetic values stand in for the evidence class they emulate so that the decision logic can be shown. They are not measurements of any real plant, and the result is not an operational instruction.",
+   "sections": [
+    {
+     "bullets": [],
+     "key": "observation",
+     "paragraphs": [
+      "Between 2026-05-01 and 2026-06-29 the plant delivered 94,312.2 MWh against an expected 98,958.8 MWh: a gap of 4,646.6 MWh (4.7 %). The comparison covers 100 % of daylight intervals; intervals without both values are left out, not filled.",
+      "In the assessment window (2026-06-23 to 2026-06-29), which describes the present state of the plant, the gap is 8.6 %. Combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %.",
+      "Actual energy is SYNTHETIC (emulates MEASURED) (Synthetic stand-in for revenue-meter energy). Expected energy is SYNTHETIC (emulates MODELLED) (telemetry model; Synthetic stand-in for a weather-adjusted performance model)."
+     ],
+     "title": "What the data show"
+    },
+    {
+     "bullets": [
+      "Soiling of the module surface: strong support. A direct soiling measurement shows a loss of 8.5 %, in line with the deviation observed in production. Estimated loss 4,553.8 MWh [SYNTHETIC (emulates MODELLED)].",
+      "Operating temperature above the baseline's reference: not supported. The baseline already reflects the temperatures actually experienced, so heat cannot explain a gap against it - unless the temperature input itself is wrong.",
+      "Inverter or other equipment fault: not supported. Available equipment data show no anomaly. Estimated loss 197.9 MWh [SYNTHETIC (emulates MODELLED)].",
+      "Shading of part of the array: cannot be evaluated. Shading cannot be assessed from daily totals and no site observation is recorded.",
+      "Curtailment or downtime: cannot be evaluated. No outage interval was found; curtailment cannot be assessed without a log or sub-daily data.",
+      "Unclassified loss: not supported. Quantified factors account for the deviation within the materiality threshold."
+     ],
+     "key": "diagnosis",
+     "paragraphs": [
+      "Soiling of the module surface accounts for the deviation: A direct soiling measurement shows a loss of 8.5 %, in line with the deviation observed in production.",
+      "Not quantified for lack of inputs (any effect stays inside the unexplained residual): curtailment."
+     ],
+     "title": "What may explain it"
+    },
+    {
+     "bullets": [
+      "The energy value is a user assumption, not an official or contractual reference."
+     ],
+     "key": "economics",
+     "paragraphs": [
+      "Soiling loss from the soiling measurement [SYNTHETIC (emulates MEASURED)]: 8.5 % (7.5 % to 9.5 %). Over a benefit horizon of 30 days a cleaning is projected to recover 3,784.3 MWh (range 2,078.0 MWh to 6,907.3 MWh).",
+      "Range obtained by combining the extremes of: soiling loss 8.5 % with declared standard uncertainty 0.5 % points (range 7.5 .. 9.5 % at k = 2); cleaning effectiveness 0.80 .. 0.98; benefit horizon 21 .. 45 days. It is a scenario range, not a statistical confidence interval. Not included: weather over the horizon differing from the projection, a change of soiling rate, and how representative the soiling sensor is of the array.",
+      "Cost of the cleaning: 4,520,000 DZD. Net benefit: 4,965,999 DZD (conservative), 14,401,568 DZD (base), 30,920,706 DZD (optimistic). Break-even at 904.0 MWh recovered."
+     ],
+     "title": "Recoverable energy and economics"
+    },
+    {
+     "bullets": [
+      "PASS - Reliable measured production data: Actual energy: SYNTHETIC (emulates MEASURED) (Synthetic stand-in for revenue-meter energy); completeness 100 % over the period, 100 % in the assessment window.",
+      "PASS - Baseline of documented origin: Baseline: TELEMETRY_MODEL, SYNTHETIC (emulates MODELLED) (Synthetic stand-in for a weather-adjusted performance model).",
+      "PASS - Significant under-performance now: Gap in the assessment window: 8.6 % (combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %).",
+      "PASS - Credible measured soiling evidence: Soiling loss 8.5 % from soiling_ratio channel [SYNTHETIC (emulates MEASURED)], last reading 2026-06-29 (0 day(s) before the period end).",
+      "PASS - Soiling measurement consistent with the production gap: Deviation left for soiling to explain 8.4 % vs measured soiling loss 8.5 %: difference -0.1 % points (tolerance 4.2).",
+      "PASS - No unresolved technical issue: No equipment, outage or sensor issue is open in the assessment window.",
+      "PASS - No critical contradiction in the evidence: No critical contradiction was found.",
+      "PASS - Recoverable energy estimated from measured soiling: Recoverable over 30 days: 2,078.0 .. 6,907.3 MWh (central 3,784.3 MWh).",
+      "PASS - Economic inputs complete and decision-grade: All cost items and a decision-grade energy value were supplied.",
+      "PASS - Cleaning profitable in the conservative case: Conservative net benefit 4,965,999 DZD (PROFITABLE)."
+     ],
+     "key": "decision",
+     "paragraphs": [
+      "Gap in the assessment window: 8.6 % (combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %).",
+      "Soiling loss 8.5 % from soiling_ratio channel [SYNTHETIC (emulates MEASURED)], last reading 2026-06-29 (0 day(s) before the period end).",
+      "Deviation left for soiling to explain 8.4 % vs measured soiling loss 8.5 %: difference -0.1 % points (tolerance 4.2).",
+      "No technical issue is open and the evidence is free of critical contradictions.",
+      "Recoverable over 30 days: 2,078.0 .. 6,907.3 MWh (central 3,784.3 MWh).",
+      "Net benefit: 4,965,999 DZD in the conservative case, 14,401,568 DZD in the base case (ROI 319 %).",
+      "SIMULATED DECISION. It rests on a demonstration scenario with synthetic evidence and is not an operational instruction. No cleaning may be ordered on this basis."
+     ],
+     "title": "Decision: CLEAN NOW (rule R3)"
+    },
+    {
+     "bullets": [
+      "[SHADING] Sub-daily (hourly or finer) production data: shading shows in the shape of the day, not in daily totals.",
+      "[SHADING] A documented site observation at the affected time of day.",
+      "[CURTAILMENT_DOWNTIME] Curtailment log (curtailed energy or active-power set-points from the grid operator).",
+      "[CURTAILMENT_DOWNTIME] Sub-daily production data, in which curtailment appears as a flat-topped profile.",
+      "[INVERTER] Device-level (inverter) energy, to compare each device with the fleet.",
+      "The baseline is a model output, not a measured clean-condition performance of this plant: part of any gap may be model error."
+     ],
+     "key": "unknowns",
+     "paragraphs": [],
+     "title": "What is not known"
+    },
+    {
+     "bullets": [
+      "Schedule the cleaning; record its date, method, water use and cost.",
+      "Measure the soiling ratio again after cleaning to verify the recovery and to refine the cleaning-effectiveness assumption."
+     ],
+     "key": "next_steps",
+     "paragraphs": [],
+     "title": "Next steps"
+    },
+    {
+     "bullets": [
+      "Any gate failing: a technical issue appearing, the soiling measurement becoming outdated, or costs rising above the break-even."
+     ],
+     "key": "would_change",
+     "paragraphs": [],
+     "title": "What would change this decision"
+    }
+   ],
+   "summary": "SIMULATED - El Foulia reference case (synthetic data): CLEAN NOW. Gap in the assessment window: 8.6 % (combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %).",
+   "title": "CLEAN NOW - El Foulia reference case (synthetic data)"
+  },
+  "gap": {
+   "actual": {
+    "basis": "OBSERVATION",
+    "note": null,
+    "std_uncertainty": null,
+    "tag": {
+     "emulates": "MEASURED",
+     "method": null,
+     "provenance": "SYNTHETIC",
+     "source": "Synthetic stand-in for revenue-meter energy"
+    },
+    "unit": "kWh",
+    "value": 94312202.9
+   },
+   "coverage": {
+    "daylight_slots": 60,
+    "days_complete": 60,
+    "days_total": 60,
+    "days_with_data": 60,
+    "fraction": 1.0,
+    "matched_daylight_slots": 60,
+    "missing_actual_slots": 0,
+    "missing_expected_slots": 0
+   },
+   "daily": [
+    {
+     "actual_kwh": 1554518.3,
+     "coverage": 1.0,
+     "day": "2026-06-16",
+     "expected_kwh": 1686297.5,
+     "gap_kwh": 131779.19999999995,
+     "performance_index": 0.9218529352027148,
+     "relative_gap_pct": 7.814706479728514,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1512197.5,
+     "coverage": 1.0,
+     "day": "2026-06-17",
+     "expected_kwh": 1631727.7,
+     "gap_kwh": 119530.19999999995,
+     "performance_index": 0.9267462334554963,
+     "relative_gap_pct": 7.325376654450369,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1549310.4,
+     "coverage": 1.0,
+     "day": "2026-06-18",
+     "expected_kwh": 1674509.2,
+     "gap_kwh": 125198.80000000005,
+     "performance_index": 0.9252325397794171,
+     "relative_gap_pct": 7.476746022058288,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1045498.7,
+     "coverage": 1.0,
+     "day": "2026-06-19",
+     "expected_kwh": 1127735.5,
+     "gap_kwh": 82236.80000000005,
+     "performance_index": 0.927077936271404,
+     "relative_gap_pct": 7.292206372859597,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1600161.0,
+     "coverage": 1.0,
+     "day": "2026-06-20",
+     "expected_kwh": 1728515.4,
+     "gap_kwh": 128354.3999999999,
+     "performance_index": 0.9257429815204424,
+     "relative_gap_pct": 7.425701847955761,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1571595.7,
+     "coverage": 1.0,
+     "day": "2026-06-21",
+     "expected_kwh": 1718045.2,
+     "gap_kwh": 146449.5,
+     "performance_index": 0.9147580634083434,
+     "relative_gap_pct": 8.524193659165661,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1557609.8,
+     "coverage": 1.0,
+     "day": "2026-06-22",
+     "expected_kwh": 1694561.7,
+     "gap_kwh": 136951.8999999999,
+     "performance_index": 0.9191815205076334,
+     "relative_gap_pct": 8.081847949236662,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1526410.0,
+     "coverage": 1.0,
+     "day": "2026-06-23",
+     "expected_kwh": 1663220.1,
+     "gap_kwh": 136810.1000000001,
+     "performance_index": 0.9177438391948245,
+     "relative_gap_pct": 8.22561608051755,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1507887.1,
+     "coverage": 1.0,
+     "day": "2026-06-24",
+     "expected_kwh": 1638848.6,
+     "gap_kwh": 130961.5,
+     "performance_index": 0.9200893236873742,
+     "relative_gap_pct": 7.991067631262583,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1500981.5,
+     "coverage": 1.0,
+     "day": "2026-06-25",
+     "expected_kwh": 1650262.4,
+     "gap_kwh": 149280.8999999999,
+     "performance_index": 0.9095411129769424,
+     "relative_gap_pct": 9.045888702305762,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1522640.5,
+     "coverage": 1.0,
+     "day": "2026-06-26",
+     "expected_kwh": 1662419.8,
+     "gap_kwh": 139779.30000000005,
+     "performance_index": 0.9159181694058264,
+     "relative_gap_pct": 8.408183059417365,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1460242.5,
+     "coverage": 1.0,
+     "day": "2026-06-27",
+     "expected_kwh": 1599503.6,
+     "gap_kwh": 139261.1000000001,
+     "performance_index": 0.9129348005218618,
+     "relative_gap_pct": 8.706519947813815,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1455976.7,
+     "coverage": 1.0,
+     "day": "2026-06-28",
+     "expected_kwh": 1600317.6,
+     "gap_kwh": 144340.90000000014,
+     "performance_index": 0.909804841239014,
+     "relative_gap_pct": 9.019515876098602,
+     "status": "OK"
+    },
+    {
+     "actual_kwh": 1582750.8,
+     "coverage": 1.0,
+     "day": "2026-06-29",
+     "expected_kwh": 1737034.6,
+     "gap_kwh": 154283.80000000005,
+     "performance_index": 0.9111797773055298,
+     "relative_gap_pct": 8.882022269447024,
+     "status": "OK"
+    }
+   ],
+   "expected": {
+    "basis": "BASELINE",
+    "note": null,
+    "std_uncertainty": null,
+    "tag": {
+     "emulates": "MODELLED",
+     "method": null,
+     "provenance": "SYNTHETIC",
+     "source": "Synthetic stand-in for a weather-adjusted performance model"
+    },
+    "unit": "kWh",
+    "value": 98958798.69999997
+   },
+   "gap": {
+    "basis": "CALCULATED",
+    "note": null,
+    "std_uncertainty": null,
+    "tag": {
+     "emulates": "MODELLED",
+     "method": "expected - actual, summed over intervals where both exist",
+     "provenance": "SYNTHETIC",
+     "source": "SolarWise gap engine"
+    },
+    "unit": "kWh",
+    "value": 4646595.799999967
+   },
+   "interval_minutes": 1440,
+   "limitations": [],
+   "period_end": "2026-06-29",
+   "period_start": "2026-05-01",
+   "result": {
+    "actual_kwh": 94312202.9,
+    "expected_kwh": 98958798.69999997,
+    "gap_kwh": 4646595.799999967,
+    "message": null,
+    "relative_gap_pct": 4.695485253500727,
+    "status": "OK"
+   },
+   "significance": {
+    "basis": "UNCERTAINTY_AND_MATERIALITY",
+    "combined_std_uncertainty_pct": 2.055984864554368,
+    "direction": "UNDERPERFORMANCE",
+    "distinguishable": true,
+    "material": true,
+    "note": "combined standard uncertainty 2.06 % (k = 2 -> 4.11 %); materiality threshold 3 %",
+    "significant": true,
+    "threshold_pct": 4.111969729108736
+   },
+   "window": {
+    "coverage": {
+     "daylight_slots": 7,
+     "days_complete": 7,
+     "days_total": 7,
+     "days_with_data": 7,
+     "fraction": 1.0,
+     "matched_daylight_slots": 7,
+     "missing_actual_slots": 0,
+     "missing_expected_slots": 0
+    },
+    "end": "2026-06-29",
+    "result": {
+     "actual_kwh": 10556889.1,
+     "expected_kwh": 11551606.7,
+     "gap_kwh": 994717.5999999996,
+     "message": null,
+     "relative_gap_pct": 8.611075721613684,
+     "status": "OK"
+    },
+    "significance": {
+     "basis": "UNCERTAINTY_AND_MATERIALITY",
+     "combined_std_uncertainty_pct": 2.051535616804889,
+     "direction": "UNDERPERFORMANCE",
+     "distinguishable": true,
+     "material": true,
+     "note": "combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %",
+     "significant": true,
+     "threshold_pct": 4.103071233609778
+    },
+    "start": "2026-06-23"
+   }
+  },
+  "generated_at": "2026-07-01T08:00:00Z",
+  "interval_minutes": 1440,
+  "intraday": {
+   "asymmetry_pct": null,
+   "clipping_days": 0,
+   "days_evaluated": 0,
+   "days_with_edge_excess": 0,
+   "edge_excess_pct": null,
+   "edge_side": null,
+   "evaluable": false,
+   "loss_evening_pct": null,
+   "loss_midday_pct": null,
+   "loss_morning_pct": null,
+   "notes": [],
+   "plateau_day_list": [],
+   "plateau_days": 0,
+   "plateau_excess_loss_kwh": null,
+   "plateau_level_of_ac": null,
+   "plateau_signature": false,
+   "profile": [],
+   "reason": "daily data carry no intraday profile; shading and curtailment signatures cannot be assessed",
+   "shading_excess_loss_kwh": null,
+   "shading_signature": false
+  },
+  "period_end": "2026-06-29",
+  "period_start": "2026-05-01",
+  "plant": {
+   "annual_degradation_rate": null,
+   "azimuth_deg": 180.0,
+   "capacity_ac_kw": 250000.0,
+   "capacity_dc_kwp": 300000.0,
+   "commissioning_date": null,
+   "is_demonstration": true,
+   "latitude": 33.49,
+   "longitude": 6.8,
+   "module_area_m2": null,
+   "module_temp_coeff_per_c": -0.0035,
+   "name": "El Foulia reference case (synthetic data)",
+   "noct_c": 45.0,
+   "parameter_notes": {
+    "azimuth_deg": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "capacity_ac_kw": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "capacity_dc_kwp": "Nominal capacity of the public reference case (300 MWp).",
+    "latitude": "Approximate location of Guemar, El Oued (not a surveyed site coordinate).",
+    "longitude": "Approximate location of Guemar, El Oued (not a surveyed site coordinate).",
+    "module_temp_coeff_per_c": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "noct_c": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "system_loss_fraction": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "tilt_deg": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "tracking": "Illustrative assumption for the demonstration - not the actual design of the plant."
+   },
+   "system_loss_fraction": 0.14,
+   "tilt_deg": 30.0,
+   "timezone": "Africa/Algiers",
+   "tracking": "FIXED"
+  },
+  "provenance": [
+   {
+    "effective_class": "MEASURED",
+    "label": "Actual energy",
+    "method": null,
+    "metric": "actual_energy",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for revenue-meter energy",
+    "uncertainty_abs": null,
+    "uncertainty_pct": 0.5,
+    "unit": "kWh"
+   },
+   {
+    "effective_class": "MODELLED",
+    "label": "Expected energy (baseline)",
+    "method": null,
+    "metric": "expected_energy",
+    "provenance": "SYNTHETIC (emulates MODELLED)",
+    "source": "Synthetic stand-in for a weather-adjusted performance model",
+    "uncertainty_abs": null,
+    "uncertainty_pct": 2.0,
+    "unit": "kWh"
+   },
+   {
+    "effective_class": "MEASURED",
+    "label": "Availability",
+    "method": null,
+    "metric": "availability",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for a SCADA availability log",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "fraction"
+   },
+   {
+    "effective_class": "MEASURED",
+    "label": "Soiling ratio",
+    "method": null,
+    "metric": "soiling_ratio",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for a soiling station (clean / soiled reference cells)",
+    "uncertainty_abs": 0.005,
+    "uncertainty_pct": null,
+    "unit": "fraction"
+   },
+   {
+    "effective_class": "MEASURED",
+    "label": "In-plane irradiation",
+    "method": null,
+    "metric": "poa_irradiation",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for an in-plane pyranometer",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "kWh/m2"
+   },
+   {
+    "effective_class": "MEASURED",
+    "label": "Global horizontal irradiation",
+    "method": null,
+    "metric": "ghi",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for a horizontal pyranometer",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "kWh/m2"
+   },
+   {
+    "effective_class": "MEASURED",
+    "label": "Ambient temperature",
+    "method": null,
+    "metric": "ambient_temp",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for a weather-station thermometer",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "degC"
+   },
+   {
+    "effective_class": "MEASURED",
+    "label": "Module temperature",
+    "method": null,
+    "metric": "module_temp",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for back-of-module temperature sensors",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "degC"
+   },
+   {
+    "effective_class": "MEASURED",
+    "label": "Wind speed",
+    "method": null,
+    "metric": "wind_speed",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for a weather-station anemometer",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "m/s"
+   },
+   {
+    "effective_class": "MEASURED",
+    "label": "Precipitation",
+    "method": null,
+    "metric": "precipitation",
+    "provenance": "SYNTHETIC (emulates MEASURED)",
+    "source": "Synthetic stand-in for a weather-station rain gauge",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "mm"
+   }
+  ],
+  "quality": {
+   "channels": [
+    {
+     "column": "actual_energy_kwh",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 1788625.5,
+     "mean": 1571870.0483333333,
+     "metric": "actual_energy",
+     "minimum": 1045498.7,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for revenue-meter energy",
+     "unit": "kWh"
+    },
+    {
+     "column": "expected_energy_kwh",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 1790044.3,
+     "mean": 1649313.3116666663,
+     "metric": "expected_energy",
+     "minimum": 1104645.4,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MODELLED)",
+     "source": "Synthetic stand-in for a weather-adjusted performance model",
+     "unit": "kWh"
+    },
+    {
+     "column": "availability_fraction",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 0.998,
+     "mean": 0.9979999999999991,
+     "metric": "availability",
+     "minimum": 0.998,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for a SCADA availability log",
+     "unit": "fraction"
+    },
+    {
+     "column": "soiling_ratio",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 0.9981,
+     "mean": 0.9536700000000001,
+     "metric": "soiling_ratio",
+     "minimum": 0.9114,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for a soiling station (clean / soiled reference cells)",
+     "unit": "fraction"
+    },
+    {
+     "column": "poa_irradiation_kwh_m2",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 7.4026,
+     "mean": 6.843511666666668,
+     "metric": "poa_irradiation",
+     "minimum": 4.4403,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for an in-plane pyranometer",
+     "unit": "kWh/m2"
+    },
+    {
+     "column": "ghi_kwh_m2",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 8.3947,
+     "mean": 7.610118333333332,
+     "metric": "ghi",
+     "minimum": 4.7482,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for a horizontal pyranometer",
+     "unit": "kWh/m2"
+    },
+    {
+     "column": "ambient_temp_c",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 36.89,
+     "mean": 30.48016666666667,
+     "metric": "ambient_temp",
+     "minimum": 24.22,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for a weather-station thermometer",
+     "unit": "degC"
+    },
+    {
+     "column": "module_temp_c",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 51.14,
+     "mean": 43.59016666666667,
+     "metric": "module_temp",
+     "minimum": 34.07,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for back-of-module temperature sensors",
+     "unit": "degC"
+    },
+    {
+     "column": "wind_speed_ms",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 5.26,
+     "mean": 3.232333333333334,
+     "metric": "wind_speed",
+     "minimum": 1.54,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for a weather-station anemometer",
+     "unit": "m/s"
+    },
+    {
+     "column": "precipitation_mm",
+     "completeness": 1.0,
+     "expected_slots": 60,
+     "longest_gap_slots": 0,
+     "maximum": 0.0,
+     "mean": 0.0,
+     "metric": "precipitation",
+     "minimum": 0.0,
+     "observed_slots": 60,
+     "provenance": "SYNTHETIC (emulates MEASURED)",
+     "source": "Synthetic stand-in for a weather-station rain gauge",
+     "unit": "mm"
+    }
+   ],
+   "daylight_slots": 60,
+   "days_total": 60,
+   "import_issues": [],
+   "issues": [],
+   "notes": [
+    "Missing values are never replaced by zero or interpolated.",
+    "Suspect values are reported and left unchanged."
+   ],
+   "slots_total": 60,
+   "status": "GOOD",
+   "summary": "No blocking issue or warning on the analysed period."
+  },
+  "recommendation": {
+   "authorization_note": "SIMULATED DECISION. It rests on a demonstration scenario with synthetic evidence and is not an operational instruction. No cleaning may be ordered on this basis.",
+   "context": "DEMONSTRATION",
+   "decision": "CLEAN_NOW",
+   "decisive_evidence": [
+    {
+     "effective_class": "MEASURED",
+     "label": "Actual energy",
+     "tag": {
+      "emulates": "MEASURED",
+      "method": null,
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for revenue-meter energy"
+     }
+    },
+    {
+     "effective_class": "MODELLED",
+     "label": "Expected energy (baseline)",
+     "tag": {
+      "emulates": "MODELLED",
+      "method": null,
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for a weather-adjusted performance model"
+     }
+    },
+    {
+     "effective_class": "MEASURED",
+     "label": "Soiling measurement",
+     "tag": {
+      "emulates": "MEASURED",
+      "method": null,
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for a soiling station (clean / soiled reference cells)"
+     }
+    }
+   ],
+   "failed_gates": [],
+   "gates": [
+    {
+     "detail": "Actual energy: SYNTHETIC (emulates MEASURED) (Synthetic stand-in for revenue-meter energy); completeness 100 % over the period, 100 % in the assessment window.",
+     "id": "PRODUCTION_MEASURED",
+     "label": "Reliable measured production data",
+     "passed": true
+    },
+    {
+     "detail": "Baseline: TELEMETRY_MODEL, SYNTHETIC (emulates MODELLED) (Synthetic stand-in for a weather-adjusted performance model).",
+     "id": "BASELINE_DOCUMENTED",
+     "label": "Baseline of documented origin",
+     "passed": true
+    },
+    {
+     "detail": "Gap in the assessment window: 8.6 % (combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %).",
+     "id": "DEVIATION_SIGNIFICANT",
+     "label": "Significant under-performance now",
+     "passed": true
+    },
+    {
+     "detail": "Soiling loss 8.5 % from soiling_ratio channel [SYNTHETIC (emulates MEASURED)], last reading 2026-06-29 (0 day(s) before the period end).",
+     "id": "SOILING_EVIDENCE_CREDIBLE",
+     "label": "Credible measured soiling evidence",
+     "passed": true
+    },
+    {
+     "detail": "Deviation left for soiling to explain 8.4 % vs measured soiling loss 8.5 %: difference -0.1 % points (tolerance 4.2).",
+     "id": "SOILING_CONSISTENT_WITH_GAP",
+     "label": "Soiling measurement consistent with the production gap",
+     "passed": true
+    },
+    {
+     "detail": "No equipment, outage or sensor issue is open in the assessment window.",
+     "id": "NO_UNRESOLVED_TECHNICAL_ISSUE",
+     "label": "No unresolved technical issue",
+     "passed": true
+    },
+    {
+     "detail": "No critical contradiction was found.",
+     "id": "NO_CRITICAL_CONTRADICTION",
+     "label": "No critical contradiction in the evidence",
+     "passed": true
+    },
+    {
+     "detail": "Recoverable over 30 days: 2,078.0 .. 6,907.3 MWh (central 3,784.3 MWh).",
+     "id": "RECOVERABLE_ENERGY_ESTIMATED",
+     "label": "Recoverable energy estimated from measured soiling",
+     "passed": true
+    },
+    {
+     "detail": "All cost items and a decision-grade energy value were supplied.",
+     "id": "ECONOMICS_DECISION_GRADE",
+     "label": "Economic inputs complete and decision-grade",
+     "passed": true
+    },
+    {
+     "detail": "Conservative net benefit 4,965,999 DZD (PROFITABLE).",
+     "id": "ECONOMICS_PROFITABLE",
+     "label": "Cleaning profitable in the conservative case",
+     "passed": true
+    }
+   ],
+   "headline": "SIMULATED DECISION - Clean now: measured soiling explains the loss and cleaning pays even in the conservative case. Not an operational instruction.",
+   "next_actions": [
+    "Schedule the cleaning; record its date, method, water use and cost.",
+    "Measure the soiling ratio again after cleaning to verify the recovery and to refine the cleaning-effectiveness assumption."
+   ],
+   "operational_authorization": false,
+   "reason_code": "CLEANING_JUSTIFIED",
+   "reasons": [
+    "Gap in the assessment window: 8.6 % (combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %).",
+    "Soiling loss 8.5 % from soiling_ratio channel [SYNTHETIC (emulates MEASURED)], last reading 2026-06-29 (0 day(s) before the period end).",
+    "Deviation left for soiling to explain 8.4 % vs measured soiling loss 8.5 %: difference -0.1 % points (tolerance 4.2).",
+    "No technical issue is open and the evidence is free of critical contradictions.",
+    "Recoverable over 30 days: 2,078.0 .. 6,907.3 MWh (central 3,784.3 MWh).",
+    "Net benefit: 4,965,999 DZD in the conservative case, 14,401,568 DZD in the base case (ROI 319 %)."
+   ],
+   "review_after_days": null,
+   "rule": "R3",
+   "rule_trace": [
+    "R0 passed",
+    "R1 passed",
+    "R2 passed",
+    "R3 applies: all gates passed"
+   ],
+   "safety_interlock_triggered": false,
+   "simulated": true,
+   "would_change_decision": [
+    "Any gate failing: a technical issue appearing, the soiling measurement becoming outdated, or costs rising above the break-even."
+   ]
+  },
+  "recoverable": {
+   "assumptions": [
+    {
+     "classification": "DERIVED_FROM_DATA",
+     "name": "Measured soiling loss",
+     "source": "soiling_ratio channel [SYNTHETIC (emulates MEASURED)]",
+     "unit": "%",
+     "value": 8.510370204345687
+    },
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Cleaning effectiveness",
+     "source": "Illustrative demonstration assumption (no rain expected during the dry season).",
+     "unit": "fraction",
+     "value": 0.9
+    },
+    {
+     "classification": "USER_ASSUMPTION",
+     "name": "Benefit horizon",
+     "source": "Illustrative demonstration assumption (no rain expected during the dry season).",
+     "unit": "days",
+     "value": 30.0
+    },
+    {
+     "classification": "DERIVED_FROM_DATA",
+     "name": "Projected daily energy of the clean array",
+     "source": "mean of the assessment window (persistence assumption)",
+     "unit": "kWh/day",
+     "value": 1646929.0695142858
+    }
+   ],
+   "horizon_days": 30.0,
+   "method": "recoverable = soiling loss fraction x cleaning effectiveness x projected daily clean energy x horizon",
+   "observed_gap": {
+    "basis": "expected - actual over the assessment window",
+    "note": null,
+    "std_uncertainty": null,
+    "tag": {
+     "emulates": "MODELLED",
+     "method": "expected - actual, summed over intervals where both exist",
+     "provenance": "SYNTHETIC",
+     "source": "SolarWise gap engine"
+    },
+    "unit": "kWh",
+    "value": 994717.5999999996
+   },
+   "observed_gap_pct": 8.611075721613684,
+   "projected_daily_clean_energy": {
+    "basis": "PERSISTENCE_ASSUMPTION",
+    "note": "Mean of 7 day(s) in a 7-day window; assumes the coming weeks resemble it.",
+    "std_uncertainty": null,
+    "tag": {
+     "emulates": "MODELLED",
+     "method": "mean daily pre-soiling expected energy of the assessment window, held constant",
+     "provenance": "SYNTHETIC",
+     "source": "SolarWise projection"
+    },
+    "unit": "kWh/day",
+    "value": 1646929.0695142858
+   },
+   "reasons": [
+    "Projection based on a credible soiling measurement and the declared assumptions."
+   ],
+   "recoverable": {
+    "central": 3784313.542103589,
+    "high": 6907341.171758329,
+    "low": 2077999.8980749445,
+    "unit": "kWh"
+   },
+   "recoverable_per_day": {
+    "central": 126143.7847367863,
+    "high": 153496.4704835184,
+    "low": 98952.37609880688,
+    "unit": "kWh/day"
+   },
+   "recoverable_tag": {
+    "emulates": "MODELLED",
+    "method": "measured soiling loss x assumed cleaning effectiveness x projected clean energy x assumed horizon",
+    "provenance": "SYNTHETIC",
+    "source": "SolarWise recoverable-energy engine"
+   },
+   "residual_soiling_after_cleaning_pct": 0.8510370204345685,
+   "soiling_loss_high_pct": 9.510370204345687,
+   "soiling_loss_low_pct": 7.510370204345687,
+   "soiling_loss_pct": 8.510370204345687,
+   "soiling_related_loss": {
+    "basis": "measured soiling ratio applied to the assessment window",
+    "note": null,
+    "std_uncertainty": 57642.517433,
+    "tag": {
+     "emulates": "MODELLED",
+     "method": "pre-soiling expected energy x (1 - soiling ratio)",
+     "provenance": "SYNTHETIC",
+     "source": "SolarWise attribution"
+    },
+    "unit": "kWh",
+    "value": 981118.32573056
+   },
+   "status": "ESTIMATED",
+   "uncertainty_statement": "Range obtained by combining the extremes of: soiling loss 8.5 % with declared standard uncertainty 0.5 % points (range 7.5 .. 9.5 % at k = 2); cleaning effectiveness 0.80 .. 0.98; benefit horizon 21 .. 45 days. It is a scenario range, not a statistical confidence interval. Not included: weather over the horizon differing from the projection, a change of soiling rate, and how representative the soiling sensor is of the array.",
+   "unexplained_loss": {
+    "basis": "residual of the factor chain over the assessment window",
+    "note": null,
+    "std_uncertainty": null,
+    "tag": {
+     "emulates": "MODELLED",
+     "method": "expected - quantified factors - actual",
+     "provenance": "SYNTHETIC",
+     "source": "SolarWise attribution"
+    },
+    "unit": "kWh",
+    "value": -9503.939130559796
+   },
+   "usable_for_decision": true,
+   "warnings": []
+  },
+  "stages": [
+   {
+    "key": "validation",
+    "message": "No blocking issue or warning on the analysed period.",
+    "state": "OK",
+    "title": "Data validation"
+   },
+   {
+    "key": "baseline",
+    "message": "Telemetry Model baseline, SYNTHETIC (emulates MODELLED).",
+    "state": "OK",
+    "title": "Baseline"
+   },
+   {
+    "key": "gap",
+    "message": "Gap 4.7 % over the period, 8.6 % in the assessment window.",
+    "state": "OK",
+    "title": "Performance gap"
+   },
+   {
+    "key": "attribution",
+    "message": "Not quantified (remain in the residual): curtailment.",
+    "state": "WARNING",
+    "title": "Factor attribution"
+   },
+   {
+    "key": "diagnostics",
+    "message": "Soiling of the module surface accounts for the deviation: A direct soiling measurement shows a loss of 8.5 %, in line with the deviation observed in production.",
+    "state": "OK",
+    "title": "Diagnostic hypotheses"
+   },
+   {
+    "key": "recoverable",
+    "message": "3,784.3 MWh over 30 days (central).",
+    "state": "OK",
+    "title": "Recoverable energy"
+   },
+   {
+    "key": "economics",
+    "message": "Profitable: base net benefit 14,401,568 DZD.",
+    "state": "OK",
+    "title": "Cleaning economics"
+   },
+   {
+    "key": "evidence",
+    "message": "Data adequacy HIGH; 10 of 10 gates passed.",
+    "state": "OK",
+    "title": "Evidence assessment"
+   },
+   {
+    "key": "decision",
+    "message": "CLEAN_NOW (rule R3).",
+    "state": "OK",
+    "title": "Decision"
+   },
+   {
+    "key": "explanation",
+    "message": "Assembled deterministically from the engine outputs.",
+    "state": "OK",
+    "title": "Explanation"
+   }
+  ],
+  "thresholds": {
+   "assessment_window_days": 7,
+   "availability_alert_fraction": 0.99,
+   "consistency_tolerance_pct": 3.0,
+   "coverage_factor": 2.0,
+   "device_underperformance_ratio": 0.9,
+   "factor_materiality_pct": 1.0,
+   "gap_materiality_pct": 3.0,
+   "gap_severe_pct": 10.0,
+   "min_data_completeness": 0.9,
+   "min_dry_days_for_trend": 14,
+   "outage_actual_fraction": 0.02,
+   "rain_cleaning_threshold_mm": 6.0,
+   "shading_edge_excess_pct": 10.0,
+   "soiling_credibility_floor_pct": 2.0,
+   "soiling_measurement_max_age_days": 7,
+   "step_change_min_drop_pct": 3.0
+  },
+  "timezone": "Africa/Algiers",
+  "trend": {
+   "confidence_level": 0.95,
+   "declining": true,
+   "evaluable": true,
+   "method": "Theil-Sen slope with Sen's confidence interval on the daily performance index (actual / pre-soiling expected), over the current dry spell.",
+   "precipitation_known": true,
+   "reason": null,
+   "reset_events": [],
+   "slope_high_pct_per_day": -0.14226723094622157,
+   "slope_low_pct_per_day": -0.15718828579834143,
+   "slope_pct_per_day": -0.15015247272941898,
+   "spell_days": 60,
+   "spell_start": "2026-05-01",
+   "spell_started_by": "PERIOD_START",
+   "step": {
+    "after_pct": 95.09082308639314,
+    "before_pct": 96.53739324348672,
+    "day": "2026-05-30",
+    "drop_pct": 1.446570157093575,
+    "material": false,
+    "noise_sigma_pct": 0.3860337145489153
+   },
+   "trend_points": 60,
+   "valid_days": 60
+  }
+ },
+ "rule": "R3",
+ "simulated": true,
+ "window_gap_pct": 8.611075721613684
+}

@@ -1,0 +1,30 @@
+{
+  "name": "El Foulia reference case (synthetic data)",
+  "capacity_dc_kwp": 300000.0,
+  "capacity_ac_kw": 250000.0,
+  "latitude": 33.49,
+  "longitude": 6.8,
+  "timezone": "Africa/Algiers",
+  "tracking": "FIXED",
+  "tilt_deg": 30.0,
+  "azimuth_deg": 180.0,
+  "module_temp_coeff_per_c": -0.0035,
+  "noct_c": 45.0,
+  "system_loss_fraction": 0.14,
+  "module_area_m2": null,
+  "commissioning_date": null,
+  "annual_degradation_rate": null,
+  "is_demonstration": true,
+  "parameter_notes": {
+    "capacity_dc_kwp": "Nominal capacity of the public reference case (300 MWp).",
+    "latitude": "Approximate location of Guemar, El Oued (not a surveyed site coordinate).",
+    "longitude": "Approximate location of Guemar, El Oued (not a surveyed site coordinate).",
+    "capacity_ac_kw": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "tracking": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "tilt_deg": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "azimuth_deg": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "module_temp_coeff_per_c": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "noct_c": "Illustrative assumption for the demonstration - not the actual design of the plant.",
+    "system_loss_fraction": "Illustrative assumption for the demonstration - not the actual design of the plant."
+  }
+}

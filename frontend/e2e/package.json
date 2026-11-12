@@ -1,0 +1,12 @@
+{
+  "name": "solarwise-e2e",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Browser checks of SolarWise DZ against a real server. See README.md.",
+  "scripts": {
+    "all": "./all.sh"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.17.0"
+  }
+}

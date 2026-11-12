@@ -1,0 +1,20 @@
+{
+ "ai": {
+  "enabled": false,
+  "provider": null,
+  "role": "rephrases the engine's explanation only; never decides"
+ },
+ "demo_limits": {
+  "max_datasets_per_plant": 8,
+  "max_upload_mb": 5
+ },
+ "demo_mode": true,
+ "demo_statement": "SYNTHETIC DEMONSTRATION DATASET. Every value was computed by the SolarWise DZ scenario generator from a seeded pseudo-random sequence. It contains no measurement from the El Foulia plant or from any other plant and does not describe the actual operation of any plant. The plant name, location and nominal capacity are public reference information; all technical parameters are illustrative assumptions.",
+ "engine_version": "1.0.0",
+ "external_data_enabled": true,
+ "max_upload_mb": 25,
+ "name": "SolarWise DZ",
+ "registration_open": true,
+ "schema_revision": "created from models (in-memory database)",
+ "version": "0.1.0"
+}

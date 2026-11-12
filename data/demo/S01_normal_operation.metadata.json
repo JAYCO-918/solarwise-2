@@ -1,0 +1,88 @@
+{
+  "name": "Demo scenario - Normal operation",
+  "description": "Synthetic scenario 'S01_normal_operation'. SYNTHETIC DEMONSTRATION DATASET. Every value was computed by the SolarWise DZ scenario generator from a seeded pseudo-random sequence. It contains no measurement from the El Foulia plant or from any other plant and does not describe the actual operation of any plant. The plant name, location and nominal capacity are public reference information; all technical parameters are illustrative assumptions.",
+  "timezone": "Africa/Algiers",
+  "interval_minutes": 1440,
+  "timestamp_column": "timestamp",
+  "device_column": "device_code",
+  "channels": {
+    "actual_energy": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for revenue-meter energy",
+      "uncertainty_pct": 0.5,
+      "boundary": "GRID_METER"
+    },
+    "expected_energy": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MODELLED",
+      "source": "Synthetic stand-in for a weather-adjusted performance model",
+      "uncertainty_pct": 2.0,
+      "boundary": "GRID_METER"
+    },
+    "availability": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for a SCADA availability log"
+    },
+    "soiling_ratio": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for a soiling station (clean / soiled reference cells)",
+      "uncertainty_abs": 0.005,
+      "soiling_method": "SOILING_STATION"
+    },
+    "poa_irradiation": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for an in-plane pyranometer"
+    },
+    "ghi": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for a horizontal pyranometer"
+    },
+    "ambient_temp": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for a weather-station thermometer"
+    },
+    "module_temp": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for back-of-module temperature sensors"
+    },
+    "wind_speed": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for a weather-station anemometer"
+    },
+    "precipitation": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for a weather-station rain gauge"
+    }
+  },
+  "baseline": {
+    "method": "TELEMETRY_MODEL",
+    "irradiance_adjusted": true,
+    "temperature_adjusted": true,
+    "degradation_adjusted": true,
+    "soiling_allowance_fraction": 0.0,
+    "description": "Synthetic stand-in for an expected-energy model driven by measured in-plane irradiation and module temperature."
+  },
+  "capacity_dc_kwp": 300000.0,
+  "synthetic": {
+    "generator": "solarwise.demo.generator",
+    "generator_version": "1.0.0",
+    "seed": 20260607,
+    "statement": "SYNTHETIC DEMONSTRATION DATASET. Every value was computed by the SolarWise DZ scenario generator from a seeded pseudo-random sequence. It contains no measurement from the El Foulia plant or from any other plant and does not describe the actual operation of any plant. The plant name, location and nominal capacity are public reference information; all technical parameters are illustrative assumptions.",
+    "parameters": {
+      "scenario": "S01_normal_operation"
+    },
+    "injected_effects": [
+      "No fault injected: array near clean (soiling ratio 0.995), availability 99.8 %."
+    ]
+  },
+  "disclaimer": "SYNTHETIC DEMONSTRATION DATASET. Every value was computed by the SolarWise DZ scenario generator from a seeded pseudo-random sequence. It contains no measurement from the El Foulia plant or from any other plant and does not describe the actual operation of any plant. The plant name, location and nominal capacity are public reference information; all technical parameters are illustrative assumptions."
+}

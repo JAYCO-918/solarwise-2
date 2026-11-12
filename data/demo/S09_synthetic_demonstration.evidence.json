@@ -1,0 +1,37 @@
+[
+  {
+    "reference": "DEMO-CLEAN-0430",
+    "evidence_type": "CLEANING_EVENT",
+    "observed_start": "2026-04-30T06:00:00+01:00",
+    "tag": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for a maintenance log"
+    },
+    "description": "Full-site cleaning (synthetic record)."
+  },
+  {
+    "reference": "DEMO-INSP-0626",
+    "evidence_type": "VISUAL_INSPECTION",
+    "observed_start": "2026-06-26T10:00:00+01:00",
+    "tag": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for an inspection report"
+    },
+    "description": "Uniform dust layer on all inspected rows (synthetic record).",
+    "finding": "SOILING_HEAVY"
+  },
+  {
+    "reference": "DEMO-SRTEST-0627",
+    "evidence_type": "SOILING_MEASUREMENT",
+    "observed_start": "2026-06-27T12:00:00+01:00",
+    "tag": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic stand-in for a clean-reference string test"
+    },
+    "description": "Freshly cleaned strings compared with adjacent uncleaned strings at midday (synthetic record).",
+    "value": 0.913,
+    "unit": "fraction",
+    "std_uncertainty": 0.006,
+    "soiling_method": "STRING_COMPARISON"
+  }
+]

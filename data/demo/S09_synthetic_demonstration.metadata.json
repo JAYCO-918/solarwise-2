@@ -1,0 +1,80 @@
+{
+  "name": "Demo scenario - Synthetic demonstration (no evidence role declared)",
+  "description": "Synthetic scenario 'S09_synthetic_demonstration'. SYNTHETIC DEMONSTRATION DATASET. Every value was computed by the SolarWise DZ scenario generator from a seeded pseudo-random sequence. It contains no measurement from the El Foulia plant or from any other plant and does not describe the actual operation of any plant. The plant name, location and nominal capacity are public reference information; all technical parameters are illustrative assumptions.",
+  "timezone": "Africa/Algiers",
+  "interval_minutes": 1440,
+  "timestamp_column": "timestamp",
+  "device_column": "device_code",
+  "channels": {
+    "actual_energy": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: revenue-meter energy",
+      "uncertainty_pct": 0.5,
+      "boundary": "GRID_METER"
+    },
+    "expected_energy": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: a weather-adjusted performance model",
+      "uncertainty_pct": 2.0,
+      "boundary": "GRID_METER"
+    },
+    "availability": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: a SCADA availability log"
+    },
+    "soiling_ratio": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: a soiling station (clean / soiled reference cells)",
+      "uncertainty_abs": 0.005,
+      "soiling_method": "SOILING_STATION"
+    },
+    "poa_irradiation": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: an in-plane pyranometer"
+    },
+    "ghi": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: a horizontal pyranometer"
+    },
+    "ambient_temp": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: a weather-station thermometer"
+    },
+    "module_temp": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: back-of-module temperature sensors"
+    },
+    "wind_speed": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: a weather-station anemometer"
+    },
+    "precipitation": {
+      "provenance": "SYNTHETIC",
+      "source": "Synthetic series: a weather-station rain gauge"
+    }
+  },
+  "baseline": {
+    "method": "TELEMETRY_MODEL",
+    "irradiance_adjusted": true,
+    "temperature_adjusted": true,
+    "degradation_adjusted": true,
+    "soiling_allowance_fraction": 0.0,
+    "description": "Synthetic stand-in for an expected-energy model driven by measured in-plane irradiation and module temperature."
+  },
+  "capacity_dc_kwp": 300000.0,
+  "synthetic": {
+    "generator": "solarwise.demo.generator",
+    "generator_version": "1.0.0",
+    "seed": 20260607,
+    "statement": "SYNTHETIC DEMONSTRATION DATASET. Every value was computed by the SolarWise DZ scenario generator from a seeded pseudo-random sequence. It contains no measurement from the El Foulia plant or from any other plant and does not describe the actual operation of any plant. The plant name, location and nominal capacity are public reference information; all technical parameters are illustrative assumptions.",
+    "parameters": {
+      "scenario": "S09_synthetic_demonstration",
+      "soiling_rate_per_day": 0.0015
+    },
+    "injected_effects": [
+      "Soiling accumulating at 0.15 % per day since a cleaning on the day before the period (soiling ratio 0.91 on the last day).",
+      "Availability 99.8 %; no equipment fault, no curtailment."
+    ]
+  },
+  "disclaimer": "SYNTHETIC DEMONSTRATION DATASET. Every value was computed by the SolarWise DZ scenario generator from a seeded pseudo-random sequence. It contains no measurement from the El Foulia plant or from any other plant and does not describe the actual operation of any plant. The plant name, location and nominal capacity are public reference information; all technical parameters are illustrative assumptions."
+}

@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solarwise"
+version = "0.1.0"
+description = "SolarWise DZ - photovoltaic performance intelligence and cleaning optimisation"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "LicenseRef-Proprietary"
+dependencies = [
+    # Web/API layer
+    "fastapi>=0.115,<1.0",
+    "uvicorn>=0.30,<1.0",
+    "python-multipart>=0.0.9",      # required by FastAPI for file uploads
+    "pydantic>=2.7,<3.0",
+    "pydantic-settings>=2.3,<3.0",  # environment-based configuration
+    # Persistence
+    "sqlalchemy>=2.0.30,<2.1",
+    "alembic>=1.13,<2.0",
+    # Security
+    "argon2-cffi>=23.1",            # Argon2id password hashing
+    "pyjwt>=2.8,<3.0",              # signed access tokens
+    # Numerics (robust statistics, baseline predictive methods)
+    "numpy>=1.26",
+    # Outbound HTTP (NASA POWER, PVGIS, optional AI providers)
+    "httpx>=0.27,<1.0",
+    # Time zones: Windows and minimal container images ship no IANA database of their own
+    "tzdata>=2024.1",
+    # Reporting
+    "jinja2>=3.1,<4.0",             # auto-escaped HTML reports
+    "reportlab>=4.0,<5.0",          # PDF reports
+]
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.1,<4.0"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.5",
+    "mypy>=1.10",
+    "httpx2>=2.0",  # HTTP client used by the framework's test client
+]
+
+[project.scripts]
+solarwise = "solarwise.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["solarwise*"]
+
+[tool.setuptools.package-data]
+solarwise = ["reference/*.json", "reports/templates/*.html", "migrations/script.py.mako", "py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+    "safety: decision-safety invariants that must never be relaxed",
+    "scientific: checks of formulas against independent reference values",
+]
+filterwarnings = ["error::DeprecationWarning:solarwise.*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = ["solarwise/migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "C4", "SIM", "RUF"]
+ignore = [
+    "E501",    # explanatory strings are not wrapped mid-sentence; code lines stay readable
+    "S101",    # assert is fine in tests and for internal invariants
+    "B008",    # FastAPI's Depends() default-argument idiom
+    "RUF012",  # SQLAlchemy/Pydantic class attributes
+    "SIM108",  # ternaries are not always clearer in engineering code
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105", "S106", "S311"]
+"solarwise/demo/**" = ["S311"]  # seeded PRNG is used deliberately for reproducible synthetic data
+
+[tool.mypy]
+python_version = "3.11"
+plugins = ["pydantic.mypy"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+check_untyped_defs = true
+disallow_untyped_defs = true
+files = ["solarwise"]
+
+[[tool.mypy.overrides]]
+module = ["reportlab.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["solarwise.migrations.*"]
+ignore_errors = true

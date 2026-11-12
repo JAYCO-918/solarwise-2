@@ -1,0 +1,14 @@
+[
+  {
+    "reference": "DEMO-INSP-0627",
+    "evidence_type": "VISUAL_INSPECTION",
+    "observed_start": "2026-06-27T10:00:00+01:00",
+    "tag": {
+      "provenance": "SYNTHETIC",
+      "emulates": "MEASURED",
+      "source": "Synthetic stand-in for an inspection report"
+    },
+    "description": "Thick dust layer on all inspected rows (synthetic record).",
+    "finding": "SOILING_HEAVY"
+  }
+]

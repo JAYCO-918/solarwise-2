@@ -1,0 +1,65 @@
+{
+  "name": "REPLACE - short name of the dataset",
+  "description": "REPLACE - where the file comes from, who exported it and when",
+  "timezone": "Africa/Algiers",
+  "interval_minutes": 1440,
+  "channels": {
+    "actual_energy": {
+      "unit": "kWh",
+      "provenance": "MEASURED",
+      "source": "REPLACE - meter identification: revenue meter at the delivery point, serial number, accuracy class",
+      "uncertainty_pct": null,
+      "boundary": "GRID_METER"
+    },
+    "expected_energy": {
+      "unit": "kWh",
+      "provenance": "MODELLED",
+      "source": "REPLACE - model name and version, and who ran it",
+      "method": "REPLACE - how the expected energy is computed",
+      "uncertainty_pct": null,
+      "boundary": "GRID_METER"
+    },
+    "poa_irradiation": {
+      "unit": "kWh/m2",
+      "provenance": "MEASURED",
+      "source": "REPLACE - pyranometer or reference cell, serial number, last calibration date",
+      "plane": "POA"
+    },
+    "ambient_temp": {
+      "unit": "degC",
+      "provenance": "MEASURED",
+      "source": "REPLACE - weather station identification"
+    },
+    "module_temp": {
+      "unit": "degC",
+      "provenance": "MEASURED",
+      "source": "REPLACE - back-of-module sensors, number and position"
+    },
+    "availability": {
+      "unit": "fraction",
+      "provenance": "MEASURED",
+      "source": "REPLACE - SCADA availability log and its definition of availability"
+    },
+    "curtailed_energy": {
+      "unit": "kWh",
+      "provenance": "MEASURED",
+      "source": "REPLACE - dispatch or curtailment log"
+    },
+    "soiling_ratio": {
+      "unit": "fraction",
+      "provenance": "MEASURED",
+      "source": "REPLACE - soiling station identification and cleaning schedule of its reference device",
+      "uncertainty_abs": null,
+      "soiling_method": "SOILING_STATION"
+    }
+  },
+  "baseline": {
+    "method": "TELEMETRY_MODEL",
+    "irradiance_adjusted": true,
+    "temperature_adjusted": true,
+    "degradation_adjusted": false,
+    "soiling_allowance_fraction": 0.0,
+    "description": "REPLACE - what the expected-energy model takes into account and what it does not"
+  },
+  "capacity_dc_kwp": null
+}

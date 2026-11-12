@@ -1,0 +1,1 @@
+timestamp,actual_energy_kwh,expected_energy_kwh,poa_irradiation_kwh_m2,ambient_temp_c,module_temp_c,availability_fraction,curtailed_energy_kwh,soiling_ratio

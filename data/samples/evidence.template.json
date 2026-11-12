@@ -1,0 +1,26 @@
+[
+  {
+    "reference": "CLEAN-001",
+    "evidence_type": "CLEANING_EVENT",
+    "observed_start": "REPLACE - date and time with UTC offset, for example 2026-01-31T06:00:00+01:00",
+    "tag": {
+      "provenance": "MEASURED",
+      "source": "REPLACE - maintenance log, work order number"
+    },
+    "description": "REPLACE - what was cleaned and how"
+  },
+  {
+    "reference": "SOILING-001",
+    "evidence_type": "SOILING_MEASUREMENT",
+    "observed_start": "REPLACE - date and time with UTC offset",
+    "tag": {
+      "provenance": "MEASURED",
+      "source": "REPLACE - test report reference"
+    },
+    "description": "REPLACE - method and conditions of the measurement",
+    "value": null,
+    "unit": "fraction",
+    "std_uncertainty": null,
+    "soiling_method": "STRING_COMPARISON"
+  }
+]

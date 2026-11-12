@@ -1,0 +1,25 @@
+{
+  "cleaning": {
+    "cleaning_effectiveness": 0.9,
+    "cleaning_effectiveness_low": 0.8,
+    "cleaning_effectiveness_high": 0.98,
+    "benefit_horizon_days": 3.0,
+    "benefit_horizon_days_low": 2.0,
+    "benefit_horizon_days_high": 5.0,
+    "source_note": "Illustrative demonstration assumption: natural cleaning expected within days."
+  },
+  "economics": {
+    "energy_value_per_kwh": 5.0,
+    "energy_value_basis": "INTERNAL_VALUATION",
+    "energy_value_source": "Illustrative demonstration assumption - not a market price, tariff or contractual value.",
+    "water_volume_m3": 1500.0,
+    "water_price_per_m3": 80.0,
+    "labour_hours": 6000.0,
+    "labour_rate_per_hour": 400.0,
+    "equipment_cost": 1500000.0,
+    "operational_cost": 500000.0,
+    "downtime_cost": 0.0,
+    "cost_uncertainty_pct": 20.0,
+    "cost_source": "Illustrative demonstration assumption - not a market price, tariff or contractual value."
+  }
+}
