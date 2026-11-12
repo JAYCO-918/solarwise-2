@@ -16,6 +16,8 @@ interface AuthState {
   expired: boolean;
   /** What the server answered when it did. */
   expiredReason: string | null;
+  /** Set when the session ended because the visitor signed out. */
+  signedOut: boolean;
   login: (email: string, password: string) => Promise<void>;
   /** Sign-up: creates the account and opens its session. */
   register: (fullName: string, email: string, password: string) => Promise<void>;
@@ -32,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [meta, setMeta] = useState<Meta | null>(null);
   const [expired, setExpired] = useState(false);
   const [expiredReason, setExpiredReason] = useState<string | null>(null);
+  const [signedOut, setSignedOut] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -65,6 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(token.access_token, token.expires_at);
     setUser(token.user);
     setExpired(false);
+    setSignedOut(false);
     setStatus("authenticated");
   }, []);
 
@@ -82,12 +86,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearSession();
     setUser(null);
     setExpired(false);
+    setSignedOut(true);
     setStatus(hasSession() ? "authenticated" : "anonymous");
   }, []);
 
   const value = useMemo<AuthState>(
-    () => ({ status, user, meta, expired, expiredReason, login, register, demoLogin, logout }),
-    [status, user, meta, expired, expiredReason, login, register, demoLogin, logout],
+    () => ({ status, user, meta, expired, expiredReason, signedOut, login, register, demoLogin, logout }),
+    [status, user, meta, expired, expiredReason, signedOut, login, register, demoLogin, logout],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

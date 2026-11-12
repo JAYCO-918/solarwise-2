@@ -17,7 +17,7 @@ packaging has not been run.
 | API | 43 operations on 34 paths |
 | Database | 11 tables; SQLite or PostgreSQL |
 | Demonstration | 10 synthetic scenarios on one reference case |
-| Automated tests | 788 on the backend, 80 on the interface, 9 browser runs with 163 expectations: all passing |
+| Automated tests | 788 on the backend, 83 on the interface, 10 browser runs with 180 expectations: all passing |
 | Documentation | 10 documents in `docs/`, 2 READMEs, this report |
 | Pitch | 15 slides (PowerPoint, PDF, HTML) and a speaker script |
 
@@ -178,12 +178,12 @@ Last complete run: November 2026, on Debian 12 with Python 3.11.2, Node.js 22.22
 |---|---|---|
 | Backend tests, SQLite | `make test` (`pytest`) | 788 passed |
 | Backend tests, PostgreSQL 16 | `pytest` with `SOLARWISE_TEST_DATABASE_URL` | 788 passed |
-| Interface tests | `npm test` (`vitest`) | 80 passed, 10 files |
+| Interface tests | `npm test` (`vitest`) | 83 passed, 10 files |
 | Lint | `ruff check`, `eslint` | clean |
 | Static typing | `mypy` (83 files), `tsc` | clean |
 | Build of the interface | `npm run build` | succeeds |
-| Browser checks | `make e2e` | 9 runs of 9 passed, 163 expectations |
-| Browser checks that write data, on PostgreSQL 16 | `E2E_DATABASE_URL=...` | 4 runs passed, 116 expectations |
+| Browser checks | `make e2e` | 10 runs of 10 passed, 180 expectations |
+| Browser checks that write data, on PostgreSQL 16 | `E2E_DATABASE_URL=...` | 5 runs passed, 133 expectations |
 | Slides | build and comparison of the PowerPoint file with the PDF | 377 lines of text of 377 in place |
 
 The first six are one command: `make check`.
@@ -194,9 +194,15 @@ security primitives and generated fixtures 35.
 
 What the browser checks cover: sign-in directly and through proxies that remove or replace the `Authorization`
 header; sign-up, directly and through such a proxy (the account is created, signed in at once, registers a
-plant, signs in again; an address that is taken is refused); a tour of the demonstration (every page, every
-scenario, the reports); the work of a signed-in account (register a plant, import a file, run an analysis,
-manage accounts); and the framing policy.
+plant, signs in again; an address that is taken is refused); a first visit from beginning to end (the
+demonstration answers "Clean now" for scenario 02; the visitor signs out, creates an account, registers a plant,
+imports the file of scenario 02 with its declaration file and gets "Investigate", because the file is declared
+synthetic; the PDF report downloads); a tour of the demonstration (every page, every scenario, the reports); the
+work of a signed-in account (register a plant, import a file, run an analysis, manage accounts); and the framing
+policy.
+
+A fresh copy of the pushed branch was also cloned from GitHub, installed with `make install`, built with
+`make build` and started with `make run`; the first visit above was walked in a browser against it.
 
 Beyond the test suites, the package was installed the way the container image installs it and run in
 production mode from another directory, on a SQLite file and on PostgreSQL: start-up, migration, demonstration

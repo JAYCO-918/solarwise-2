@@ -235,6 +235,21 @@ describe("signing up", () => {
     await userEvent.click(screen.getByRole("button", { name: "Create the account" }));
     expect(await screen.findByRole("heading", { level: 1, name: "How SolarWise DZ decides" })).toBeInTheDocument();
   });
+
+  it("starts on its own plants when the page that was asked for belongs to a plant it cannot see", async () => {
+    const calls = mockApi({
+      "GET /meta": json(demoServer()),
+      "POST /auth/register": json(NEWCOMER, 201),
+      "GET /plants": json([]),
+    });
+    open("/analyses/2");
+    await userEvent.click(await screen.findByRole("link", { name: "Create an account" }));
+    await fillSignUp({ name: "Amina Benali", email: "amina@example.org", password: PASSPHRASE, confirmation: PASSPHRASE });
+    await userEvent.click(screen.getByRole("button", { name: "Create the account" }));
+
+    expect(await screen.findByText("No plant yet")).toBeInTheDocument();
+    expect(calls.some((call) => call.path === "/analyses/2")).toBe(false);
+  });
 });
 
 describe("a stored session", () => {
@@ -274,6 +289,48 @@ describe("a stored session", () => {
     expect(await screen.findByRole("button", { name: "Open the demonstration" })).toBeInTheDocument();
     expect(window.sessionStorage.getItem("solarwise.session")).toBeNull();
     expect(screen.queryByText("The server closed the session")).not.toBeInTheDocument();
+  });
+
+  it("leaves no page to return to after a sign-out: an account created next starts on its own plants", async () => {
+    setSession(TOKEN.access_token, TOKEN.expires_at);
+    const calls = mockApi({
+      "GET /meta": json(demoServer()),
+      "GET /auth/me": json(TOKEN.user),
+      "GET /analyses/2": json(fixtures.cleanNow()),
+      "POST /auth/register": json(NEWCOMER, 201),
+      "GET /plants": json([]),
+    });
+    open("/analyses/2");
+    expect(await screen.findByRole("heading", { level: 1, name: "Analysis 2" })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    await userEvent.click(await screen.findByRole("link", { name: "Create an account" }));
+    await fillSignUp({ name: "Amina Benali", email: "amina@example.org", password: PASSPHRASE, confirmation: PASSPHRASE });
+    await userEvent.click(screen.getByRole("button", { name: "Create the account" }));
+
+    expect(await screen.findByText("No plant yet")).toBeInTheDocument();
+    // The page of the demonstration that was left is not asked for again with the new account.
+    expect(calls.filter((call) => call.path === "/analyses/2")).toHaveLength(1);
+    expect(screen.queryByText(/not found/i)).not.toBeInTheDocument();
+  });
+
+  it("opens the list of plants for whoever signs in after a sign-out, not the page that was left", async () => {
+    setSession(ADMIN.access_token, ADMIN.expires_at);
+    const calls = mockApi({
+      "GET /meta": json(closedServer()),
+      "GET /auth/me": json(ADMIN.user),
+      "GET /users": json([ADMIN.user]),
+      "POST /auth/login": json(NEWCOMER),
+      "GET /plants": json([fixtures.plant()]),
+    });
+    open("/users");
+    expect(await screen.findByRole("heading", { name: "Create an account" })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    await userEvent.type(await screen.findByLabelText("E-mail address"), "amina@example.org");
+    await userEvent.type(screen.getByLabelText("Password"), PASSPHRASE);
+    await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
+
+    expect(await screen.findByRole("link", { name: fixtures.plant().name })).toBeInTheDocument();
+    expect(calls.filter((call) => call.path === "/users")).toHaveLength(1);
   });
 });
 

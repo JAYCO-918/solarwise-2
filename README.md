@@ -49,6 +49,9 @@ make build       # builds the interface into frontend/dist
 make run         # http://localhost:8000, with the demonstration
 ```
 
+No API key and no account with an outside service is needed. `make install` and `make build` download packages;
+after them the application runs without the internet. What you create is kept in `var/solarwise.db`.
+
 The same without `make`:
 
 ```sh
@@ -117,6 +120,13 @@ What you declare decides what the data can support: a file declared `MEASURED` c
 recommendation; a synthetic, modelled or undeclared one cannot. The platform records who imported a file and
 keeps the declaration with every result; it cannot verify the declaration itself.
 
+To follow the whole path without data of your own, use the file of scenario 02. In **Add a dataset** choose
+`data/demo/S02_confirmed_soiling.csv`, select **Use a declaration file (JSON)** and choose
+`data/demo/S02_confirmed_soiling.metadata.json`; then **Check the file**, **Import the dataset** and **Run the
+analysis**. In the demonstration these numbers give *Clean now*, marked simulated. On your plant they give
+*Investigate*, with 4 gates of 10 passed: the file is declared synthetic, and synthetic data cannot support a
+cleaning decision. The browser check `frontend/e2e/first_use.cjs` walks this path.
+
 ## Command line
 
 The engine also runs without the web application or a database:
@@ -167,8 +177,8 @@ make e2e         # browser checks against a throw-away server (needs a Chromium:
 | Check | Result on the last run |
 |---|---|
 | Backend tests (`pytest`) | 788 passed on SQLite, and 788 passed on PostgreSQL 16 |
-| Interface tests (`vitest`) | 80 passed |
-| Browser checks | 9 runs, 163 expectations, all passed; the 4 checks that write data also passed on PostgreSQL 16 |
+| Interface tests (`vitest`) | 83 passed |
+| Browser checks | 10 runs, 180 expectations, all passed; the 5 checks that write data also passed on PostgreSQL 16 |
 | Static checks | `ruff`, `mypy`, `tsc`, `eslint`: clean |
 
 What could not be verified in the environment the project was built in - Docker itself, a real plant's data,

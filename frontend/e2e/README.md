@@ -10,7 +10,8 @@ demonstration mode on, bound to 127.0.0.1) and stops it afterwards. Nothing is l
 | Check | What it establishes |
 |---|---|
 | `sign_in.cjs` | The demonstration is offered first; a wrong password is explained; the demonstration opens; a session the server refuses says what the server answered. With `PROXY=strip` or `PROXY=replace` a proxy removes or replaces the `Authorization` header: the session still works and the server tells the operator. |
-| `sign_up.cjs` | The sign-in page offers to create an account; a form that cannot be accepted is answered before anything is sent; the account is created and its session opens at once; it is an engineer account, not an administrator; it registers a plant; its password opens the next session; an address that is taken is refused next to the field; no password reaches the server log. With `PROXY=strip` the new session survives a proxy that removes the `Authorization` header. |
+| `sign_up.cjs` | The sign-in page offers to create an account; a form that cannot be accepted is answered before anything is sent; the account is created and its session opens at once; it is an engineer account, not an administrator; it registers a plant; after a sign-out its password opens the next session, on its list of plants; an address that is taken is refused next to the field; no password reaches the server log. With `PROXY=strip` the new session survives a proxy that removes the `Authorization` header. |
+| `first_use.cjs` | A first visit from beginning to end: the demonstration answers "Clean now" for scenario 02; the visitor signs out and creates an account, which starts on its own empty list of plants and not on the page that was left; the account registers a plant, adds the file of scenario 02 with its declaration file, and runs the analysis, which answers "Investigate" with 4 gates of 10 because the file is declared synthetic; the PDF report downloads. |
 | `tour_demo.cjs` | Every page and tab as a demonstration visitor, on a desktop and on a 390 px screen: no sideways scrolling, no raw value (`null`, `NaN`, `undefined`) in the text, charts drawn, the PDF report downloads, an incomplete calculator input is refused. |
 | `tour_admin.cjs` (`ADMIN=1`) | A signed-in account registers a plant, declares and imports a file through the form, runs an analysis, meets the duplicate check, creates an account, signs out. |
 | `framing.cjs` | Another origin cannot embed the application by default; it can when `SOLARWISE_FRAME_ANCESTORS` names it. |
@@ -25,7 +26,7 @@ demonstration mode on, bound to 127.0.0.1) and stops it afterwards. Nothing is l
 # a browser: any Chromium or Chrome
 export CHROMIUM_PATH=/usr/bin/chromium
 
-frontend/e2e/all.sh                             # the nine runs, one after the other
+frontend/e2e/all.sh                             # the ten runs, one after the other
 frontend/e2e/run.sh sign_in.cjs                 # or one check
 PROXY=strip frontend/e2e/run.sh sign_in.cjs
 PROXY=strip frontend/e2e/run.sh sign_up.cjs

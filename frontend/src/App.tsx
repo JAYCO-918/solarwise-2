@@ -19,10 +19,15 @@ const UploadPage = lazy(() => import("./pages/UploadPage"));
 const UsersPage = lazy(() => import("./pages/UsersPage"));
 
 function Protected({ children }: { children: ReactNode }) {
-  const { status } = useAuth();
+  const { status, signedOut } = useAuth();
   const location = useLocation();
   if (status === "loading") return <Loading label="Opening the session" />;
-  if (status === "anonymous") return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
+  if (status === "anonymous") {
+    // The page is kept for the next sign-in when the session expired or was never opened. It is not kept after a
+    // sign-out: whoever comes next may be somebody else, who cannot see the page that was left.
+    const state = signedOut ? null : { from: location.pathname + location.search };
+    return <Navigate to="/login" replace state={state} />;
+  }
   return <>{children}</>;
 }
 

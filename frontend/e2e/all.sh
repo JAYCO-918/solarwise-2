@@ -16,6 +16,7 @@ check "sign-in, proxy removing Authorization"           PROXY=strip "$HERE/run.s
 check "sign-in, proxy replacing Authorization"          PROXY=replace "$HERE/run.sh" sign_in.cjs
 check "sign-up, direct connection"                      "$HERE/run.sh" sign_up.cjs
 check "sign-up, proxy removing Authorization"           PROXY=strip "$HERE/run.sh" sign_up.cjs
+check "first visit, from the demonstration to a report" "$HERE/run.sh" first_use.cjs
 check "demonstration tour"                              "$HERE/run.sh" tour_demo.cjs
 check "work of a signed-in account"                     ADMIN=1 "$HERE/run.sh" tour_admin.cjs
 check "framing refused by default"                      "$HERE/run.sh" framing.cjs refused

@@ -32,6 +32,8 @@ function sentence(text: string): string {
   return /[.!?]$/.test(capitalised) ? capitalised : `${capitalised}.`;
 }
 
+const OPEN_TO_A_NEW_ACCOUNT = new Set(["/plants", "/plants/new", "/reference"]);
+
 export function RegisterPage() {
   const { status, meta, register } = useAuth();
   const navigate = useNavigate();
@@ -46,8 +48,9 @@ export function RegisterPage() {
   const [busy, setBusy] = useState(false);
 
   const from = (location.state as { from?: string } | null)?.from;
-  // Only ever return to a path of this application.
-  const target = from && from.startsWith("/") && !from.startsWith("//") ? from : "/plants";
+  // A new account has no plant yet: of the pages that may have been asked for, only those that belong to no plant
+  // can be shown to it. Anything else would greet it with "not found".
+  const target = from && OPEN_TO_A_NEW_ACCOUNT.has(from.split(/[?#]/, 1)[0] ?? "") ? from : "/plants";
   if (status === "authenticated") return <Navigate to={target} replace />;
 
   function check(): Problems {

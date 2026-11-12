@@ -103,9 +103,9 @@ async function invalidFields(page) {
     await page.type('input[type="email"]', EMAIL);
     await page.type('input[type="password"]', PASSWORD);
     await clickText(page, "button", "Sign in");
-    // Signing out happened on the page of the plant: signing in again leads back to it.
-    await page.waitForFunction(() => /^\/plants\/\d+$/.test(location.pathname) && document.body.innerText.includes("Plant of a new account"), { timeout: 15000 });
-    expect(true, "after signing out, the address and the password open the session again, on the plant it registered");
+    // A sign-out leaves no page to return to: the session opens on the list of plants, which now has the plant.
+    await page.waitForFunction(() => location.pathname === "/plants" && document.body.innerText.includes("Plant of a new account"), { timeout: 15000 });
+    expect(true, "after signing out, the address and the password open the session again, on its list of plants with the plant it registered");
 
     // ---- an address that is taken is refused next to the field
     await clickText(page, "button", "Sign out");
