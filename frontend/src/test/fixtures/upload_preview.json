@@ -1,0 +1,432 @@
+{
+ "file_name": "may-2026-export.csv",
+ "file_sha256": "d29895a62f4b530ac206cbe329352bcdc3bf09576679d62ed40ac2d680446240",
+ "preview": {
+  "columns": [
+   {
+    "confidence": "NAME",
+    "empty": 0,
+    "filled": 14,
+    "maximum": null,
+    "metric": null,
+    "minimum": null,
+    "name": "Date",
+    "numeric": 0,
+    "reason": "the header names a date or a time",
+    "reported_as": null,
+    "role": "TIMESTAMP",
+    "samples": [
+     "2026-05-01",
+     "2026-05-02",
+     "2026-05-03",
+     "2026-05-04",
+     "2026-05-05"
+    ],
+    "unit": null,
+    "unit_source": null
+   },
+   {
+    "confidence": "NAME",
+    "empty": 1,
+    "filled": 13,
+    "maximum": 46000.0,
+    "metric": "actual_energy",
+    "minimum": 46000.0,
+    "name": "Energy (kWh)",
+    "numeric": 12,
+    "reason": "the header names the energy produced",
+    "reported_as": null,
+    "role": "QUANTITY",
+    "samples": [
+     "46000.0",
+     "abc"
+    ],
+    "unit": "kWh",
+    "unit_source": "HEADER"
+   },
+   {
+    "confidence": "NAME",
+    "empty": 0,
+    "filled": 14,
+    "maximum": 50000.0,
+    "metric": "expected_energy",
+    "minimum": 50000.0,
+    "name": "Expected production (kWh)",
+    "numeric": 14,
+    "reason": "the header names an expected or reference production",
+    "reported_as": null,
+    "role": "QUANTITY",
+    "samples": [
+     "50000.0"
+    ],
+    "unit": "kWh",
+    "unit_source": "HEADER"
+   },
+   {
+    "confidence": "AMBIGUOUS",
+    "empty": 0,
+    "filled": 14,
+    "maximum": 270.0,
+    "metric": "poa_irradiation",
+    "minimum": 270.0,
+    "name": "Irradiance (W/m2)",
+    "numeric": 14,
+    "reason": "the header names irradiance without saying whether it is in the plane of the modules or horizontal",
+    "reported_as": null,
+    "role": "QUANTITY",
+    "samples": [
+     "270"
+    ],
+    "unit": "w/m2",
+    "unit_source": "HEADER"
+   },
+   {
+    "confidence": "NAME",
+    "empty": 0,
+    "filled": 14,
+    "maximum": 44.5,
+    "metric": "module_temp",
+    "minimum": 44.5,
+    "name": "Module temperature (°C)",
+    "numeric": 14,
+    "reason": "the header names the module temperature",
+    "reported_as": null,
+    "role": "QUANTITY",
+    "samples": [
+     "44.5"
+    ],
+    "unit": "degC",
+    "unit_source": "HEADER"
+   },
+   {
+    "confidence": "NONE",
+    "empty": 0,
+    "filled": 14,
+    "maximum": 27.4,
+    "metric": null,
+    "minimum": 27.4,
+    "name": "T2",
+    "numeric": 14,
+    "reason": "not recognised: assign it yourself, or leave it unused",
+    "reported_as": null,
+    "role": "UNUSED",
+    "samples": [
+     "27.4"
+    ],
+    "unit": null,
+    "unit_source": null
+   },
+   {
+    "confidence": "NAME",
+    "empty": 0,
+    "filled": 14,
+    "maximum": 250.0,
+    "metric": "soiling_ratio",
+    "minimum": 8.0,
+    "name": "Soiling loss (%)",
+    "numeric": 14,
+    "reason": "the header names a soiling loss (0 = clean): it is converted to a soiling ratio",
+    "reported_as": "LOSS",
+    "role": "QUANTITY",
+    "samples": [
+     "8.00",
+     "250"
+    ],
+    "unit": "percent",
+    "unit_source": "HEADER"
+   },
+   {
+    "confidence": "NAME",
+    "empty": 13,
+    "filled": 1,
+    "maximum": 1.0,
+    "metric": null,
+    "minimum": 1.0,
+    "name": "Cleaning",
+    "numeric": 1,
+    "reason": "the header names cleaning events",
+    "reported_as": null,
+    "role": "CLEANING",
+    "samples": [
+     "1"
+    ],
+    "unit": null,
+    "unit_source": null
+   },
+   {
+    "confidence": "NAME",
+    "empty": 11,
+    "filled": 3,
+    "maximum": null,
+    "metric": null,
+    "minimum": null,
+    "name": "Alarms",
+    "numeric": 0,
+    "reason": "the header names alarms or events",
+    "reported_as": null,
+    "role": "EVENTS",
+    "samples": [
+     "Inverter fault INV-02",
+     "Err 0x21"
+    ],
+    "unit": null,
+    "unit_source": null
+   },
+   {
+    "confidence": "NONE",
+    "empty": 0,
+    "filled": 14,
+    "maximum": null,
+    "metric": null,
+    "minimum": null,
+    "name": "Operator",
+    "numeric": 0,
+    "reason": "not recognised: assign it yourself, or leave it unused",
+    "reported_as": null,
+    "role": "UNUSED",
+    "samples": [
+     "A. B."
+    ],
+    "unit": null,
+    "unit_source": null
+   }
+  ],
+  "decimal_comma": false,
+  "embedded_metadata": false,
+  "file_format": "CSV",
+  "notes": [
+   {
+    "code": "INTERVAL_READ",
+    "column": "Date",
+    "message": "The rows are one day apart.",
+    "severity": "INFO",
+    "suggested_unit": null
+   },
+   {
+    "code": "TEXT_IN_NUMERIC_COLUMN",
+    "column": "Energy (kWh)",
+    "message": "1 cell(s) of 'Energy (kWh)' are not numbers (for example 'abc'). They would be rejected and stored as missing, not as zero.",
+    "severity": "WARNING",
+    "suggested_unit": null
+   },
+   {
+    "code": "CONSTANT_COLUMN",
+    "column": "Energy (kWh)",
+    "message": "'Energy (kWh)' has the same value (46,000) on every row.",
+    "severity": "INFO",
+    "suggested_unit": null
+   },
+   {
+    "code": "CONSTANT_COLUMN",
+    "column": "Expected production (kWh)",
+    "message": "'Expected production (kWh)' has the same value (50,000) on every row.",
+    "severity": "INFO",
+    "suggested_unit": null
+   },
+   {
+    "code": "CONSTANT_COLUMN",
+    "column": "Irradiance (W/m2)",
+    "message": "'Irradiance (W/m2)' has the same value (270) on every row.",
+    "severity": "INFO",
+    "suggested_unit": null
+   },
+   {
+    "code": "CONSTANT_COLUMN",
+    "column": "Module temperature (°C)",
+    "message": "'Module temperature (°C)' has the same value (44.5) on every row.",
+    "severity": "INFO",
+    "suggested_unit": null
+   },
+   {
+    "code": "EVENTS_IN_FILE",
+    "column": "Alarms",
+    "message": "'Alarms' holds 3 marked row(s) with 2 different text(s), for example 'Inverter fault INV-02', 'Err 0x21'. Each event becomes an evidence record of the dataset.",
+    "severity": "INFO",
+    "suggested_unit": null
+   }
+  ],
+  "proposal": {
+   "channels": {
+    "actual_energy": {
+     "column": "Energy (kWh)",
+     "reported_as": "RATIO",
+     "unit": "kWh"
+    },
+    "expected_energy": {
+     "column": "Expected production (kWh)",
+     "reported_as": "RATIO",
+     "unit": "kWh"
+    },
+    "module_temp": {
+     "column": "Module temperature (°C)",
+     "reported_as": "RATIO",
+     "unit": "degC"
+    },
+    "poa_irradiation": {
+     "column": "Irradiance (W/m2)",
+     "reported_as": "RATIO",
+     "unit": "w/m2"
+    },
+    "soiling_ratio": {
+     "column": "Soiling loss (%)",
+     "reported_as": "LOSS",
+     "unit": "percent"
+    }
+   },
+   "cleaning_column": "Cleaning",
+   "device_column": null,
+   "event_column": "Alarms",
+   "interval_minutes": 1440,
+   "timestamp_column": "Date"
+  },
+  "rows_total": 14,
+  "sample_rows": [
+   [
+    "2026-05-01",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-02",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-03",
+    "abc",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-04",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-05",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "1",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-06",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-07",
+    "",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-08",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-09",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "",
+    "A. B."
+   ],
+   [
+    "2026-05-10",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "Inverter fault INV-02",
+    "A. B."
+   ],
+   [
+    "2026-05-11",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "8.00",
+    "",
+    "Inverter fault INV-02",
+    "A. B."
+   ],
+   [
+    "2026-05-12",
+    "46000.0",
+    "50000.0",
+    "270",
+    "44.5",
+    "27.4",
+    "250",
+    "",
+    "",
+    "A. B."
+   ]
+  ]
+ },
+ "same_file_as": [],
+ "size_bytes": 927
+}

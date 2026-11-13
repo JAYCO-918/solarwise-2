@@ -58,6 +58,40 @@ export const FACTOR_LABEL: Record<string, string> = {
   SOILING: "Soiling (measured)",
 };
 
+/** The quantities of a file, in the words of somebody who runs a plant. */
+export const METRIC_LABEL: Record<string, string> = {
+  actual_energy: "Energy produced",
+  expected_energy: "Expected production",
+  baseline_irradiation: "Irradiation assumed by the baseline",
+  availability: "Availability",
+  curtailed_energy: "Curtailed energy",
+  soiling_ratio: "Soiling ratio",
+  poa_irradiation: "In-plane irradiation",
+  ghi: "Horizontal irradiation",
+  ambient_temp: "Ambient temperature",
+  module_temp: "Module temperature",
+  wind_speed: "Wind speed",
+  relative_humidity: "Relative humidity",
+  precipitation: "Rainfall",
+  device_energy: "Energy of a device",
+};
+
+export function metricLabel(metric: string): string {
+  return METRIC_LABEL[metric] ?? metric.replace(/_/g, " ");
+}
+
+const UNIT_LABEL: Record<string, string> = {
+  kwh: "kWh", mwh: "MWh", gwh: "GWh", wh: "Wh", j: "J", kj: "kJ", mj: "MJ",
+  "kwh/m2": "kWh/m²", "wh/m2": "Wh/m²", "mj/m2": "MJ/m²", "j/m2": "J/m²", "w/m2": "W/m²", "kw/m2": "kW/m²",
+  degc: "°C", degf: "°F", k: "K", percent: "%", fraction: "fraction (0 to 1)",
+};
+
+/** A unit as it is written on a data sheet; the symbol the server understands stays the value that is sent. */
+export function unitLabel(unit: string | null | undefined): string {
+  if (!unit) return "";
+  return UNIT_LABEL[unit.toLowerCase()] ?? unit;
+}
+
 export const FACTOR_STATUS_LABEL: Record<string, string> = {
   QUANTIFIED: "Quantified",
   PARTIALLY_QUANTIFIED: "Partly quantified",

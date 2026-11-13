@@ -50,7 +50,7 @@ solarwise = "solarwise.cli:main"
 include = ["solarwise*"]
 
 [tool.setuptools.package-data]
-solarwise = ["reference/*.json", "reports/templates/*.html", "migrations/script.py.mako", "py.typed"]
+solarwise = ["reference/*.json", "reference/templates/*", "reports/templates/*.html", "migrations/script.py.mako", "py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

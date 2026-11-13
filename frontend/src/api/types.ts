@@ -47,6 +47,21 @@ export type Traced = DeepRequired<S["Traced"]>;
 export type EconomicsResult = DeepRequired<S["EconomicsResult"]>;
 export type RecoverableEnergy = DeepRequired<S["RecoverableEnergy"]>;
 export type AiExplanation = DeepRequired<S["AiExplanation"]>;
+export type UploadPreviewOut = DeepRequired<S["UploadPreviewOut"]>;
+export type UploadPreview = UploadPreviewOut["preview"];
+export type ColumnPreview = DeepRequired<S["ColumnPreview"]>;
+export type DataNote = DeepRequired<S["DataNote"]>;
+export type MappingProposal = UploadPreview["proposal"];
+export type DataReview = DeepRequired<S["DataReview"]>;
+export type DataSuggestion = DeepRequired<S["DataSuggestion"]>;
+export type EventSummary = DeepRequired<S["EventSummary"]>;
+export type InsightOut = DeepRequired<S["InsightOut"]>;
+export type Insight = InsightOut["insight"];
+export type InsightCause = DeepRequired<S["InsightCause"]>;
+export type InsightItem = DeepRequired<S["InsightItem"]>;
+export type InsightGate = DeepRequired<S["InsightGate"]>;
+export type GuardrailCheck = DeepRequired<S["GuardrailCheck"]>;
+export type AiStatus = DeepRequired<S["AiStatus"]>;
 export type ForecastResponse = DeepRequired<S["ForecastResponse"]>;
 export type PerformanceForecast = ForecastResponse["forecast"];
 export type EconomicsResponse = DeepRequired<S["EconomicsResponse"]>;
@@ -106,6 +121,25 @@ export interface MetricSpec {
   description: string;
   minimum: number | null;
   maximum: number | null;
+  /** Units a column of this quantity may be declared in; irradiation also takes irradiance (W/m2). */
+  accepted_units?: string[];
+}
+
+/** A file offered for download: column names only (template), or with invented values (example). */
+export interface UploadTemplate {
+  name: string;
+  title: string;
+  description: string;
+  example: boolean;
+}
+
+export interface EventsReference {
+  principle: string;
+  cleaning_marks: string[];
+  no_event_cells: string[];
+  vocabulary: { evidence_type: string; matches: string }[];
+  unmatched: string;
+  max_events_per_file: number;
 }
 
 export interface ReferenceSchema {
@@ -123,6 +157,8 @@ export interface ReferenceSchema {
   value_classifications: string[];
   limits: { max_rows: number; max_columns: number };
   missing_values: string;
+  events?: EventsReference;
+  templates?: UploadTemplate[];
 }
 
 export interface DecisionRules {

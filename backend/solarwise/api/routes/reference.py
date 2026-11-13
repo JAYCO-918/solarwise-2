@@ -4,11 +4,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Response
 from sqlalchemy import text
 
 from solarwise import __version__
 from solarwise.api.deps import AppSettings, CurrentUser, DbSession
+from solarwise.api.errors import ApiError
 from solarwise.api.schemas import ReferenceOut
 from solarwise.core import rules
 from solarwise.core.economics import EnergyValueBasis, ValueClassification
@@ -28,8 +29,11 @@ from solarwise.core.pipeline import ENGINE_VERSION
 from solarwise.core.provenance import Provenance
 from solarwise.core.units import accepted_units
 from solarwise.demo.generator import SYNTHETIC_STATEMENT
+from solarwise.ingestion import templates
+from solarwise.ingestion.detect import accepted_units as units_of
 from solarwise.ingestion.parser import MAX_COLUMNS, MAX_ROWS
 from solarwise.ingestion.schema import DatasetMetadata
+from solarwise.ingestion.validator import CLEANING_TOKENS, EVENT_VOCABULARY, MAX_EVENTS, NO_EVENT_TOKENS
 from solarwise.services import datasets as dataset_service
 from solarwise.services import reference as reference_service
 
@@ -68,9 +72,9 @@ def meta(settings: AppSettings, request: Request) -> dict[str, Any]:
         "max_upload_mb": settings.max_upload_mb,
         "external_data_enabled": settings.external_data_enabled,
         "ai": {
-            "enabled": settings.ai_provider != "none" and bool(settings.ai_model),
+            "enabled": settings.ai_enabled,
             "provider": settings.ai_provider if settings.ai_provider != "none" else None,
-            "role": "rephrases the engine's explanation only; never decides",
+            "role": "interprets and explains what the engine found; never decides, never supplies a figure",
         },
         "schema_revision": request.app.state.schema_state,
     }
@@ -83,6 +87,8 @@ def schema(_: CurrentUser) -> dict[str, Any]:
             {
                 "metric": metric.value, "column": spec.column, "unit": spec.unit, "dimension": spec.dimension,
                 "table": spec.table, "description": spec.description, "minimum": spec.minimum, "maximum": spec.maximum,
+                # Irradiation columns also take irradiance (W/m2): the mean over each interval, converted with its length.
+                "accepted_units": units_of(metric),
             }
             for metric, spec in METRIC_SPECS.items()
         ],
@@ -100,8 +106,39 @@ def schema(_: CurrentUser) -> dict[str, Any]:
         "limits": {"max_rows": MAX_ROWS, "max_columns": MAX_COLUMNS},
         "missing_values": "An empty cell (or JSON null) means 'not observed'. It is never read as zero and never "
                           "interpolated.",
+        "events": {
+            "principle": "A cleaning mark or an alarm text found in a declared event column becomes an evidence "
+                         "record of the dataset. Events never become numbers, and a logged fault is a reason to "
+                         "investigate, never a reason to clean.",
+            "cleaning_marks": sorted(CLEANING_TOKENS),
+            "no_event_cells": sorted(t for t in NO_EVENT_TOKENS if t),
+            "vocabulary": [{"evidence_type": kind.value, "matches": pattern.pattern} for kind, pattern in EVENT_VOCABULARY],
+            "unmatched": "OTHER: shown with the analysis, not used by the diagnosis",
+            "max_events_per_file": MAX_EVENTS,
+        },
+        "templates": [
+            {"name": t.name, "title": t.title, "description": t.description, "example": t.example}
+            for t in templates.TEMPLATES
+        ],
         "metadata_schema": DatasetMetadata.model_json_schema(),
     }
+
+
+@router.get(
+    "/reference/templates/{name}", tags=["reference"], response_class=Response,
+    summary="Download an upload template or example (CSV or JSON)",
+    description="The templates hold column names and no data. The examples hold invented values for a hypothetical "
+                "plant: they show the format and describe no real installation.",
+    responses={200: {"content": {"text/csv": {}, "application/json": {}}}},
+)
+def template(name: str, _: CurrentUser) -> Response:
+    found = templates.find(name)
+    if found is None:
+        raise ApiError(404, "NOT_FOUND", "no such template")
+    return Response(
+        content=templates.read(found), media_type=found.media_type,
+        headers={"Content-Disposition": f'attachment; filename="{found.name}"', "Cache-Control": "no-store"},
+    )
 
 
 @router.get("/reference/decision-rules", tags=["reference"], summary="The decision rules, gates and thresholds")

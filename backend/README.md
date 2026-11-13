@@ -22,14 +22,14 @@ prefix `SOLARWISE_` (see [`.env.example`](../.env.example)).
 | Package | Role |
 |---|---|
 | `solarwise.core` | The analysis pipeline. Pure functions: no database, no network. |
-| `solarwise.ingestion` | Reading uploads and validating them against what the uploader declared. |
+| `solarwise.ingestion` | Reading uploads, proposing what each column is from its header, and validating the file against what the uploader declared; templates. |
 | `solarwise.demo` | Generator of the ten synthetic demonstration scenarios. |
 | `solarwise.services` | Permissions, storage, audit trail, running the engine on stored data. |
 | `solarwise.api` | FastAPI application, middleware, routes, schemas. |
 | `solarwise.db`, `solarwise.migrations` | SQLAlchemy models and Alembic migrations (SQLite or PostgreSQL). |
 | `solarwise.reports` | PDF, HTML, CSV and JSON reports. |
 | `solarwise.integrations` | Optional clients for PVGIS and NASA POWER. |
-| `solarwise.ai` | Optional rephrasing of the engine's explanation by a language model, behind guardrails. |
+| `solarwise.ai` | Optional language-model layer: diagnostic analysis, operational report, review of an uploaded file, rewording of the explanation - behind guardrails, with the engine's own text as fallback. It never decides. |
 | `solarwise.cli` | The `solarwise` command. |
 
 More in [docs/architecture.md](../docs/architecture.md).

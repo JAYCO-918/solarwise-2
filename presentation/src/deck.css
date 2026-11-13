@@ -264,7 +264,7 @@ html.flat .ui, html.plate .ui { display: none; }
 .s9 .browser { left: 72px; top: 150px; width: 664px; }
 .s9 .st { position: absolute; left: 776px; width: 432px; height: 100px; display: flex; gap: 18px; align-items: center; }
 .s9 .st + .st { border-top: 1px solid var(--ink-200); }
-.s9 .st .n { flex: none; width: 104px; font-size: 46px; line-height: 52px; font-weight: 700; color: var(--ink-950); }
+.s9 .st .n { flex: none; width: 124px; font-size: 46px; line-height: 52px; font-weight: 700; color: var(--ink-950); }
 .s9 .st p { font-size: 16px; line-height: 23px; color: var(--ink-700); }
 .s9 .st p b { color: var(--ink-950); }
 .s9 .honest { position: absolute; left: 776px; top: 566px; width: 432px; height: 68px; border-radius: 10px; border: 1px solid var(--violet-300); display: flex; align-items: center; gap: 12px; padding: 0 16px; color: var(--violet-900); font-size: 22px;

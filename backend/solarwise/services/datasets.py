@@ -1,12 +1,15 @@
-"""Datasets: validation of uploads, immutable import, and loading for analysis."""
+"""Datasets: preview and validation of uploads, immutable import, and loading for analysis."""
 
 from __future__ import annotations
 
+import csv
 import hashlib
+import io
 import json
+import zlib
 from collections.abc import Mapping
-from dataclasses import dataclass, fields
-from datetime import datetime
+from dataclasses import dataclass, field, fields
+from datetime import date, datetime
 from typing import Any
 
 from pydantic import ValidationError
@@ -19,14 +22,26 @@ from solarwise.core.models import (
     BaselineDescriptor,
     ChannelMeta,
     DeviceObservation,
+    EvidenceRecord,
     Metric,
     Observation,
 )
-from solarwise.core.provenance import ProvenanceTag
-from solarwise.db.models import Dataset, DatasetKind, Plant, ProductionObservation, User, WeatherObservation
+from solarwise.core.provenance import Provenance, ProvenanceTag
+from solarwise.db.models import (
+    Dataset,
+    DatasetFile,
+    DatasetKind,
+    EvidenceRow,
+    Plant,
+    ProductionObservation,
+    User,
+    WeatherObservation,
+)
+from solarwise.ingestion.detect import UploadPreview, preview_table
 from solarwise.ingestion.parser import ParseError, RawTable, parse_upload
 from solarwise.ingestion.schema import DatasetMetadata, unfilled_placeholders
-from solarwise.ingestion.validator import IssueSeverity, ParsedDataset, ValidationReport, validate_table
+from solarwise.ingestion.validator import IssueSeverity, ParsedDataset, Rejection, ValidationReport, validate_table
+from solarwise.services import evidence as evidence_service
 from solarwise.services import plants as plant_service
 from solarwise.services.errors import ConflictError, InvalidError, NotFoundError
 
@@ -44,6 +59,16 @@ DEMO_MAX_UPLOAD_MB = 5
 
 
 @dataclass
+class Overlap:
+    """A dataset of the plant that covers some of the same days."""
+
+    dataset_id: int
+    name: str
+    period_start: date
+    period_end: date
+
+
+@dataclass
 class Checked:
     """Outcome of validating one upload."""
 
@@ -53,6 +78,61 @@ class Checked:
     table: RawTable
     content_sha256: str
     duplicate_of: int | None
+    #: The uploaded bytes, their fingerprint, and what the browser said about the file.
+    data: bytes = b""
+    file_sha256: str = ""
+    content_type: str = ""
+    #: Datasets of the plant imported from the very same file, under whatever declaration.
+    same_file_as: list[int] = field(default_factory=list)
+    #: Datasets of the plant that cover some of the same days.
+    overlapping: list[Overlap] = field(default_factory=list)
+    #: Every rejected cell and row (only collected on request).
+    rejections: list[Rejection] = field(default_factory=list)
+
+
+def fingerprint(data: bytes, metadata: DatasetMetadata) -> str:
+    """SHA-256 of the uploaded bytes together with what was declared about them.
+
+    Declarations that use none of the fields added after the first release hash exactly as they always did, so that
+    a file imported then is still recognised as a duplicate now.
+    """
+    declared = metadata.model_dump(mode="json")
+    if declared.get("events") is None:
+        declared.pop("events", None)
+    for channel in declared.get("channels", {}).values():
+        if channel.get("reported_as") != "LOSS":  # a ratio, stated or not, is what a channel always was
+            channel.pop("reported_as", None)
+    digest = hashlib.sha256()
+    digest.update(data)
+    digest.update(b"\x00")
+    digest.update(json.dumps(declared, sort_keys=True).encode())
+    return digest.hexdigest()
+
+
+def _same_file(db: Session, plant: Plant, file_sha256: str) -> list[int]:
+    return list(
+        db.scalars(
+            select(Dataset.id).join(DatasetFile, DatasetFile.dataset_id == Dataset.id)
+            .where(Dataset.plant_id == plant.id, DatasetFile.sha256 == file_sha256).order_by(Dataset.id)
+        )
+    )
+
+
+def _read(data: bytes, filename: str | None, content_type: str | None) -> RawTable:
+    try:
+        return parse_upload(data, filename, content_type)
+    except ParseError as exc:
+        raise InvalidError(str(exc), code="UNREADABLE_FILE") from exc
+
+
+def preview_upload(
+    db: Session, plant: Plant, *, data: bytes, filename: str | None, content_type: str | None
+) -> tuple[UploadPreview, str, list[int]]:
+    """What the file contains and what its columns probably are.  Nothing is validated or stored."""
+    table = _read(data, filename, content_type)
+    preview = preview_table(table, plant=plant_service.spec_of(plant), known_devices=plant_service.device_specs(db, plant))
+    file_sha256 = hashlib.sha256(data).hexdigest()
+    return preview, file_sha256, _same_file(db, plant, file_sha256)
 
 
 def parse_metadata(raw: str | None, table: RawTable, fallback_name: str) -> DatasetMetadata:
@@ -88,25 +168,80 @@ def parse_metadata(raw: str | None, table: RawTable, fallback_name: str) -> Data
 
 
 def check_upload(
-    db: Session, plant: Plant, *, data: bytes, filename: str | None, content_type: str | None, metadata_json: str | None
+    db: Session, plant: Plant, *, data: bytes, filename: str | None, content_type: str | None, metadata_json: str | None,
+    collect_rejections: bool = False,
 ) -> Checked:
     """Parse and validate an upload without storing anything."""
-    try:
-        table = parse_upload(data, filename, content_type)
-    except ParseError as exc:
-        raise InvalidError(str(exc), code="UNREADABLE_FILE") from exc
+    table = _read(data, filename, content_type)
     fallback = (filename or "uploaded dataset").rsplit("/", 1)[-1][:200] or "uploaded dataset"
     metadata = parse_metadata(metadata_json, table, fallback)
+    rejections: list[Rejection] = []
     report, parsed = validate_table(
-        table, metadata, plant=plant_service.spec_of(plant), known_devices=plant_service.device_specs(db, plant)
+        table, metadata, plant=plant_service.spec_of(plant), known_devices=plant_service.device_specs(db, plant),
+        rejections=rejections if collect_rejections else None,
     )
-    digest = hashlib.sha256()
-    digest.update(data)
-    digest.update(b"\x00")
-    digest.update(json.dumps(metadata.model_dump(mode="json"), sort_keys=True).encode())
-    sha = digest.hexdigest()
+    sha = fingerprint(data, metadata)
     duplicate = db.scalar(select(Dataset.id).where(Dataset.plant_id == plant.id, Dataset.content_sha256 == sha))
-    return Checked(report=report, parsed=parsed, metadata=metadata, table=table, content_sha256=sha, duplicate_of=duplicate)
+    file_sha256 = hashlib.sha256(data).hexdigest()
+    overlapping: list[Overlap] = []
+    if report.first_local_day is not None and report.last_local_day is not None and report.rows_plant > 0:
+        has_production = any(c.metric is Metric.ACTUAL_ENERGY for c in report.channels)
+        kind = DatasetKind.PRODUCTION if has_production else DatasetKind.WEATHER
+        overlapping = [
+            Overlap(dataset_id=d.id, name=d.name, period_start=d.period_start, period_end=d.period_end)
+            for d in db.scalars(
+                select(Dataset).where(
+                    Dataset.plant_id == plant.id, Dataset.archived.is_(False), Dataset.kind == kind.value,
+                    Dataset.period_start <= report.last_local_day, Dataset.period_end >= report.first_local_day,
+                ).order_by(Dataset.id)
+            )
+            if d.id != duplicate
+        ]
+    return Checked(
+        report=report, parsed=parsed, metadata=metadata, table=table, content_sha256=sha, duplicate_of=duplicate,
+        data=data, file_sha256=file_sha256, content_type=(content_type or "")[:100],
+        same_file_as=[i for i in _same_file(db, plant, file_sha256) if i != duplicate],
+        overlapping=overlapping, rejections=rejections,
+    )
+
+
+#: Cells a spreadsheet would run as a formula.  A leading plus or minus is left alone: those are numbers.
+_FORMULA_START = ("=", "@", "\t", "\r")
+
+
+def _safe_cell(value: Any) -> str:
+    text = "" if value is None else str(value)
+    return "'" + text if text.startswith(_FORMULA_START) else text
+
+
+def rejected_rows_csv(table: RawTable, rejections: list[Rejection], total: int | None = None) -> str:
+    """The rows of the file that had something rejected, as they are in the file, with the reason next to each.
+
+    ``solarwise_row`` is the row number quoted in the validation report; ``solarwise_problems`` lists what was
+    rejected on that row.  Everything else is the uploader's own row, so that it can be corrected and sent again.
+    When the file has more rejections than are listed (``total``), a last line says how many are not.
+    """
+    offset = 2 if table.file_format == "CSV" else 1
+    by_row: dict[int, list[Rejection]] = {}
+    for rejection in rejections:
+        by_row.setdefault(rejection.row, []).append(rejection)
+    out = io.StringIO()
+    writer = csv.writer(out, lineterminator="\n")
+    writer.writerow(["solarwise_row", *(_safe_cell(c) for c in table.columns), "solarwise_problems"])
+    for number in sorted(by_row):
+        index = number - offset
+        row = table.rows[index] if 0 <= index < len(table.rows) else {}
+        problems = " | ".join(
+            (f"{r.column}: " if r.column else "") + f"{r.problem} [{r.code}]" for r in by_row[number]
+        )
+        writer.writerow([number, *(_safe_cell(row.get(c)) for c in table.columns), _safe_cell(problems)])
+    if total is not None and total > len(rejections):
+        writer.writerow([
+            "", *("" for _ in table.columns),
+            f"{total - len(rejections):,} further rejected cells or rows are not listed: the list stops at "
+            f"{len(rejections):,}. The validation report counts them all.",
+        ])
+    return out.getvalue()
 
 
 def store_parsed(
@@ -176,7 +311,66 @@ def store_parsed(
     return dataset
 
 
+def _event_record(record: EvidenceRecord, user: User) -> EvidenceRecord:
+    """Nothing uploaded in a demonstration session is a real observation of a real plant."""
+    tag = record.tag
+    if not user.is_demo or tag.provenance is Provenance.SYNTHETIC:
+        return record
+    emulates = tag.provenance if tag.provenance in (Provenance.MEASURED, Provenance.MODELLED) else None
+    return record.model_copy(
+        update={"tag": ProvenanceTag(provenance=Provenance.SYNTHETIC, emulates=emulates, source=tag.source, method=tag.method)}
+    )
+
+
 def import_upload(db: Session, plant: Plant, user: User, checked: Checked, file_name: str | None) -> Dataset:
+    """Store a validated upload: the values, the declarations, the file itself and the events it carries."""
+    dataset = _import(db, plant, user, checked, file_name)
+    if checked.data:
+        rejected = (
+            rejected_rows_csv(checked.table, checked.rejections, checked.report.rejections_total)
+            if checked.rejections else None
+        )
+        db.add(
+            DatasetFile(
+                dataset_id=dataset.id, file_name=(file_name or "")[:255], content_type=checked.content_type,
+                size_bytes=len(checked.data), sha256=checked.file_sha256, encoding="zlib",
+                content=zlib.compress(checked.data, 6),
+                rejected_rows=zlib.compress(rejected.encode("utf-8"), 6) if rejected is not None else None,
+                rejections=len(checked.rejections),
+            )
+        )
+    if checked.parsed is not None:
+        for record in checked.parsed.events:
+            evidence_service.add_evidence(db, plant, user, _event_record(record, user), dataset)
+    db.flush()
+    return dataset
+
+
+def original_file(db: Session, dataset: Dataset) -> tuple[DatasetFile, bytes] | None:
+    """The file the dataset was imported from, byte for byte; ``None`` for a dataset that did not come from an upload."""
+    stored = db.get(DatasetFile, dataset.id)
+    if stored is None:
+        return None
+    data = zlib.decompress(stored.content) if stored.encoding == "zlib" else bytes(stored.content)
+    return stored, data
+
+
+def stored_rejected_rows(db: Session, dataset: Dataset) -> str | None:
+    """The rows rejected when the dataset was imported, as CSV; ``None`` when nothing was rejected or kept."""
+    stored = db.get(DatasetFile, dataset.id)
+    if stored is None or stored.rejected_rows is None:
+        return None
+    return zlib.decompress(stored.rejected_rows).decode("utf-8")
+
+
+def events_of(db: Session, dataset: Dataset) -> list[EvidenceRow]:
+    """Evidence records that came with the dataset (events of the file, or of a demonstration scenario)."""
+    return list(
+        db.scalars(select(EvidenceRow).where(EvidenceRow.dataset_id == dataset.id).order_by(EvidenceRow.observed_start))
+    )
+
+
+def _import(db: Session, plant: Plant, user: User, checked: Checked, file_name: str | None) -> Dataset:
     if checked.duplicate_of is not None:
         raise ConflictError(
             "this file, with the same declarations, has already been imported for this plant",

@@ -32,10 +32,17 @@ const { BASE, launch, expect, shot, settle, clickText, inspect, field, fill, tab
     await page.goto(BASE + "/analyses/2", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.body.innerText.includes("Clean now"), { timeout: 15000 });
     await inspect(page, "analysis 2 / Decision", "demo-analysis-decision", { fullPage: true });
-    for (const name of ["Performance", "Attribution", "Diagnosis", "Economics", "Provenance", "Explanation"]) {
+    for (const name of ["AI analysis", "Performance", "Attribution", "Diagnosis", "Economics", "Provenance", "Explanation"]) {
       await tab(page, name);
       await settle(page, 900);
-      await inspect(page, `analysis 2 / ${name}`, `demo-analysis-${name.toLowerCase()}`, { fullPage: true });
+      if (name === "AI analysis") {
+        // No language model on this server: the interpretation is the engine's own, and the page says so.
+        const reading = await page.evaluate(() => document.querySelector('[role="tabpanel"]').innerText);
+        expect(/SIMULATED DECISION \(demonstration, not an operational instruction\): Clean now\./.test(reading)
+          && /No language model is configured on this server/.test(reading) && /Narrative assembled by the engine/.test(reading),
+          "analysis 2 / AI analysis: without a language model the reading is the engine's, and the decision is marked simulated");
+      }
+      await inspect(page, `analysis 2 / ${name}`, `demo-analysis-${name.toLowerCase().replace(/\s+/g, "-")}`, { fullPage: true });
     }
     // The report really downloads, with the session's token.
     const report = page.waitForResponse((r) => r.url().includes("/report.pdf"), { timeout: 20000 });

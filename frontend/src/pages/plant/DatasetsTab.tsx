@@ -55,15 +55,17 @@ export function DatasetsTab({ plant }: { plant: Plant }) {
         <CardHeader
           id="datasets-title"
           title="Datasets"
-          description="A dataset is a file as it was imported, with what was declared about it. It is never modified afterwards."
-          actions={editable ? <LinkButton to={`/plants/${plant.id}/upload`} variant="primary" size="sm"><Upload className="size-4" aria-hidden /> Add a dataset</LinkButton> : undefined}
+          description="A dataset is a file of operational data as it was uploaded, with what was declared about it. It is never modified afterwards."
         />
         {datasets.loading && <Loading label="Loading the datasets" />}
         {datasets.error && <div className="p-5"><ErrorNote error={datasets.error} onRetry={datasets.reload} /></div>}
         {datasets.data && datasets.data.length === 0 && (
-          <EmptyState title="No dataset yet">
+          <EmptyState
+            title="No operational data yet"
+            action={editable ? <LinkButton to={`/plants/${plant.id}/upload`} variant="primary"><Upload className="size-4" aria-hidden /> Upload a CSV or JSON file</LinkButton> : undefined}
+          >
             {editable
-              ? "Upload the production data of the plant, with a declaration of where each column comes from."
+              ? "The plant is described. Now upload what it measured: a CSV or JSON export of its production, with the weather, soiling and events it holds. The columns are recognised from their headers."
               : "You have read-only access to this plant; an owner or editor can add data."}
           </EmptyState>
         )}

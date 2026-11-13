@@ -14,11 +14,11 @@ One process serves everything on one origin:
     └── /api/docs       interactive description of the API (/api/openapi.json)
           │
           ├── services        permissions, storage, audit trail, running the engine on stored data
-          ├── ingestion       reading uploads, validating them against their declarations
-          ├── core            the analysis pipeline - pure functions
+          ├── ingestion       reading uploads, proposing what their columns are, validating them
+          ├── core            the analysis pipeline - pure functions; the only place a decision is taken
           ├── reports         PDF, HTML, CSV, JSON
           ├── integrations    PVGIS and NASA POWER, only when a user asks
-          └── ai              optional rephrasing of the explanation, behind guardrails
+          └── ai              optional: a language model interprets and explains the result; checked, never deciding
           │
           ▼
    SQLite file or PostgreSQL (SQLAlchemy, Alembic migrations)
@@ -65,9 +65,15 @@ The method is described in [SCIENTIFIC_METHODOLOGY.md](SCIENTIFIC_METHODOLOGY.md
 ## Around the pipeline
 
 **Ingestion** (`solarwise.ingestion`). `parser` handles the shape of a file (encoding, separator, JSON envelope,
-size limits); `validator` handles its meaning (timestamps, units, ranges, duplicates) against the uploader's
-declarations (`schema`). A value that cannot be trusted is rejected and stored as missing, with a count and
-examples in the validation report; a problem that makes the whole file unusable blocks the import.
+size limits). `detect` takes a first look before anything is declared: it proposes what each column is and in
+which unit from its header, with fixed vocabularies, and reports what looks odd in the values - a proposal the
+uploader corrects, which never includes a provenance and never changes a value. `validator` handles the meaning of
+the file (timestamps, units, ranges, duplicates) against the uploader's declarations (`schema`), converts mean
+irradiance to irradiation with the length of the interval and a soiling loss to a soiling ratio, and turns the
+cleaning marks and alarm texts of declared event columns into evidence records. A value that cannot be trusted is
+rejected and stored as missing, with a count and examples in the validation report and a line in the list of
+rejected rows; a problem that makes the whole file unusable blocks the import. `templates` serves the files an
+operator downloads to see the format. See [data-upload.md](data-upload.md).
 
 **Services** (`solarwise.services`). The only layer that touches both the database and the engine.
 
@@ -92,26 +98,36 @@ figure is already text; `render.py` writes it as PDF (ReportLab), HTML (Jinja2, 
 baseline; NASA POWER provides daily weather context. Both are labelled `MODELLED`, are never required, and are
 called only on request.
 
-**Language model** (`solarwise.ai`). Off by default. When configured it receives an evidence packet - the
-engine's result, read-only - and may rephrase the explanation. Its answer is shown only if mechanical checks pass
-(figures taken from the engine only, no contradiction with the decision, no over-claiming, plain text);
-otherwise the engine's own text is shown.
+**Language model** (`solarwise.ai`). An interpretation layer above the pipeline, off by default. It reads the
+stored result of an analysis as an *evidence packet* - plain data, no time series - and writes: a diagnostic
+analysis and the narrative of an operational report (`analyst.py`, `report.py`), a rewording of the engine's
+explanation (`explain.py`), and suggestions for the mapping of an uploaded file (`data_assist.py`). Three things
+keep it in its place: the decision, the gates, the rating of each cause, the evidence, the steps and the figures of
+an insight are copied from the engine by the server and have no field in the model's answer; everything the model
+writes passes mechanical checks before it is shown (`guardrails.py`); and when there is no model, or its answer
+cannot be used, the engine's own text fills the same structure and the page says so. Providers are reached over
+plain HTTPS through one small interface (`providers.py`): the OpenAI chat-completions protocol, which most services
+and self-hosted servers implement, and Anthropic's. See [ai.md](ai.md).
 
 **Demonstration** (`solarwise.demo`). A seeded generator builds ten synthetic scenarios for the reference case;
 `services/demo.py` loads them at start-up when demonstration mode is on.
 
 ## Database
 
-Eleven tables, created by the Alembic migration `0001_initial_schema`:
+Thirteen tables: eleven created by the Alembic migration `0001_initial_schema`, and `dataset_files` and
+`ai_insights` added by `0002_original_files_and_ai_insights`. A database of the first release is upgraded in place
+at start-up.
 
 | Table | Content |
 |---|---|
 | `users` | Accounts: Argon2id password hash, role, lock-out state, demonstration flag |
 | `plants`, `devices`, `plant_permissions` | Plants with their specification, their inverter blocks, who may access them |
 | `datasets` | One row per imported file: declarations, validation report, content hash, period |
+| `dataset_files` | The uploaded file itself, compressed and returned byte for byte, with its SHA-256; the rows rejected at import |
 | `production_observations`, `weather_observations` | The validated time series, in canonical units, UTC |
 | `evidence_records` | Soiling measurements, inspections, fault and curtailment logs, cleaning events |
 | `analyses` | Each analysis as issued: decision, rule, context, options, complete result |
+| `ai_insights` | Each interpretation generated for an analysis: written by a model or by the engine, provider, model, time, prompt version, fingerprint of the evidence, result of every check, content |
 | `economic_reference_values` | Documented references and demonstration values; never applied automatically |
 | `audit_log` | Who did what, when, from where |
 

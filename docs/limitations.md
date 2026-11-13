@@ -66,7 +66,18 @@ decision, and are not soiling forecasts.
 ## 6. The platform
 
 - **Files only.** Data arrive as CSV or JSON uploads. There is no live connection to a SCADA system, no
-  scheduled import and no alerting.
+  scheduled import and no alerting. Excel files are not read.
+- **Reading a file is a proposal.** Columns are recognised from their headers with a fixed vocabulary, in English
+  and French. A header nobody could read is left for the uploader to assign. A recognised column can still be the
+  wrong one - a horizontal irradiance taken for an in-plane one when the header does not say: that is why
+  ambiguous headers are flagged, and why nothing is imported before the uploader has seen the mapping.
+- **One column for the date and the time.** A file with separate date and time columns is pointed out, not merged.
+  Counter readings are pointed out, not converted to energy per interval.
+- **Irradiance in W/m² is taken as the mean over each interval.** Spot values or daylight-only means give a wrong
+  irradiation; the platform cannot tell, and says so each time.
+- **Events are read with a fixed vocabulary.** An alarm text it does not know is kept as "other" and does not
+  enter the diagnosis. Whether an alarm that stopped being reported was actually resolved is not known: it is
+  recorded as not confirmed closed.
 - **Declarations are trusted.** The platform cannot verify that a channel declared `MEASURED` was measured. It
   records who declared it.
 - **One language.** The interface, the reports and the slides are in English. There is no French or Arabic
@@ -75,7 +86,15 @@ decision, and are not soiling forecasts.
   or reset, no multi-factor authentication.
 - **Scale**: designed for one instance. The sign-in throttling lives in the memory of the process. Analyses run
   inside the request, and no load test was made.
-- **The optional language model** was exercised only against simulated providers; no real provider was called.
+- **The language model was never run against a real provider.** Everything that uses it - the diagnostic
+  analysis, the operational report, the review of an uploaded file, the rewording of the explanation - was tested
+  against a stand-in that speaks the OpenAI chat-completions protocol and gives scripted answers. The protocol,
+  the handling of failures, the checks, the storage and the display are verified that way; how well a given model
+  writes, how often its answers pass the checks, what it costs and how long it takes are not. See [ai.md](ai.md).
+- **The checks on a model's text are patterns.** They catch the overreaches they were written for - soiling
+  stated as a fact, an invented figure, another decision, a claimed validation - and they are in English. They do
+  not verify that every sentence is true. This is why every fact that matters is copied from the engine by the
+  server and each section of the page says who wrote it.
 - **No independent review** of the code, the method or the security has been made.
 
 ## 7. What could not be verified where the project was built
@@ -88,6 +107,7 @@ network access.
 | `docker build`, `docker compose up` | **Never run.** The same installation steps were verified without Docker, on SQLite and on PostgreSQL 16 ([deployment.md](deployment.md)) |
 | Windows and macOS | Not tested. The Windows commands in the README are the equivalent of the tested Linux ones |
 | PVGIS and NASA POWER | The services could not be reached. Their clients are tested against simulated answers only; a live call has never been made |
+| A language-model provider | **Never called**: none could be reached, and no key was available. The layer is tested against a stand-in on a local port that speaks the OpenAI chat-completions protocol and gives scripted answers - over real HTTP, including time-outs, rate limits and refused keys. The Anthropic protocol is tested against simulated answers only |
 | The PowerPoint file | Checked by rendering it with LibreOffice and comparing every line of text with the PDF. Never opened in PowerPoint, Keynote or Google Slides |
 | Browsers | The browser checks run in Chromium only |
 | The public preview link | Opened by a visitor successfully, as the server log shows; it cannot be opened from inside the sandbox |

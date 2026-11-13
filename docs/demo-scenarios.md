@@ -96,6 +96,46 @@ In the application: start it with `SOLARWISE_DEMO_MODE=true` and choose **Open t
 datasets and their analyses are created at start-up. A visitor can run a scenario again with other assumptions;
 only that visitor sees the result.
 
+## A demonstration in three parts
+
+**1. The decision depends on the evidence (2 minutes).** Open the demonstration and the plant. Read the table of
+datasets: six drops of about 9 %, one cleaning order. Open scenario 2 (*Clean now*, ten gates of ten), then
+scenario 5 or 8 (*Investigate*).
+
+**2. What the findings mean (1 minute).** On an analysis, open the tab **AI analysis**. At the top, the engine's
+decision in a box of its own, tagged *Engine*. Below, section by section: summary, performance, anomalies, each
+possible explanation with the support the engine gave it and its evidence, data quality, economics, why the engine
+decided this, next steps, what is missing, limitations. Each section says who wrote it.
+
+* Without a language model - the default - the page says so: "No language model is configured on this server ...
+  the deterministic fallback is active". Every section is tagged *Engine*. Nothing is missing.
+* With a model configured, **Generate the AI analysis** asks it to write the narrative. Those sections are then
+  tagged *AI interpretation*, with the model's name, the time and the checks its text passed; the gates, the
+  steps and what would change the decision stay tagged *Engine*. If its answer fails a check, the page says which
+  one, and shows the engine's text.
+* **Operational report**: PDF, HTML or JSON, eight sections, the engine's tables in annex.
+
+What can be shown honestly: the page, the tags, the fallback, the report. What cannot: that a real model was
+tried. It was not - see [ai.md](ai.md).
+
+**3. An operator's own file (2 minutes).** Sign out, create an account, and **Register a plant** of 1,000 kWp:
+the form describes the plant and asks for no measurement. On the plant's page, **Upload operational data**, and
+choose `data/samples/solarwise-operational-data.example.csv` (also offered for download on that page: *CSV
+example*).
+
+* The first rows appear as they are in the file; under each header, what the column was read as - *Energy
+  produced · kWh*, *In-plane irradiation · W/m²*, *Cleaning marks*, *Alarms and events*.
+* In step 3 every quantity is pre-selected from its header; every provenance is *Unknown - not documented*.
+* **Check the file**: 14 rows, three events read from the file (one cleaning, an inverter alarm over two days, a
+  grid outage still open on the last row), the conversion of irradiance stated, and what to do about each finding.
+* **Import and run the analysis**: the answer is *Investigate* - rule R0, "the production data are not measured
+  data and cannot support a cleaning decision". Nothing was declared about where the columns come from, so
+  nothing can be decided from them. Declaring them measured would be a false declaration here: the values of this
+  file are invented.
+
+The browser check `frontend/e2e/upload_flow.cjs` walks part 3 with a file whose headers are an operator's own, a
+correction by hand, declared provenance, and - with the stand-in - the assistant and the generated analysis.
+
 On the command line:
 
 ```sh

@@ -54,8 +54,12 @@ function shot(name) {
   return path.join(SHOTS, `${name}.png`);
 }
 
+// How long to wait for the network to fall silent before going on anyway. A check that waits for what it needs to
+// see can lower it (E2E_IDLE_TIMEOUT): some browsers now and then never report a request as finished.
+const IDLE_TIMEOUT = Number(process.env.E2E_IDLE_TIMEOUT || 15000);
+
 async function settle(page, ms = 350) {
-  await page.waitForNetworkIdle({ idleTime: 250, timeout: 15000 }).catch(() => {});
+  await page.waitForNetworkIdle({ idleTime: 250, timeout: IDLE_TIMEOUT }).catch(() => {});
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
 

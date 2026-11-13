@@ -72,8 +72,9 @@ Demonstration mode lets anyone in without an account, so it is isolated:
   even for an administrator), the evidence they enter is recorded as synthetic, and every decision is marked
   simulated - including for a file declared `MEASURED`;
 - limits: 3 plants, 8 datasets per plant, 5 MB per upload; opening sessions, calling external services and
-  asking for a rephrasing by the language model are rate-limited, so that anonymous visitors can neither send
-  unbounded traffic to third parties nor spend the operator's model budget.
+  asking the language model for anything are rate-limited, so that anonymous visitors can neither send
+  unbounded traffic to third parties nor spend the operator's model budget. Events found in a file uploaded in a
+  demonstration session are recorded as synthetic, like the evidence a visitor enters.
 
 Turn demonstration mode off (`SOLARWISE_DEMO_MODE=false`) on an installation that holds real data and is
 reachable by others.
@@ -113,6 +114,14 @@ Every response - refusals and failures included - carries:
 - Every value is validated against the declarations and physical ranges; what cannot be trusted is stored as
   missing.
 - A stored dataset is immutable and identified by the SHA-256 of its content.
+- **The uploaded file is kept**, compressed, in the database (`dataset_files`), with its own SHA-256, and can be
+  downloaded by whoever may read the dataset. It is always sent back as an attachment of type
+  `application/octet-stream`, under a file name reduced to letters, digits, dot, dash and underscore: a browser
+  never renders it, whatever it contains. Deleting the plant deletes its files.
+- The first look at a file (`preview`) and the review by the language model store nothing.
+- The CSV of rejected rows gives the uploader's own cells back unchanged, except that a cell starting with `=` or
+  `@` is prefixed with an apostrophe so that a spreadsheet does not run it as a formula. A leading plus or minus
+  is left alone: those are numbers.
 - Free text supplied by users (plant names, descriptions, sources) is escaped in every report; the HTML reports
   are rendered with auto-escaping.
 
@@ -126,19 +135,36 @@ Part of security here is that a result cannot claim more than its evidence suppo
 - an analysis is stored as issued, with the engine version, the options and the content hash of its dataset;
 - state-changing actions are recorded in an audit trail with the account and the remote address.
 
-## The optional language model
+## The language model
 
-Off by default. When a provider is configured:
+Off by default. The complete description is in [ai.md](ai.md); what matters for security:
 
-- it receives an *evidence packet* built from the engine's result only; free text from users is bounded,
-  stripped of control characters and kept in a data channel, apart from the instructions;
-- its answer is shown only if mechanical checks pass: every figure is one of the engine's, no certainty the
-  engine does not state, no contradiction with the decision, no link, mark-up or meta-commentary, a bounded
-  length. A rejected answer is replaced by the engine's own text, with the reason;
-- the decision statement shown to the user always comes from the engine;
-- the API key is never logged or returned, and a provider failure falls back silently to the engine's text.
-
-Using a provider sends the content of the packet - plant name, figures, reasons - to that provider.
+- **The key stays on the server.** It is read from the environment, held in memory and sent to the provider only.
+  No response of the API contains it, the interface has no setting for it, and it is written nowhere: not to the
+  database, not to the audit trail, not to a stored insight, not to a report, not to the log. A provider's error
+  is reported by its status only; the body of its answer, which may echo the request, is never passed on. Tests
+  look for the key in every answer, stored row and log line.
+- **The model has no power.** It has no tool and no access to the database; nothing it returns is executed. The
+  decision, the gates, the rating of each cause, the evidence, the steps and every figure of an insight are
+  copied from the stored analysis by the server: a model's answer has no field for them.
+- **What it writes is checked** before it is shown: the requested structure, then ten checks against the engine's
+  result (length, figures from the engine only, no certainty the engine does not state, no other decision, no
+  soiling stated as a fact without measured evidence, no recoverable energy the engine did not estimate, synthetic
+  data never called measurements, no claimed validation or authorisation, plain text, no anomaly of the engine
+  passed over). One failure discards the whole
+  answer; the engine's own text is shown, with the reason.
+- **What is sent** to the provider is bounded: for an analysis, the findings of the engine as plain data - no time
+  series, no file, no account; for an uploaded file, column names, counts, extremes and at most five sample values
+  per column. Free text from users is stripped of control characters, bounded, and kept in a data channel apart
+  from the instructions; a model that obeys an instruction hidden in it is caught by the checks.
+- **Suggestions for a mapping are never applied by the server**, never name a provenance and never change a value.
+  What the uploader accepts goes through the same validation as anything typed by hand.
+- **Traceability**: every generated insight is stored with provider, model, time, the version of the prompt, the
+  fingerprint of the evidence it was written from and the result of every check; generating one is recorded in
+  the audit trail.
+- **Availability**: a provider that is slow, unreachable, rate-limited or wrong leaves the engine's text; the
+  request of the user succeeds. Demonstration visitors share a bounded allowance of model calls.
+- If nothing about a plant may leave your network, use a model served on your own machines, or leave the layer off.
 
 ## Left to the installation
 

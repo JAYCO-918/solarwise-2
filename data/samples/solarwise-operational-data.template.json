@@ -1,0 +1,18 @@
+{
+  "records": [
+    {
+      "timestamp": "REPLACE - start of the interval, for example 2026-05-01 or 2026-05-01T13:00:00+01:00",
+      "energy_kwh": null,
+      "expected_energy_kwh": null,
+      "poa_irradiance_w_m2": null,
+      "module_temp_c": null,
+      "ambient_temp_c": null,
+      "relative_humidity_pct": null,
+      "wind_speed_m_s": null,
+      "rainfall_mm": null,
+      "soiling_ratio": null,
+      "cleaning_event": null,
+      "alarm": null
+    }
+  ]
+}

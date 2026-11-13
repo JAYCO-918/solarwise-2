@@ -1,0 +1,15 @@
+{
+ "capabilities": [
+  "diagnostic analysis of the engine's findings",
+  "operational report",
+  "explanation of the engine's decision",
+  "review of the columns of an uploaded file",
+  "plain-language rewording of the engine's explanation"
+ ],
+ "enabled": true,
+ "endpoint_host": "127.0.0.1",
+ "fallback": "When no model is configured, cannot be reached or gives an answer that fails a check, the deterministic engine's own text is shown instead, and the page says so.",
+ "model": "example-model",
+ "provider": "openai-compatible",
+ "role": "A language model interprets and explains what the engine found. It never decides, never supplies a figure and never acts: the deterministic engine is the only authority for a recommendation."
+}

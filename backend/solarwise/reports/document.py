@@ -83,6 +83,10 @@ class TextBlock:
     title: str
     paragraphs: list[str] = field(default_factory=list)
     bullets: list[str] = field(default_factory=list)
+    #: Who produced the text of the block ("engine", "language model ..."), shown next to its title.
+    label: str | None = None
+    #: Sub-sections, rendered one level below the block.
+    children: list[TextBlock] = field(default_factory=list)
 
 
 @dataclass
@@ -103,6 +107,10 @@ class ReportDocument:
     explanation: list[TextBlock]
     disclaimers: list[str]
     footer: str
+    #: A second notice under the banner (for example: how the narrative of the document was produced).
+    notice: str | None = None
+    #: Heading of the tables section, when the tables are annexes of a narrative report.
+    tables_title: str | None = None
 
 
 def build_document(result: AnalysisResult, meta: ReportMeta) -> ReportDocument:

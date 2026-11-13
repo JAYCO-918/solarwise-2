@@ -4,9 +4,14 @@
   made about it, and never edited.  Corrections are a new dataset.
 * Observations are stored wide, one row per interval, in canonical units.
   ``NULL`` means *not observed* - it is never a zero.
+* ``dataset_files`` keep the uploaded file itself, byte for byte, so that what
+  was imported can always be compared with what was sent.
 * ``analyses`` keep the complete result of a run together with the options and
   engine version that produced it, so that a past recommendation can always be
   re-read exactly as it was issued.
+* ``ai_insights`` keep every interpretation written for an analysis, with the
+  model that wrote it (or the note that none was used), the checks it passed and
+  the time.  An insight never changes the analysis it reads.
 """
 
 from __future__ import annotations
@@ -15,7 +20,19 @@ from datetime import date, datetime
 from enum import StrEnum
 from typing import Any
 
-from sqlalchemy import JSON, Boolean, Date, Float, ForeignKey, Index, Integer, String, Text, UniqueConstraint
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    Date,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    LargeBinary,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from solarwise.db.base import Base, UTCDateTime, utcnow
@@ -142,6 +159,26 @@ class Dataset(Base):
     created_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
 
 
+class DatasetFile(Base):
+    """The file a dataset was imported from, exactly as it was uploaded."""
+
+    __tablename__ = "dataset_files"
+
+    dataset_id: Mapped[int] = mapped_column(ForeignKey("datasets.id", ondelete="CASCADE"), primary_key=True)
+    file_name: Mapped[str] = mapped_column(String(255), default="")
+    content_type: Mapped[str] = mapped_column(String(100), default="")
+    #: Size and SHA-256 of the uploaded bytes (before compression).
+    size_bytes: Mapped[int] = mapped_column(Integer)
+    sha256: Mapped[str] = mapped_column(String(64), index=True)
+    #: ``zlib``: the content is stored compressed and returned byte-identical.
+    encoding: Mapped[str] = mapped_column(String(10), default="zlib")
+    #: Read only when the file is asked for: a page that shows a dataset does not carry megabytes around.
+    content: Mapped[bytes] = mapped_column(LargeBinary, deferred=True)
+    #: The rows that had something rejected at import, with the reasons (CSV, compressed); ``None`` when there were none.
+    rejected_rows: Mapped[bytes | None] = mapped_column(LargeBinary, nullable=True, deferred=True)
+    rejections: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class ProductionObservation(Base):
     __tablename__ = "production_observations"
     __table_args__ = (
@@ -224,6 +261,29 @@ class Analysis(Base):
     headline: Mapped[str] = mapped_column(Text)
     options: Mapped[dict[str, Any]] = mapped_column(JSON)
     result: Mapped[dict[str, Any]] = mapped_column(JSON)
+
+
+class AiInsight(Base):
+    """An interpretation of one analysis: written by a language model, or assembled by the engine when none is used."""
+
+    __tablename__ = "ai_insights"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    analysis_id: Mapped[int] = mapped_column(ForeignKey("analyses.id", ondelete="CASCADE"), index=True)
+    created_by_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow, index=True)
+    #: ``AI`` or ``DETERMINISTIC_ENGINE``.
+    generated_by: Mapped[str] = mapped_column(String(30))
+    provider: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    model: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    prompt_version: Mapped[str] = mapped_column(String(20), default="")
+    #: SHA-256 of the evidence packet the text was written from.
+    packet_sha256: Mapped[str] = mapped_column(String(64), default="")
+    duration_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    #: Why the engine's own text is shown although a model was asked.
+    fallback_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    checks: Mapped[list[Any]] = mapped_column(JSON)
+    content: Mapped[dict[str, Any]] = mapped_column(JSON)
 
 
 class EconomicReference(Base):

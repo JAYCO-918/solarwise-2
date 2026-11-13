@@ -84,7 +84,11 @@ Environment variables, or a `.env` file in the directory the server is started i
 | `SOLARWISE_LOGIN_MAX_ATTEMPTS`, `..._WINDOW_SECONDS`, `..._LOCKOUT_SECONDS` | 5, 300, 900 | Sign-in throttling |
 | `SOLARWISE_EXTERNAL_DATA_ENABLED` | `true` | Allows PVGIS and NASA POWER requests, made only when a user asks |
 | `SOLARWISE_EXTERNAL_TIMEOUT_SECONDS` | 20 | Time allowed to those services |
-| `SOLARWISE_AI_PROVIDER` | `none` | `openai` or `anthropic`: rephrasing of the explanation; needs `SOLARWISE_AI_API_KEY` and `SOLARWISE_AI_MODEL` |
+| `SOLARWISE_AI_PROVIDER` | `none` | Language model that interprets and explains the engine's findings: `openai-compatible` (any service speaking `/chat/completions`; `openai` is a synonym) or `anthropic`. Off: the engine's own text is shown everywhere |
+| `SOLARWISE_AI_MODEL` | none | Name of the model at the provider. Required for the layer to be on |
+| `SOLARWISE_AI_API_KEY` | none | Key of the provider. Server side only: never sent to the browser, logged or stored. May be left out only for an OpenAI-compatible service named by `SOLARWISE_AI_BASE_URL` that takes none |
+| `SOLARWISE_AI_BASE_URL` | the provider's public address | Root of the service, for a gateway or a model served on your own machines |
+| `SOLARWISE_AI_TIMEOUT_SECONDS`, `..._MAX_OUTPUT_TOKENS`, `..._MAX_RETRIES`, `..._JSON_MODE` | 30, 2000, 1, `false` | Budget of one call; see [ai.md](ai.md) |
 
 ## 6. For an installation that others can reach
 

@@ -23,6 +23,10 @@
   .decision .label { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
   .decision .tag { font: 600 11px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .note { color: var(--muted); font-size: 12.5px; }
+  .notice { padding: 10px 14px; border: 1px solid var(--line); border-left: 6px solid var(--monitor); margin: 0 0 18px; font-size: 13px; }
+  .src { display: inline-block; margin-left: 8px; padding: 1px 7px; border: 1px solid var(--line); border-radius: 10px;
+         font: 600 10.5px/1.6 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); vertical-align: middle; }
+  .annex { margin-top: 38px; }
   table { width: 100%; border-collapse: collapse; margin: 0 0 6px; font-size: 13px; }
   th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
   th { font-weight: 600; color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; }
@@ -37,6 +41,9 @@
   <h1>{{ doc.title }}</h1>
   <div class="subtitle">{{ doc.subtitle }}</div>
   <div class="banner{% if doc.simulated %} sim{% endif %}">{{ doc.banner }}</div>
+  {% if doc.notice %}
+  <div class="notice">{{ doc.notice }}</div>
+  {% endif %}
 
   <section class="decision {{ doc.decision }}">
     <div class="tag">{% if doc.simulated %}Simulated decision{% else %}Decision{% endif %}</div>
@@ -56,11 +63,19 @@
   </table>
 
   {% for block in doc.blocks %}
-  <h2>{{ block.title }}</h2>
+  <h2>{{ block.title }}{% if block.label %}<span class="src">{{ block.label }}</span>{% endif %}</h2>
   {% for paragraph in block.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
   {% if block.bullets %}<ul>{% for item in block.bullets %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+  {% for child in block.children %}
+  <h3>{{ child.title }}{% if child.label %}<span class="src">{{ child.label }}</span>{% endif %}</h3>
+  {% for paragraph in child.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+  {% if child.bullets %}<ul>{% for item in child.bullets %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
+  {% endfor %}
   {% endfor %}
 
+  {% if doc.tables_title %}
+  <h1 class="annex">{{ doc.tables_title }}</h1>
+  {% endif %}
   {% for table in doc.tables %}
   <h2>{{ table.title }}</h2>
   <table>
@@ -70,6 +85,7 @@
   {% if table.note %}<p class="note">{{ table.note }}</p>{% endif %}
   {% endfor %}
 
+  {% if doc.hypotheses %}
   <h2>Diagnostic hypotheses</h2>
   <p class="note">Each hypothesis is rated by the strength of the evidence for it (strong, moderate, weak, not supported, not evaluable). No probability is stated: the data do not support one.</p>
   {% for block in doc.hypotheses %}
@@ -77,13 +93,16 @@
   {% for paragraph in block.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
   {% if block.bullets %}<ul>{% for item in block.bullets %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
   {% endfor %}
+  {% endif %}
 
+  {% if doc.explanation %}
   <h2>Explanation</h2>
   {% for block in doc.explanation %}
   <h3>{{ block.title }}</h3>
   {% for paragraph in block.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
   {% if block.bullets %}<ul>{% for item in block.bullets %}<li>{{ item }}</li>{% endfor %}</ul>{% endif %}
   {% endfor %}
+  {% endif %}
 
   <h2>Statements that apply to this document</h2>
   <ul>{% for item in doc.disclaimers %}<li>{{ item }}</li>{% endfor %}</ul>

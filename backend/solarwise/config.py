@@ -64,12 +64,22 @@ class Settings(BaseSettings):
     nasa_power_base_url: str = "https://power.larc.nasa.gov"
     pvgis_base_url: str = "https://re.jrc.ec.europa.eu"
 
-    # --- optional language model used only to rephrase the engine's explanation
-    ai_provider: Literal["none", "openai", "anthropic"] = "none"
+    # --- optional language model: interprets and explains what the engine found; it never decides
+    #: ``openai`` and ``openai-compatible`` are the same protocol (``/chat/completions``): the base URL selects the
+    #: service - a commercial API, a gateway, or a model served on your own machines.
+    ai_provider: Literal["none", "openai", "openai-compatible", "anthropic"] = "none"
+    #: Kept on the server.  Never sent to the browser, never logged, never stored with a result.
     ai_api_key: str | None = None
     ai_base_url: str | None = None
     ai_model: str | None = None
     ai_timeout_seconds: float = Field(default=30.0, gt=0, le=180)
+    #: Upper bound of one answer of the model [tokens].
+    ai_max_output_tokens: int = Field(default=2000, ge=256, le=8000)
+    #: Further attempts after a rate limit (429), a gateway error (502, 503, 504) or a failed connection.
+    ai_max_retries: int = Field(default=1, ge=0, le=3)
+    #: Ask an OpenAI-compatible service for a JSON object (``response_format``).  Off: not every service accepts it,
+    #: and the answer is parsed and checked either way.
+    ai_json_mode: bool = False
 
     @field_validator("cors_origins", "allowed_hosts", mode="before")
     @classmethod
@@ -86,8 +96,19 @@ class Settings(BaseSettings):
             if "*" in self.cors_origins:
                 raise ValueError("SOLARWISE_CORS_ORIGINS must list explicit origins in production")
         if self.ai_provider != "none" and not self.ai_api_key:
-            raise ValueError("SOLARWISE_AI_API_KEY is required when SOLARWISE_AI_PROVIDER is set")
+            # A model served on your own machines usually takes no key; a commercial API always does.
+            self_hosted = self.ai_provider in ("openai", "openai-compatible") and bool(self.ai_base_url)
+            if not self_hosted:
+                raise ValueError(
+                    "SOLARWISE_AI_API_KEY is required when SOLARWISE_AI_PROVIDER is set (it may only be left out "
+                    "for an OpenAI-compatible service named by SOLARWISE_AI_BASE_URL that takes no key)"
+                )
         return self
+
+    @property
+    def ai_enabled(self) -> bool:
+        """A language model is configured: a provider, a model, and a key or a self-hosted endpoint."""
+        return self.ai_provider != "none" and bool(self.ai_model)
 
     @property
     def is_sqlite(self) -> bool:

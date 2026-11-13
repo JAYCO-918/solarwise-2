@@ -75,7 +75,8 @@ def evaluate(body: EvaluateRequest, user: CurrentUser) -> EvaluateResponse:
                 plant=plant, observations=parsed.observations, interval_minutes=parsed.interval_minutes,
                 channels=parsed.channels, context=context, options=body.options, declared_baseline=parsed.baseline,
                 device_observations=parsed.device_observations, devices=devices, device_tag=parsed.device_tag,
-                records=body.evidence, dataset_name=body.metadata.name, dataset_disclaimer=body.metadata.disclaimer,
+                records=[*body.evidence, *parsed.events], dataset_name=body.metadata.name,
+                dataset_disclaimer=body.metadata.disclaimer,
                 # A case that is not tied to a registered plant and stored dataset is never authorised.
                 allow_operational_authorization=False,
             )

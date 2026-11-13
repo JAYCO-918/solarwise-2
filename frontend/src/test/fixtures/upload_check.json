@@ -1,0 +1,332 @@
+{
+ "accepted": true,
+ "content_sha256": "915869081a9a45683e1ee1b56dd7a1c2801f3124df5f260b1e99e501dd3f331a",
+ "dataset": null,
+ "declared_metadata": {
+  "baseline": {
+   "degradation_adjusted": true,
+   "description": null,
+   "irradiance_adjusted": true,
+   "method": "TELEMETRY_MODEL",
+   "reference_cell_temp_c": null,
+   "soiling_allowance_fraction": 0.0,
+   "temperature_adjusted": true
+  },
+  "capacity_dc_kwp": null,
+  "channels": {
+   "actual_energy": {
+    "boundary": "GRID_METER",
+    "column": "Energy (kWh)",
+    "emulates": null,
+    "method": null,
+    "notes": null,
+    "plane": null,
+    "provenance": "MEASURED",
+    "reported_as": null,
+    "soiling_method": null,
+    "source": "revenue meter (test fixture)",
+    "uncertainty_abs": null,
+    "uncertainty_pct": 0.5,
+    "unit": "kWh"
+   },
+   "expected_energy": {
+    "boundary": "GRID_METER",
+    "column": "Expected production (kWh)",
+    "emulates": null,
+    "method": null,
+    "notes": null,
+    "plane": null,
+    "provenance": "MODELLED",
+    "reported_as": null,
+    "soiling_method": null,
+    "source": "performance model (test fixture)",
+    "uncertainty_abs": null,
+    "uncertainty_pct": 2.0,
+    "unit": "kWh"
+   },
+   "module_temp": {
+    "boundary": null,
+    "column": "Module temperature (°C)",
+    "emulates": null,
+    "method": null,
+    "notes": null,
+    "plane": null,
+    "provenance": "MEASURED",
+    "reported_as": null,
+    "soiling_method": null,
+    "source": "module sensors (test fixture)",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "degC"
+   },
+   "poa_irradiation": {
+    "boundary": null,
+    "column": "Irradiance (W/m2)",
+    "emulates": null,
+    "method": null,
+    "notes": null,
+    "plane": "POA",
+    "provenance": "MEASURED",
+    "reported_as": null,
+    "soiling_method": null,
+    "source": "pyranometer (test fixture)",
+    "uncertainty_abs": null,
+    "uncertainty_pct": null,
+    "unit": "w/m2"
+   },
+   "soiling_ratio": {
+    "boundary": null,
+    "column": "Soiling loss (%)",
+    "emulates": null,
+    "method": null,
+    "notes": null,
+    "plane": null,
+    "provenance": "MEASURED",
+    "reported_as": "LOSS",
+    "soiling_method": "SOILING_STATION",
+    "source": "soiling station (test fixture)",
+    "uncertainty_abs": 0.005,
+    "uncertainty_pct": null,
+    "unit": "percent"
+   }
+  },
+  "description": "",
+  "device_column": "device_code",
+  "disclaimer": null,
+  "events": {
+   "cleaning_column": "Cleaning",
+   "emulates": null,
+   "event_column": "Alarms",
+   "provenance": "MEASURED",
+   "source": "SCADA event log (test fixture)"
+  },
+  "interval_minutes": null,
+  "name": "May 2026, operator export",
+  "synthetic": null,
+  "timestamp_column": "Date",
+  "timezone": null
+ },
+ "duplicate_of": null,
+ "events_stored": 0,
+ "file_sha256": "d29895a62f4b530ac206cbe329352bcdc3bf09576679d62ed40ac2d680446240",
+ "overlapping": [],
+ "report": {
+  "accepted": true,
+  "channels": [
+   {
+    "canonical_column": "actual_energy_kwh",
+    "maximum": 46000.0,
+    "metric": "actual_energy",
+    "minimum": 46000.0,
+    "missing": 1,
+    "provenance": "MEASURED",
+    "rejected": 1,
+    "source": "revenue meter (test fixture)",
+    "source_column": "Energy (kWh)",
+    "unit": "kWh",
+    "unit_in": "kWh",
+    "values": 12
+   },
+   {
+    "canonical_column": "expected_energy_kwh",
+    "maximum": 50000.0,
+    "metric": "expected_energy",
+    "minimum": 50000.0,
+    "missing": 0,
+    "provenance": "MODELLED",
+    "rejected": 0,
+    "source": "performance model (test fixture)",
+    "source_column": "Expected production (kWh)",
+    "unit": "kWh",
+    "unit_in": "kWh",
+    "values": 14
+   },
+   {
+    "canonical_column": "soiling_ratio",
+    "maximum": 0.92,
+    "metric": "soiling_ratio",
+    "minimum": 0.92,
+    "missing": 0,
+    "provenance": "MEASURED",
+    "rejected": 1,
+    "source": "soiling station (test fixture)",
+    "source_column": "Soiling loss (%)",
+    "unit": "fraction",
+    "unit_in": "percent",
+    "values": 13
+   },
+   {
+    "canonical_column": "poa_irradiation_kwh_m2",
+    "maximum": 6.48,
+    "metric": "poa_irradiation",
+    "minimum": 6.48,
+    "missing": 0,
+    "provenance": "MEASURED",
+    "rejected": 0,
+    "source": "pyranometer (test fixture)",
+    "source_column": "Irradiance (W/m2)",
+    "unit": "kWh/m2",
+    "unit_in": "w/m2",
+    "values": 14
+   },
+   {
+    "canonical_column": "module_temp_c",
+    "maximum": 44.5,
+    "metric": "module_temp",
+    "minimum": 44.5,
+    "missing": 0,
+    "provenance": "MEASURED",
+    "rejected": 0,
+    "source": "module sensors (test fixture)",
+    "source_column": "Module temperature (°C)",
+    "unit": "degC",
+    "unit_in": "degC",
+    "values": 14
+   }
+  ],
+  "dataset_name": "May 2026, operator export",
+  "devices": [],
+  "events": [
+   {
+    "device_code": null,
+    "evidence_type": "CLEANING_EVENT",
+    "first_day": "2026-05-05",
+    "intervals": 1,
+    "last_day": "2026-05-05",
+    "open_at_end": false,
+    "provenance": "MEASURED",
+    "reference": "F-CLEAN-001",
+    "text": "cleaning"
+   },
+   {
+    "device_code": null,
+    "evidence_type": "INVERTER_FAULT",
+    "first_day": "2026-05-10",
+    "intervals": 2,
+    "last_day": "2026-05-11",
+    "open_at_end": false,
+    "provenance": "MEASURED",
+    "reference": "F-EVT-002",
+    "text": "Inverter fault INV-02"
+   },
+   {
+    "device_code": null,
+    "evidence_type": "OTHER",
+    "first_day": "2026-05-14",
+    "intervals": 1,
+    "last_day": "2026-05-14",
+    "open_at_end": true,
+    "provenance": "MEASURED",
+    "reference": "F-EVT-003",
+    "text": "Err 0x21"
+   }
+  ],
+  "file_format": "CSV",
+  "first_local_day": "2026-05-01",
+  "interval_minutes": 1440,
+  "is_synthetic": false,
+  "issues": [
+   {
+    "code": "NON_NUMERIC",
+    "column": "Energy (kWh)",
+    "count": 1,
+    "examples": [
+     "row 4: 'abc'"
+    ],
+    "hint": "These cells hold text where a number is expected. Correct them in the file, or leave them empty if the value is not known.",
+    "message": "Cells that are not finite numbers were rejected and stored as missing.",
+    "severity": "ERROR"
+   },
+   {
+    "code": "OUT_OF_RANGE",
+    "column": "Soiling loss (%)",
+    "count": 1,
+    "examples": [
+     "row 13: 250"
+    ],
+    "hint": "Check the unit of the column and the sensor. Values outside the range are not used.",
+    "message": "Values of 'Soiling loss (%)' that are not a possible soiling loss (between 0 and 100 % of the output of a clean array) were rejected and stored as missing (not as zero).",
+    "severity": "ERROR"
+   },
+   {
+    "code": "EVENT_UNCLASSIFIED",
+    "column": "Alarms",
+    "count": 1,
+    "examples": [
+     "row 15: 'Err 0x21'"
+    ],
+    "hint": "Use the words of the vocabulary (inverter fault, grid outage, curtailment, sensor fault, shading, cleaning) so that the event counts in the diagnosis.",
+    "message": "Events of 'Alarms' whose text matches no word of the vocabulary are recorded as 'other': they are shown with the analysis but do not enter the diagnosis.",
+    "severity": "WARNING"
+   },
+   {
+    "code": "IRRADIANCE_CONVERTED",
+    "column": "Irradiance (W/m2)",
+    "count": 1,
+    "examples": [],
+    "hint": "Check that the column really holds the mean over each interval. If it holds spot values or daylight-only means, supply the irradiation (kWh/m2) instead.",
+    "message": "Column 'Irradiance (W/m2)' holds irradiance (W/m2). It was read as the mean over each interval and converted to irradiation: kWh/m2 = W/m2 x 24 h / 1000 (for daily rows: the mean over the 24 hours of the day).",
+    "severity": "WARNING"
+   },
+   {
+    "code": "EVENTS_FOUND",
+    "column": null,
+    "count": 3,
+    "examples": [],
+    "hint": null,
+    "message": "3 event(s) were read from the event columns (1 cleaning event, 1 inverter fault, 1 other). On import each becomes an evidence record of this dataset, with the provenance declared for the events (MEASURED).",
+    "severity": "INFO"
+   },
+   {
+    "code": "SOILING_LOSS_CONVERTED",
+    "column": "Soiling loss (%)",
+    "count": 1,
+    "examples": [],
+    "hint": "Nothing to do if the column really holds a loss (0 = clean).",
+    "message": "Column 'Soiling loss (%)' is declared as a soiling loss. It is stored as the soiling ratio the engine uses: ratio = 1 - loss.",
+    "severity": "INFO"
+   },
+   {
+    "code": "TIMEZONE_DEFAULTED",
+    "column": null,
+    "count": 1,
+    "examples": [],
+    "hint": null,
+    "message": "No time zone declared: timestamps without an offset are read in the plant's zone (Africa/Algiers).",
+    "severity": "INFO"
+   },
+   {
+    "code": "UNMAPPED_COLUMN",
+    "column": "T2",
+    "count": 1,
+    "examples": [],
+    "hint": null,
+    "message": "Column 'T2' is not mapped to any channel and is ignored.",
+    "severity": "INFO"
+   },
+   {
+    "code": "UNMAPPED_COLUMN",
+    "column": "Operator",
+    "count": 1,
+    "examples": [],
+    "hint": null,
+    "message": "Column 'Operator' is not mapped to any channel and is ignored.",
+    "severity": "INFO"
+   }
+  ],
+  "last_local_day": "2026-05-14",
+  "missing_intervals": 0,
+  "period_end": "2026-05-13T23:00:00Z",
+  "period_start": "2026-04-30T23:00:00Z",
+  "rejections_total": 2,
+  "rows_device": 0,
+  "rows_plant": 14,
+  "rows_rejected": 0,
+  "rows_total": 14,
+  "summary": "Importable: 14 plant-level and 0 device-level rows; 2 error type(s) with rejected values, 2 warning type(s).",
+  "timezone": "Africa/Algiers",
+  "values_rejected": 2
+ },
+ "same_file_as": [],
+ "stored": false
+}

@@ -92,3 +92,84 @@ PROFITABLE_OPTIONS: dict[str, Any] = {
         "equipment_cost": 20_000, "operational_cost": 10_000, "downtime_cost": 0, "cost_uncertainty_pct": 20,
     },
 }
+
+
+# --------------------------------------------------------------------------- an operator's own export
+
+OPERATOR_HEADER = [
+    "Date", "Energy (kWh)", "Expected production (kWh)", "Irradiance (W/m2)", "Module temperature (°C)",
+    "Soiling loss (%)", "Cleaning", "Alarms",
+]
+
+
+def operator_csv(
+    *, days: int = 30, start: date = date(2026, 5, 1), expected_kwh: float = 50_000.0, soiling_loss: float = 0.08,
+    alarms: dict[int, str] | None = None, cleaned: tuple[int, ...] = (), cells: dict[tuple[int, str], str] | None = None,
+) -> str:
+    """A daily file as a plant's own system would export it: its own column names, units in the headers.
+
+    ``alarms`` maps a day index to the text of the alarm column, ``cleaned`` lists the days marked in the cleaning
+    column, and ``cells`` overrides single cells (``{(day index, column name): text}``).  The irradiance column
+    holds the mean over the 24 hours of the day.
+    """
+    alarms = alarms or {}
+    cells = cells or {}
+    lines = [",".join(OPERATOR_HEADER)]
+    for index in range(days):
+        day = start + timedelta(days=index)
+        row = {
+            "Date": day.isoformat(),
+            "Energy (kWh)": f"{expected_kwh * (1.0 - soiling_loss):.1f}",
+            "Expected production (kWh)": f"{expected_kwh:.1f}",
+            "Irradiance (W/m2)": "270",
+            "Module temperature (°C)": "44.5",
+            "Soiling loss (%)": f"{soiling_loss * 100.0:.2f}",
+            "Cleaning": "1" if index in cleaned else "",
+            "Alarms": alarms.get(index, ""),
+        }
+        for (cell_day, column), text in cells.items():
+            if cell_day == index:
+                row[column] = text
+        lines.append(",".join(row[name] for name in OPERATOR_HEADER))
+    return "\n".join(lines) + "\n"
+
+
+def declaration_from(preview: dict[str, Any], *, name: str = "Operator export", measured: bool = True,
+                     **extra: Any) -> dict[str, Any]:
+    """The declaration the interface builds from a preview: the proposed mapping, plus what the uploader declares.
+
+    The proposal names columns and units only.  Provenance, sources and the description of the baseline are added
+    here, as the uploader adds them in the form; with ``measured=False`` nothing is declared and every channel stays
+    ``UNKNOWN``.
+    """
+    proposal = preview["preview"]["proposal"]
+    declared: dict[str, dict[str, Any]] = {
+        "actual_energy": {"provenance": "MEASURED", "source": "revenue meter (test fixture)", "uncertainty_pct": 0.5,
+                          "boundary": "GRID_METER"},
+        "expected_energy": {"provenance": "MODELLED", "source": "performance model (test fixture)",
+                            "uncertainty_pct": 2.0, "boundary": "GRID_METER"},
+        "soiling_ratio": {"provenance": "MEASURED", "source": "soiling station (test fixture)", "uncertainty_abs": 0.005,
+                          "soiling_method": "SOILING_STATION"},
+        "poa_irradiation": {"provenance": "MEASURED", "source": "pyranometer (test fixture)", "plane": "POA"},
+        "module_temp": {"provenance": "MEASURED", "source": "module sensors (test fixture)"},
+    }
+    channels: dict[str, Any] = {}
+    for metric, channel in proposal["channels"].items():
+        entry: dict[str, Any] = {"column": channel["column"], "unit": channel["unit"]}
+        if metric == "soiling_ratio":
+            entry["reported_as"] = channel["reported_as"]
+        if measured:
+            entry.update(declared.get(metric, {}))
+        channels[metric] = entry
+    payload: dict[str, Any] = {"name": name, "timestamp_column": proposal["timestamp_column"], "channels": channels}
+    if proposal["cleaning_column"] or proposal["event_column"]:
+        payload["events"] = {"cleaning_column": proposal["cleaning_column"], "event_column": proposal["event_column"]}
+        if measured:
+            payload["events"].update({"provenance": "MEASURED", "source": "SCADA event log (test fixture)"})
+    if measured and "expected_energy" in channels:
+        payload["baseline"] = {
+            "method": "TELEMETRY_MODEL", "irradiance_adjusted": True, "temperature_adjusted": True,
+            "degradation_adjusted": True, "soiling_allowance_fraction": 0.0,
+        }
+    payload.update(extra)
+    return payload

@@ -1,0 +1,371 @@
+{
+ "history": [
+  {
+   "created_at": "2026-07-01T08:00:00Z",
+   "fell_back": false,
+   "generated_by": "AI",
+   "id": 1,
+   "model": "example-model",
+   "provider": "openai-compatible"
+  }
+ ],
+ "id": 1,
+ "insight": {
+  "anomalies": [
+   "The engine rates the explanation 'Soiling' as strongly supported and present in the assessment window."
+  ],
+  "causes": [
+   {
+    "active_now": true,
+    "category": "SOILING",
+    "context": [],
+    "engine_summary": "A direct soiling measurement shows a loss of 8.5 %, in line with the deviation observed in production. Current soiling loss 8.5 % with declared standard uncertainty 0.5 % points -> 7.5 .. 9.5 % at k = 2. Representativeness of the sensor location is not included.",
+    "engine_support": "STRONG",
+    "estimated_loss_kwh": 4553781.5671362,
+    "evidence_against": [],
+    "evidence_for": [
+     "Soiling ratio 0.915 -> soiling loss 8.5 % (+/- 1.0 % points at k = 2) (soiling station, last reading 2026-06-29, 7 reading day(s) in the assessment window). [SYNTHETIC (emulates MEASURED); counts as MEASURED]",
+     "Deviation left for soiling to explain: 8.4 %; measured soiling loss 8.5 %; difference -0.1 % points (tolerance 4.2). [SYNTHETIC (emulates MODELLED); counts as MODELLED]",
+     "Performance index drifts by -0.150 % points/day (95 % interval -0.157 .. -0.142) over 60 day(s) since 2026-05-01 (period start). [SYNTHETIC (emulates MODELLED); counts as MODELLED]",
+     "Inspection DEMO-INSP-0626 (2026-06-26): soiling heavy - qualitative, not quantified. [SYNTHETIC (emulates MEASURED); counts as MEASURED]"
+    ],
+    "interpretation": "The engine rates this explanation as strongly supported; this reading keeps to that rating and to the evidence listed.",
+    "missing_evidence": [],
+    "share_of_gap_pct": 98.00253267426946,
+    "title": "Soiling"
+   },
+   {
+    "active_now": false,
+    "category": "THERMAL",
+    "context": [],
+    "engine_summary": "The baseline already reflects the temperatures actually experienced, so heat cannot explain a gap against it - unless the temperature input itself is wrong.",
+    "engine_support": "NOT_SUPPORTED",
+    "estimated_loss_kwh": null,
+    "evidence_against": [
+     "Baseline declared temperature-adjusted (energy-weighted cell temperature over the period: 43.6 degC). [SYNTHETIC (emulates MODELLED); counts as MODELLED]"
+    ],
+    "evidence_for": [],
+    "interpretation": "The engine rates this explanation as not supported; this reading keeps to that rating and to the evidence listed.",
+    "missing_evidence": [],
+    "share_of_gap_pct": null,
+    "title": "Thermal effects"
+   },
+   {
+    "active_now": false,
+    "category": "IRRADIANCE",
+    "context": [],
+    "engine_summary": "The baseline already reflects the irradiance actually received.",
+    "engine_support": "ACCOUNTED_IN_BASELINE",
+    "estimated_loss_kwh": null,
+    "evidence_against": [],
+    "evidence_for": [],
+    "interpretation": "The engine rates this explanation as assessed by its factor status; this reading keeps to that rating and to the evidence listed.",
+    "missing_evidence": [],
+    "share_of_gap_pct": null,
+    "title": "Irradiance"
+   },
+   {
+    "active_now": false,
+    "category": "EQUIPMENT",
+    "context": [],
+    "engine_summary": "Available equipment data show no anomaly.",
+    "engine_support": "NOT_SUPPORTED",
+    "estimated_loss_kwh": 197917.59740000014,
+    "evidence_against": [
+     "Logged availability: 99.8 % over the period, 99.8 % in the assessment window; energy not produced: 197.9 MWh (0.2 % of expected). [SYNTHETIC (emulates MEASURED); counts as MEASURED]"
+    ],
+    "evidence_for": [],
+    "interpretation": "The engine rates this explanation as not supported; this reading keeps to that rating and to the evidence listed.",
+    "missing_evidence": [
+     "Device-level (inverter) energy, to compare each device with the fleet."
+    ],
+    "share_of_gap_pct": 4.2594106722173155,
+    "title": "Equipment or inverter"
+   },
+   {
+    "active_now": false,
+    "category": "SHADING",
+    "context": [],
+    "engine_summary": "Shading cannot be assessed from daily totals and no site observation is recorded.",
+    "engine_support": "NOT_EVALUABLE",
+    "estimated_loss_kwh": null,
+    "evidence_against": [],
+    "evidence_for": [],
+    "interpretation": "The engine rates this explanation as not evaluable; this reading keeps to that rating and to the evidence listed.",
+    "missing_evidence": [
+     "Sub-daily (hourly or finer) production data: shading shows in the shape of the day, not in daily totals.",
+     "A documented site observation at the affected time of day."
+    ],
+    "share_of_gap_pct": null,
+    "title": "Shading"
+   },
+   {
+    "active_now": false,
+    "category": "CURTAILMENT_OR_OUTAGE",
+    "context": [],
+    "engine_summary": "No outage interval was found; curtailment cannot be assessed without a log or sub-daily data.",
+    "engine_support": "NOT_EVALUABLE",
+    "estimated_loss_kwh": null,
+    "evidence_against": [],
+    "evidence_for": [],
+    "interpretation": "The engine rates this explanation as not evaluable; this reading keeps to that rating and to the evidence listed.",
+    "missing_evidence": [
+     "Curtailment log (curtailed energy or active-power set-points from the grid operator).",
+     "Sub-daily production data, in which curtailment appears as a flat-topped profile."
+    ],
+    "share_of_gap_pct": null,
+    "title": "Curtailment or outage"
+   },
+   {
+    "active_now": false,
+    "category": "DATA_QUALITY",
+    "context": [],
+    "engine_summary": "A deviation exists but several possible causes cannot be evaluated with the data at hand.",
+    "engine_support": "MODERATE",
+    "estimated_loss_kwh": null,
+    "evidence_against": [
+     "60 of 60 daylight interval(s) have both expected and actual data (100.0 %); 0 lack actual energy, 0 lack expected energy. [SYNTHETIC (emulates MODELLED); counts as MODELLED]"
+    ],
+    "evidence_for": [
+     "Factors that could not be quantified and therefore remain inside the residual: curtailment. [UNKNOWN; counts as UNKNOWN]"
+    ],
+    "interpretation": "The engine rates this explanation as moderately supported; this reading keeps to that rating and to the evidence listed.",
+    "missing_evidence": [
+     "[SHADING] Sub-daily (hourly or finer) production data: shading shows in the shape of the day, not in daily totals.",
+     "[SHADING] A documented site observation at the affected time of day.",
+     "[CURTAILMENT_DOWNTIME] Curtailment log (curtailed energy or active-power set-points from the grid operator).",
+     "[CURTAILMENT_DOWNTIME] Sub-daily production data, in which curtailment appears as a flat-topped profile."
+    ],
+    "share_of_gap_pct": null,
+    "title": "Data quality"
+   },
+   {
+    "active_now": false,
+    "category": "UNEXPLAINED",
+    "context": [],
+    "engine_summary": "Quantified factors account for the deviation within the materiality threshold.",
+    "engine_support": "NOT_SUPPORTED",
+    "estimated_loss_kwh": null,
+    "evidence_against": [
+     "Unexplained residual: -0.1 % of pre-soiling expected energy in the assessment window; -105.1 MWh (-0.1 %) over the period. [SYNTHETIC (emulates MODELLED); counts as MODELLED]"
+    ],
+    "evidence_for": [],
+    "interpretation": "The engine rates this explanation as not supported; this reading keeps to that rating and to the evidence listed.",
+    "missing_evidence": [],
+    "share_of_gap_pct": null,
+    "title": "Unexplained remainder"
+   }
+  ],
+  "checks": [
+   {
+    "detail": "a JSON object with the requested fields",
+    "name": "requested_structure",
+    "passed": true
+   },
+   {
+    "detail": "1934 characters (allowed 200 to 9000)",
+    "name": "length",
+    "passed": true
+   },
+   {
+    "detail": "every figure is one of the engine's",
+    "name": "figures_from_engine_only",
+    "passed": true
+   },
+   {
+    "detail": "",
+    "name": "no_overclaiming",
+    "passed": true
+   },
+   {
+    "detail": "",
+    "name": "consistent_with_decision",
+    "passed": true
+   },
+   {
+    "detail": "credible measured soiling evidence exists",
+    "name": "soiling_not_asserted_without_measurement",
+    "passed": true
+   },
+   {
+    "detail": "",
+    "name": "no_recoverable_energy_without_estimate",
+    "passed": true
+   },
+   {
+    "detail": "",
+    "name": "synthetic_not_called_measured",
+    "passed": true
+   },
+   {
+    "detail": "",
+    "name": "no_validation_or_authorisation_claim",
+    "passed": true
+   },
+   {
+    "detail": "",
+    "name": "plain_text_only",
+    "passed": true
+   },
+   {
+    "detail": "the engine's findings contain 1",
+    "name": "anomalies_not_omitted",
+    "passed": true
+   }
+  ],
+  "data_quality_assessment": "The engine reports the data quality as good. Every decisive channel is synthetic, which limits the result to an illustration.",
+  "data_quality_status": "GOOD",
+  "decision": {
+   "authorization_note": "SIMULATED DECISION. It rests on a demonstration scenario with synthetic evidence and is not an operational instruction. No cleaning may be ordered on this basis.",
+   "headline": "SIMULATED DECISION - Clean now: measured soiling explains the loss and cleaning pays even in the conservative case. Not an operational instruction.",
+   "label": "Clean now",
+   "operational_authorization": false,
+   "reason_code": "CLEANING_JUSTIFIED",
+   "rule": "R3",
+   "simulated": true,
+   "statement": "SIMULATED DECISION (demonstration, not an operational instruction): Clean now.",
+   "value": "CLEAN_NOW"
+  },
+  "decision_rationale": "10 of 10 gates are passed, and rule R3 is the first rule that applies. The result is therefore Clean now.",
+  "decisive_evidence": [
+   "Actual energy: SYNTHETIC (emulates MEASURED), counts as MEASURED",
+   "Expected energy (baseline): SYNTHETIC (emulates MODELLED), counts as MODELLED",
+   "Soiling measurement: SYNTHETIC (emulates MEASURED), counts as MEASURED"
+  ],
+  "duration_ms": 850,
+  "economic_implications": "The engine holds an estimate and its economic verdict is profitable.",
+  "economics_decision_grade": true,
+  "economics_status": "COMPLETE",
+  "executive_summary": "The engine's result is Clean now, issued under rule R3. This reading restates the findings of the engine for this dataset and adds no fact of its own. The data are synthetic, so the result illustrates the method only.",
+  "fallback_reason": null,
+  "gates": [
+   {
+    "basis": "Actual energy: SYNTHETIC (emulates MEASURED) (Synthetic stand-in for revenue-meter energy); completeness 100 % over the period, 100 % in the assessment window.",
+    "id": "PRODUCTION_MEASURED",
+    "label": "Reliable measured production data",
+    "passed": true
+   },
+   {
+    "basis": "Baseline: TELEMETRY_MODEL, SYNTHETIC (emulates MODELLED) (Synthetic stand-in for a weather-adjusted performance model).",
+    "id": "BASELINE_DOCUMENTED",
+    "label": "Baseline of documented origin",
+    "passed": true
+   },
+   {
+    "basis": "Gap in the assessment window: 8.6 % (combined standard uncertainty 2.05 % (k = 2 -> 4.10 %); materiality threshold 3 %).",
+    "id": "DEVIATION_SIGNIFICANT",
+    "label": "Significant under-performance now",
+    "passed": true
+   },
+   {
+    "basis": "Soiling loss 8.5 % from soiling_ratio channel [SYNTHETIC (emulates MEASURED)], last reading 2026-06-29 (0 day(s) before the period end).",
+    "id": "SOILING_EVIDENCE_CREDIBLE",
+    "label": "Credible measured soiling evidence",
+    "passed": true
+   },
+   {
+    "basis": "Deviation left for soiling to explain 8.4 % vs measured soiling loss 8.5 %: difference -0.1 % points (tolerance 4.2).",
+    "id": "SOILING_CONSISTENT_WITH_GAP",
+    "label": "Soiling measurement consistent with the production gap",
+    "passed": true
+   },
+   {
+    "basis": "No equipment, outage or sensor issue is open in the assessment window.",
+    "id": "NO_UNRESOLVED_TECHNICAL_ISSUE",
+    "label": "No unresolved technical issue",
+    "passed": true
+   },
+   {
+    "basis": "No critical contradiction was found.",
+    "id": "NO_CRITICAL_CONTRADICTION",
+    "label": "No critical contradiction in the evidence",
+    "passed": true
+   },
+   {
+    "basis": "Recoverable over 30 days: 2,078.0 .. 6,907.3 MWh (central 3,784.3 MWh).",
+    "id": "RECOVERABLE_ENERGY_ESTIMATED",
+    "label": "Recoverable energy estimated from measured soiling",
+    "passed": true
+   },
+   {
+    "basis": "All cost items and a decision-grade energy value were supplied.",
+    "id": "ECONOMICS_DECISION_GRADE",
+    "label": "Economic inputs complete and decision-grade",
+    "passed": true
+   },
+   {
+    "basis": "Conservative net benefit 4,965,999 DZD (PROFITABLE).",
+    "id": "ECONOMICS_PROFITABLE",
+    "label": "Cleaning profitable in the conservative case",
+    "passed": true
+   }
+  ],
+  "generated_at": "2026-07-01T08:00:00Z",
+  "generated_by": "AI",
+  "limitations": [
+   "This reading adds no fact to the engine's findings."
+  ],
+  "missing_information": [
+   {
+    "id": "M1",
+    "text": "Device-level (inverter) energy, to compare each device with the fleet.",
+    "why": "It is the first missing input the engine lists."
+   },
+   {
+    "id": "M2",
+    "text": "Sub-daily (hourly or finer) production data: shading shows in the shape of the day, not in daily totals.",
+    "why": null
+   },
+   {
+    "id": "M3",
+    "text": "A documented site observation at the affected time of day.",
+    "why": null
+   },
+   {
+    "id": "M4",
+    "text": "Curtailment log (curtailed energy or active-power set-points from the grid operator).",
+    "why": null
+   },
+   {
+    "id": "M5",
+    "text": "Sub-daily production data, in which curtailment appears as a flat-topped profile.",
+    "why": null
+   },
+   {
+    "id": "M6",
+    "text": "curtailment log (energy or set-points)",
+    "why": null
+   }
+  ],
+  "model": "example-model",
+  "next_steps": [
+   {
+    "id": "N1",
+    "text": "Schedule the cleaning; record its date, method, water use and cost.",
+    "why": "It is the first step the engine lists."
+   },
+   {
+    "id": "N2",
+    "text": "Measure the soiling ratio again after cleaning to verify the recovery and to refine the cleaning-effectiveness assumption.",
+    "why": null
+   },
+   {
+    "id": "N3",
+    "text": "Add the missing inputs listed to narrow down the cause.",
+    "why": null
+   }
+  ],
+  "notice": "The narrative of this page was written by a language model from the engine's findings and checked against them before being shown. The decision, the gates, the support levels, the evidence and every figure are the engine's and remain authoritative.",
+  "packet_sha256": "5e74259c6915e23839482b850c12d03bd9578350d2d89a6938043852679c1d87",
+  "performance_overview": "In the findings the gap over the period is 4.7 % and the gap in the assessment window is 8.6 %. The engine judges the significance of the gap from the declared uncertainties.",
+  "prompt_version": "analyst-1",
+  "provider": "openai-compatible",
+  "uncertainty": [
+   "The reading inherits every limit of the engine's findings."
+  ],
+  "what_would_change": [
+   "Any gate failing: a technical issue appearing, the soiling measurement becoming outdated, or costs rising above the break-even."
+  ]
+ },
+ "stored": true
+}

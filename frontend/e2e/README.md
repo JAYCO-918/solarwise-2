@@ -14,7 +14,18 @@ demonstration mode on, bound to 127.0.0.1) and stops it afterwards. Nothing is l
 | `first_use.cjs` | A first visit from beginning to end: the demonstration answers "Clean now" for scenario 02; the visitor signs out and creates an account, which starts on its own empty list of plants and not on the page that was left; the account registers a plant, adds the file of scenario 02 with its declaration file, and runs the analysis, which answers "Investigate" with 4 gates of 10 because the file is declared synthetic; the PDF report downloads. |
 | `tour_demo.cjs` | Every page and tab as a demonstration visitor, on a desktop and on a 390 px screen: no sideways scrolling, no raw value (`null`, `NaN`, `undefined`) in the text, charts drawn, the PDF report downloads, an incomplete calculator input is refused. |
 | `tour_admin.cjs` (`ADMIN=1`) | A signed-in account registers a plant, declares and imports a file through the form, runs an analysis, meets the duplicate check, creates an account, signs out. |
+| `upload_flow.cjs` (`ADMIN=1`) | An operator's own export from the first look to the analysis: the plant form asks for no measurement; the plant's page leads to "Upload operational data"; templates download; the first rows are shown as they are; the columns are recognised from their headers, corrected by hand, and no provenance is pre-selected; the check lists events, rejections and what to do about them; the rejected rows download; the import runs the analysis; the "AI analysis" tab says the deterministic fallback is active and marks every section as the engine's; the operational report downloads; the uploaded file comes back with its exact size; the same file is noticed when chosen again. |
+| `upload_flow.cjs` (`ADMIN=1 AI=stub`) | The same with a language model configured - a **stand-in** (see below): the assistant's suggestion is shown, checked and applied only when accepted; the generated narrative is marked as the AI's while decision, gates and steps stay marked as the engine's; an answer that states soiling as a fact and names its own decision is discarded whole; an unavailable provider leaves the engine's text; the key of the model appears in no answer the browser receives. |
 | `framing.cjs` | Another origin cannot embed the application by default; it can when `SOLARWISE_FRAME_ANCESTORS` names it. |
+
+### The stand-in model
+
+`AI=stub` starts `stub_model.py` next to the server and configures the server to use it. It listens on a local port and
+speaks the OpenAI `/chat/completions` protocol, so the application is exercised exactly as with a real provider:
+configuration, request, answer, checks, storage, display. **It is not a language model.** Its answers are scripted: it
+restates what the request contains in the structure the request asks for, and on demand it misbehaves (`rogue`),
+fails (`fail`) or is slow (`slow`). These checks show that the path works and that the page says who wrote what. They
+say nothing about how a real model writes: no real provider is contacted by any check or test of this repository.
 
 ## Running them
 
@@ -26,11 +37,13 @@ demonstration mode on, bound to 127.0.0.1) and stops it afterwards. Nothing is l
 # a browser: any Chromium or Chrome
 export CHROMIUM_PATH=/usr/bin/chromium
 
-frontend/e2e/all.sh                             # the ten runs, one after the other
+frontend/e2e/all.sh                             # the twelve runs, one after the other
 frontend/e2e/run.sh sign_in.cjs                 # or one check
 PROXY=strip frontend/e2e/run.sh sign_in.cjs
 PROXY=strip frontend/e2e/run.sh sign_up.cjs
 ADMIN=1 frontend/e2e/run.sh tour_admin.cjs
+ADMIN=1 frontend/e2e/run.sh upload_flow.cjs
+ADMIN=1 AI=stub frontend/e2e/run.sh upload_flow.cjs
 FRAME=allowed frontend/e2e/run.sh framing.cjs allowed
 ```
 
@@ -38,8 +51,9 @@ FRAME=allowed frontend/e2e/run.sh framing.cjs allowed
 `curl`. Other settings: `DIST` (built interface, default `frontend/dist`), `CHROMIUM_ARGS` (extra arguments for the
 browser; a container without user namespaces may need `--single-process --no-zygote`), `E2E_SHOTS` (where the
 screenshots go, default `frontend/e2e/shots`, which is not committed), `E2E_PORT`, `E2E_PROXY_PORT`,
-`E2E_PARENT_PORT`, and `E2E_DATABASE_URL` to run a check on another database than the throw-away SQLite file (an
-empty PostgreSQL database, for example; it is not emptied afterwards).
+`E2E_PARENT_PORT`, `E2E_MODEL_PORT`, `E2E_IDLE_TIMEOUT` (how long a check waits for the network to fall silent
+before going on anyway, in milliseconds), and `E2E_DATABASE_URL` to run a check on another database than the
+throw-away SQLite file (an empty PostgreSQL database, for example; it is not emptied afterwards).
 
 `run.sh` runs any script given to it, so it also serves to script the application for other purposes:
 `presentation/src/capture.cjs` takes the screenshots of the slides that way.

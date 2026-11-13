@@ -2,7 +2,7 @@
  "ai": {
   "enabled": false,
   "provider": null,
-  "role": "rephrases the engine's explanation only; never decides"
+  "role": "interprets and explains what the engine found; never decides, never supplies a figure"
  },
  "demo_limits": {
   "max_datasets_per_plant": 8,

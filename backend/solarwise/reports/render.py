@@ -78,8 +78,10 @@ def render_pdf(document: ReportDocument) -> bytes:
     cell = ParagraphStyle("cell", parent=body, fontSize=8, leading=10.5)
     head = ParagraphStyle("head", parent=cell, fontName=bold, textColor=colors.HexColor("#5b6876"))
     h1 = ParagraphStyle("h1", parent=body, fontName=bold, fontSize=16, leading=20, spaceAfter=2)
-    h2 = ParagraphStyle("h2", parent=body, fontName=bold, fontSize=11.5, leading=15, spaceBefore=12, spaceAfter=5)
-    h3 = ParagraphStyle("h3", parent=body, fontName=bold, fontSize=9.5, leading=13, spaceBefore=7, spaceAfter=2)
+    # A heading never stays alone at the foot of a page.
+    h2 = ParagraphStyle("h2", parent=body, fontName=bold, fontSize=11.5, leading=15, spaceBefore=12, spaceAfter=5, keepWithNext=1)
+    h3 = ParagraphStyle("h3", parent=body, fontName=bold, fontSize=9.5, leading=13, spaceBefore=7, spaceAfter=2, keepWithNext=1)
+    source = ParagraphStyle("source", parent=small, keepWithNext=1, spaceAfter=3)
     bullet = ParagraphStyle("bullet", parent=body, leftIndent=11, bulletIndent=2)
     line = colors.HexColor("#d9dee5")
 
@@ -100,6 +102,13 @@ def render_pdf(document: ReportDocument) -> bytes:
         ("LEFTPADDING", (0, 0), (-1, -1), 8), ("TOPPADDING", (0, 0), (-1, -1), 5), ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
     ]))
     flow += [banner, Spacer(1, 8)]
+    if document.notice:
+        notice = Table([[Paragraph(_text(document.notice), cell)]], colWidths=[width])
+        notice.setStyle(TableStyle([
+            ("BOX", (0, 0), (-1, -1), 0.6, line), ("LINEBEFORE", (0, 0), (0, -1), 4, colors.HexColor("#27507a")),
+            ("LEFTPADDING", (0, 0), (-1, -1), 8), ("TOPPADDING", (0, 0), (-1, -1), 5), ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ]))
+        flow += [notice, Spacer(1, 8)]
 
     accent = colors.HexColor(_DECISION_COLOURS.get(document.decision, "#27507a"))
     label = "SIMULATED DECISION" if document.simulated else "DECISION"
@@ -131,15 +140,21 @@ def render_pdf(document: ReportDocument) -> bytes:
 
     def block(item: TextBlock, style: ParagraphStyle) -> None:
         flow.append(Paragraph(_text(item.title), style))
+        if item.label:
+            flow.append(Paragraph(_text(f"[{item.label}]"), source))
         for paragraph in item.paragraphs:
             flow.append(Paragraph(_text(paragraph), body))
         for entry in item.bullets:
             flow.append(Paragraph(_text(entry), bullet, bulletText="\u2022" if _fonts()[2] else "-"))
+        for child in item.children:
+            block(child, h3)
 
     pairs("Subject of the assessment", document.facts)
     pairs("Key figures", document.key_figures)
     for item in document.blocks:
         block(item, h2)
+    if document.tables_title:
+        flow += [Spacer(1, 10), Paragraph(_text(document.tables_title), h1)]
     for spec in document.tables:
         flow.append(Paragraph(_text(spec.title), h2))
         widths = spec.widths or [1.0 / len(spec.columns)] * len(spec.columns)
@@ -154,16 +169,18 @@ def render_pdf(document: ReportDocument) -> bytes:
         flow.append(table)
         if spec.note:
             flow += [Spacer(1, 3), Paragraph(_text(spec.note), small)]
-    flow.append(Paragraph("Diagnostic hypotheses", h2))
-    flow.append(Paragraph(
-        "Each hypothesis is rated by the strength of the evidence for it. No probability is stated: the data do not support one.",
-        small,
-    ))
-    for item in document.hypotheses:
-        block(item, h3)
-    flow.append(Paragraph("Explanation", h2))
-    for item in document.explanation:
-        block(item, h3)
+    if document.hypotheses:
+        flow.append(Paragraph("Diagnostic hypotheses", h2))
+        flow.append(Paragraph(
+            "Each hypothesis is rated by the strength of the evidence for it. No probability is stated: the data do not support one.",
+            small,
+        ))
+        for item in document.hypotheses:
+            block(item, h3)
+    if document.explanation:
+        flow.append(Paragraph("Explanation", h2))
+        for item in document.explanation:
+            block(item, h3)
     flow.append(Paragraph("Statements that apply to this document", h2))
     for entry in document.disclaimers:
         flow.append(Paragraph(_text(entry), bullet, bulletText="\u2022" if _fonts()[2] else "-"))

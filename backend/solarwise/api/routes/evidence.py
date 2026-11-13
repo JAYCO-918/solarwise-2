@@ -61,7 +61,10 @@ def delete_evidence(plant_id: int, evidence_id: int, user: CurrentUser, db: DbSe
     plant = plant_service.get_plant(db, user, plant_id, write=True)
     row = evidence_service.get_evidence(db, plant, evidence_id)
     if row.dataset_id is not None:
-        raise ConflictError("evidence shipped with a demonstration scenario cannot be deleted")
+        raise ConflictError(
+            "this record came with a dataset (an event of the imported file, or of a demonstration scenario) and "
+            "cannot be deleted on its own: it belongs to that dataset"
+        )
     audit.record(db, "EVIDENCE_DELETED", user=user, entity="evidence", entity_id=row.id,
                  detail={"reference": row.reference}, remote_address=client_address(request))
     db.delete(row)

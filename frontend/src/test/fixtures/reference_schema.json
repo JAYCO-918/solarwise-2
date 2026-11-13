@@ -13,6 +13,66 @@
   "INTERNAL_VALUATION",
   "CONSUMER_TARIFF_PROXY"
  ],
+ "events": {
+  "cleaning_marks": [
+   "1",
+   "cleaned",
+   "cleaning",
+   "done",
+   "nettoyage",
+   "oui",
+   "true",
+   "vrai",
+   "x",
+   "y",
+   "yes"
+  ],
+  "max_events_per_file": 500,
+  "no_event_cells": [
+   "missing",
+   "n/a",
+   "na",
+   "nan",
+   "no",
+   "no alarm",
+   "no event",
+   "non",
+   "none",
+   "normal",
+   "null",
+   "ok",
+   "ras",
+   "running"
+  ],
+  "principle": "A cleaning mark or an alarm text found in a declared event column becomes an evidence record of the dataset. Events never become numbers, and a logged fault is a reason to investigate, never a reason to clean.",
+  "unmatched": "OTHER: shown with the analysis, not used by the diagnosis",
+  "vocabulary": [
+   {
+    "evidence_type": "CLEANING_EVENT",
+    "matches": "clean|wash|nettoy|lavage"
+   },
+   {
+    "evidence_type": "CURTAILMENT_EVENT",
+    "matches": "curtail|dispatch|limitation|[eé]cr[eê]t"
+   },
+   {
+    "evidence_type": "GRID_OUTAGE",
+    "matches": "grid|outage|blackout|r[eé]seau|coupure"
+   },
+   {
+    "evidence_type": "SENSOR_FAULT",
+    "matches": "sensor|pyranomet|capteur|logger|communication|\\bcomm?s?\\b"
+   },
+   {
+    "evidence_type": "SHADING_OBSERVATION",
+    "matches": "shad|ombr"
+   },
+   {
+    "evidence_type": "INVERTER_FAULT",
+    "matches": "inverter|onduleur|\\binv\\b|trip|tracker|fault|d[eé]faut|panne|failure"
+   }
+  ]
+ },
  "evidence_types": [
   "SOILING_MEASUREMENT",
   "VISUAL_INSPECTION",
@@ -48,6 +108,15 @@
  ],
  "metrics": [
   {
+   "accepted_units": [
+    "kWh",
+    "wh",
+    "mwh",
+    "gwh",
+    "j",
+    "kj",
+    "mj"
+   ],
    "column": "actual_energy_kwh",
    "description": "AC energy delivered by the plant during the interval",
    "dimension": "energy",
@@ -58,6 +127,15 @@
    "unit": "kWh"
   },
   {
+   "accepted_units": [
+    "kWh",
+    "wh",
+    "mwh",
+    "gwh",
+    "j",
+    "kj",
+    "mj"
+   ],
    "column": "expected_energy_kwh",
    "description": "Baseline (reference) energy for the interval",
    "dimension": "energy",
@@ -68,6 +146,14 @@
    "unit": "kWh"
   },
   {
+   "accepted_units": [
+    "kWh/m2",
+    "wh/m2",
+    "mj/m2",
+    "j/m2",
+    "w/m2",
+    "kw/m2"
+   ],
    "column": "baseline_irradiation_kwh_m2",
    "description": "Irradiation assumed by a baseline that is not adjusted to actual irradiance",
    "dimension": "irradiation",
@@ -78,6 +164,10 @@
    "unit": "kWh/m2"
   },
   {
+   "accepted_units": [
+    "fraction",
+    "percent"
+   ],
    "column": "availability_fraction",
    "description": "Capacity-weighted share of the plant technically available",
    "dimension": "ratio",
@@ -88,6 +178,15 @@
    "unit": "fraction"
   },
   {
+   "accepted_units": [
+    "kWh",
+    "wh",
+    "mwh",
+    "gwh",
+    "j",
+    "kj",
+    "mj"
+   ],
    "column": "curtailed_energy_kwh",
    "description": "Energy not produced because of grid curtailment, as logged",
    "dimension": "energy",
@@ -98,6 +197,10 @@
    "unit": "kWh"
   },
   {
+   "accepted_units": [
+    "fraction",
+    "percent"
+   ],
    "column": "soiling_ratio",
    "description": "Output of a soiled reference device relative to a clean one (IEC 61724-1); 1 = clean",
    "dimension": "ratio",
@@ -108,6 +211,14 @@
    "unit": "fraction"
   },
   {
+   "accepted_units": [
+    "kWh/m2",
+    "wh/m2",
+    "mj/m2",
+    "j/m2",
+    "w/m2",
+    "kw/m2"
+   ],
    "column": "poa_irradiation_kwh_m2",
    "description": "In-plane (plane-of-array) irradiation during the interval",
    "dimension": "irradiation",
@@ -118,6 +229,14 @@
    "unit": "kWh/m2"
   },
   {
+   "accepted_units": [
+    "kWh/m2",
+    "wh/m2",
+    "mj/m2",
+    "j/m2",
+    "w/m2",
+    "kw/m2"
+   ],
    "column": "ghi_kwh_m2",
    "description": "Global horizontal irradiation during the interval",
    "dimension": "irradiation",
@@ -128,6 +247,11 @@
    "unit": "kWh/m2"
   },
   {
+   "accepted_units": [
+    "degC",
+    "k",
+    "degf"
+   ],
    "column": "ambient_temp_c",
    "description": "Ambient air temperature (daylight mean preferred for daily data)",
    "dimension": "temperature",
@@ -138,6 +262,11 @@
    "unit": "degC"
   },
   {
+   "accepted_units": [
+    "degC",
+    "k",
+    "degf"
+   ],
    "column": "module_temp_c",
    "description": "Module back-surface temperature (irradiance-weighted for daily data)",
    "dimension": "temperature",
@@ -148,6 +277,10 @@
    "unit": "degC"
   },
   {
+   "accepted_units": [
+    "m/s",
+    "km/h"
+   ],
    "column": "wind_speed_ms",
    "description": "Wind speed",
    "dimension": "speed",
@@ -158,6 +291,10 @@
    "unit": "m/s"
   },
   {
+   "accepted_units": [
+    "percent",
+    "fraction"
+   ],
    "column": "relative_humidity_pct",
    "description": "Relative humidity",
    "dimension": "ratio",
@@ -168,6 +305,11 @@
    "unit": "percent"
   },
   {
+   "accepted_units": [
+    "mm",
+    "cm",
+    "in"
+   ],
    "column": "precipitation_mm",
    "description": "Precipitation depth during the interval",
    "dimension": "precipitation",
@@ -178,6 +320,15 @@
    "unit": "mm"
   },
   {
+   "accepted_units": [
+    "kWh",
+    "wh",
+    "mwh",
+    "gwh",
+    "j",
+    "kj",
+    "mj"
+   ],
    "column": "actual_energy_kwh",
    "description": "AC energy delivered by one device (inverter) during the interval",
    "dimension": "energy",
@@ -239,6 +390,32 @@
   {
    "direct": false,
    "value": "UNSPECIFIED"
+  }
+ ],
+ "templates": [
+  {
+   "description": "Column names with their units, and no data: fill in one row per day or per interval.",
+   "example": false,
+   "name": "solarwise-operational-data.template.csv",
+   "title": "CSV template"
+  },
+  {
+   "description": "The same columns with 14 days of invented values for a hypothetical 1 MWp plant, one cleaning and two alarms. The values describe no real installation.",
+   "example": true,
+   "name": "solarwise-operational-data.example.csv",
+   "title": "CSV example"
+  },
+  {
+   "description": "One record with every field and no value: copy it once per day or per interval.",
+   "example": false,
+   "name": "solarwise-operational-data.template.json",
+   "title": "JSON template"
+  },
+  {
+   "description": "The 14 invented days of the CSV example, as JSON records.",
+   "example": true,
+   "name": "solarwise-operational-data.example.json",
+   "title": "JSON example"
   }
  ],
  "tracking_types": [

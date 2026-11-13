@@ -1,0 +1,1 @@
+timestamp,energy_kwh,expected_energy_kwh,poa_irradiance_w_m2,module_temp_c,ambient_temp_c,relative_humidity_pct,wind_speed_m_s,rainfall_mm,soiling_ratio,cleaning_event,alarm

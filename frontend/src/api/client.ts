@@ -181,11 +181,8 @@ function fileNameFrom(header: string | null, fallback: string): string {
   return plain?.[1] ?? fallback;
 }
 
-/** Fetch a file with the session's token and hand it to the browser as a download. */
-export async function download(path: string, fallbackName: string): Promise<string> {
-  const response = await send("GET", path);
-  const blob = await response.blob();
-  const name = fileNameFrom(response.headers.get("Content-Disposition"), fallbackName);
+/** Hand a file that is already in memory to the browser as a download. */
+export function saveBlob(blob: Blob, name: string): void {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -194,5 +191,16 @@ export async function download(path: string, fallbackName: string): Promise<stri
   link.click();
   link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+}
+
+/**
+ * Fetch a file with the session's token and hand it to the browser as a download. With a `form` the file is asked
+ * for by POST: that is how the server returns something computed from an upload it does not keep.
+ */
+export async function download(path: string, fallbackName: string, form?: FormData): Promise<string> {
+  const response = form ? await send("POST", path, { form }) : await send("GET", path);
+  const blob = await response.blob();
+  const name = fileNameFrom(response.headers.get("Content-Disposition"), fallbackName);
+  saveBlob(blob, name);
   return name;
 }

@@ -2,7 +2,7 @@
 
 Written by `presentation/src/build.cjs` from the notes in `presentation/src/deck.html`. Edit the notes there, not this file.
 
-**11 slides, 5:00 planned, 622 words to say** - that is 124 words a minute, a calm pace. The same text is in the notes pane of the PowerPoint file and behind the `N` key of the HTML version.
+**11 slides, 5:00 planned, 626 words to say** - that is 125 words a minute, a calm pace. The same text is in the notes pane of the PowerPoint file and behind the `N` key of the HTML version.
 
 | # | Slide | From | To | Seconds | Words |
 |---|---|---|---|---|---|
@@ -13,7 +13,7 @@ Written by `presentation/src/build.cjs` from the notes in `presentation/src/deck
 | 5 | Ten gates | 1:55 | 2:30 | 35 | 70 |
 | 6 | Same symptom, different answers | 2:30 | 3:10 | 40 | 74 |
 | 7 | Does cleaning pay? | 3:10 | 3:40 | 30 | 66 |
-| 8 | Four rules | 3:40 | 4:05 | 25 | 53 |
+| 8 | Four rules | 3:40 | 4:05 | 25 | 57 |
 | 9 | Where we are | 4:05 | 4:30 | 25 | 45 |
 | 10 | Next steps and what we ask | 4:30 | 4:55 | 25 | 42 |
 | 11 | Close | 4:55 | 5:00 | 5 | 10 |
@@ -93,14 +93,14 @@ The prices are the operator's own: nothing is built in. The figures here are ill
 
 Why trust the answer? Because of four rules the software never breaks.
 
-A gap is not a diagnosis. Every value carries its origin, and only measured data can justify a cleaning. Rules decide: an AI model may only rephrase the explanation. And a missing value stays missing: it is never replaced by zero.
+A gap is not a diagnosis. Every value carries its origin, and only measured data can justify a cleaning. Rules decide: an AI model may only interpret and explain what the engine found. And a missing value stays missing: it is never replaced by zero.
 
 *If you are short of time, this is the slide to shorten: read the four titles only.*
 
 
 ### 9. Where we are (4:05 to 4:30)
 
-And this is a working application, not a mock-up. A web interface and an API. Ten demonstration scenarios. More than eight hundred automated tests. Reports in four formats.
+And this is a working application, not a mock-up. A web interface and an API. Ten demonstration scenarios. More than twelve hundred automated tests. Reports in four formats.
 
 We are also clear about its limit: so far, it has been validated on synthetic data only.
 
@@ -134,7 +134,7 @@ The rules are checked in this order, and the first that applies decides. Only ru
 
 *Use it for technical questions: stack, deployment, security.*
 
-A file goes in with a declaration of each column. It is validated, then five engines compute the gap, the causes, the diagnosis, the recoverable energy and the economics. The rule engine decides. The result is stored as issued and can be exported as a report.
+The operator uploads the plant's own export. Its columns are recognised, and the operator declares where each one comes from. It is validated, then five engines compute the gap, the causes, the diagnosis, the recoverable energy and the economics. The rule engine decides. The result is stored as issued and can be exported as a report.
 
 
 ### 14. Backup: the ten demonstration scenarios
@@ -200,9 +200,11 @@ always give the same answer and every gate can be audited. And a production gap 
 from a fault, whatever the model: the missing information has to be measured. (Backup slide 12.)
 
 **What does the AI do, then?**
-It is optional and switched off by default. When it is on, a language model may only rephrase the explanation that
-the engine has already written. Its text is checked against the engine's figures before it is shown, and thrown
-away if a number or the decision does not match.
+It is optional and switched off by default. When it is on, a language model reads the engine's findings and
+explains them: what they mean, which causes the evidence supports, what is missing. It never decides. The decision,
+the gates and every figure are copied from the engine, and the model's text is checked against them before it is
+shown: if a number, the decision or a claim does not match, the whole text is thrown away and the engine's own text
+is shown. We have run this against a stand-in model only, not yet against a real provider.
 
 **What if the plant has no soiling sensor?**
 Then the software does not order a cleaning: it answers "Investigate" and says which measurement is missing. A

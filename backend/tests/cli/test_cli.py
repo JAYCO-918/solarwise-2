@@ -384,6 +384,37 @@ def test_check_config_says_who_can_create_accounts(
     assert "warning: sign-up is open" not in production
 
 
+def test_check_config_says_which_language_model_is_configured_and_never_its_key(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    monkeypatch.chdir(tmp_path)  # no .env file of a developer
+    for name in ("SOLARWISE_AI_PROVIDER", "SOLARWISE_AI_MODEL", "SOLARWISE_AI_API_KEY", "SOLARWISE_AI_BASE_URL",
+                 "SOLARWISE_ENVIRONMENT"):
+        monkeypatch.delenv(name, raising=False)
+    assert main(["check-config"]) == EXIT_OK
+    assert "language model       off (engine text only)" in capsys.readouterr().out
+
+    monkeypatch.setenv("SOLARWISE_AI_PROVIDER", "openai-compatible")
+    monkeypatch.setenv("SOLARWISE_AI_API_KEY", "sk-a-secret-that-must-not-be-printed")
+    assert main(["check-config"]) == EXIT_OK
+    assert "a provider is set but no model is named" in capsys.readouterr().out
+
+    monkeypatch.setenv("SOLARWISE_AI_MODEL", "some-model")
+    monkeypatch.setenv("SOLARWISE_AI_BASE_URL", "https://llm.example.org/v1")
+    assert main(["check-config"]) == EXIT_OK
+    configured = capsys.readouterr().out
+    assert "openai-compatible, model some-model, at https://llm.example.org/v1, key configured" in configured
+    assert "sk-a-secret-that-must-not-be-printed" not in configured
+
+    # A model served on one's own machines may take no key; a commercial API always does.
+    monkeypatch.delenv("SOLARWISE_AI_API_KEY")
+    assert main(["check-config"]) == EXIT_OK
+    assert "model some-model, at https://llm.example.org/v1, no key" in capsys.readouterr().out
+    monkeypatch.delenv("SOLARWISE_AI_BASE_URL")
+    assert main(["check-config"]) != EXIT_OK
+    assert "SOLARWISE_AI_API_KEY is required" in capsys.readouterr().err
+
+
 def test_settings_that_cannot_be_used_are_explained_before_the_server_starts(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:

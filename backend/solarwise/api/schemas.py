@@ -7,6 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from solarwise.ai.analyst import Insight
 from solarwise.core.baseline import PvgisMonth
 from solarwise.core.economics import EconomicInputs, EconomicsResult
 from solarwise.core.forecast import PerformanceForecast
@@ -21,7 +22,18 @@ from solarwise.core.models import (
 )
 from solarwise.core.pipeline import AnalysisOptions, AnalysisResult
 from solarwise.core.provenance import Provenance, ProvenanceTag
-from solarwise.db.models import Analysis, Dataset, Device, EconomicReference, EvidenceRow, Plant, User
+from solarwise.db.models import (
+    AiInsight,
+    Analysis,
+    Dataset,
+    DatasetFile,
+    Device,
+    EconomicReference,
+    EvidenceRow,
+    Plant,
+    User,
+)
+from solarwise.ingestion.detect import UploadPreview
 from solarwise.ingestion.schema import DatasetMetadata
 from solarwise.ingestion.validator import ValidationReport
 
@@ -281,18 +293,50 @@ class DatasetOut(BaseModel):
         )
 
 
+class OriginalFileOut(BaseModel):
+    """The uploaded file, kept byte for byte."""
+
+    file_name: str
+    content_type: str
+    size_bytes: int
+    sha256: str
+    #: Cells and rows rejected at import; the rows concerned can be downloaded.
+    rejections: int = 0
+
+    @classmethod
+    def of(cls, f: DatasetFile) -> OriginalFileOut:
+        return cls(file_name=f.file_name, content_type=f.content_type, size_bytes=f.size_bytes, sha256=f.sha256,
+                   rejections=f.rejections)
+
+
 class DatasetDetail(DatasetOut):
     declared_metadata: DatasetMetadata
     validation_report: ValidationReport
+    #: ``None`` for a dataset that did not come from an upload (demonstration scenario, NASA POWER).
+    original_file: OriginalFileOut | None = None
+    #: Evidence records that came with the dataset: events of the file, or of a demonstration scenario.
+    events: list[EvidenceOut] = []
 
     @classmethod
-    def detail(cls, d: Dataset, latest: Analysis | None = None) -> DatasetDetail:
+    def detail(cls, d: Dataset, latest: Analysis | None = None, *, original: DatasetFile | None = None,
+               events: list[EvidenceRow] | None = None) -> DatasetDetail:
         base = DatasetOut.of(d, latest)
         return cls(
             **base.model_dump(),
             declared_metadata=DatasetMetadata.model_validate(d.declared_metadata),
             validation_report=ValidationReport.model_validate(d.validation_report),
+            original_file=OriginalFileOut.of(original) if original is not None else None,
+            events=[EvidenceOut.of(row) for row in events or []],
         )
+
+
+class OverlapOut(BaseModel):
+    """A dataset of the plant that already covers some of the same days."""
+
+    dataset_id: int
+    name: str
+    period_start: date
+    period_end: date
 
 
 class UploadCheck(BaseModel):
@@ -305,6 +349,25 @@ class UploadCheck(BaseModel):
     declared_metadata: DatasetMetadata
     report: ValidationReport
     dataset: DatasetOut | None = None
+    #: SHA-256 of the uploaded bytes alone.
+    file_sha256: str = ""
+    #: Datasets of the plant imported from the very same file under another declaration.
+    same_file_as: list[int] = []
+    #: Datasets of the plant that cover some of the same days.  A warning, not a refusal.
+    overlapping: list[OverlapOut] = []
+    #: Events of the file stored as evidence records of the dataset (after an import).
+    events_stored: int = 0
+
+
+class UploadPreviewOut(BaseModel):
+    """A file as it was received, and what its columns probably are.  Nothing was validated or stored."""
+
+    file_name: str
+    size_bytes: int
+    file_sha256: str
+    #: Datasets of the plant already imported from this very file.
+    same_file_as: list[int] = []
+    preview: UploadPreview
 
 
 # --------------------------------------------------------------------------- evidence
@@ -362,6 +425,44 @@ class AnalysisDetail(AnalysisSummary):
     dataset_sha256: str
     options: AnalysisOptions
     result: AnalysisResult
+
+
+class AiStatus(BaseModel):
+    """Whether a language model is configured.  Never contains the key."""
+
+    enabled: bool
+    provider: str | None
+    model: str | None
+    #: Host name of the endpoint when a base URL is configured (no path, no credentials).
+    endpoint_host: str | None
+    capabilities: list[str]
+    fallback: str
+    role: str
+
+
+class InsightRecord(BaseModel):
+    """One stored insight, without its text."""
+
+    id: int
+    created_at: datetime
+    generated_by: str
+    provider: str | None
+    model: str | None
+    fell_back: bool
+
+    @classmethod
+    def of(cls, row: AiInsight) -> InsightRecord:
+        return cls(id=row.id, created_at=row.created_at, generated_by=row.generated_by, provider=row.provider,
+                   model=row.model, fell_back=row.fallback_reason is not None)
+
+
+class InsightOut(BaseModel):
+    #: ``False``: nothing was generated yet; ``insight`` is the engine's own, assembled for this answer.
+    stored: bool
+    id: int | None
+    insight: Insight
+    #: Every insight kept for the analysis, newest first.
+    history: list[InsightRecord] = []
 
 
 class EconomicsRequest(BaseModel):
@@ -438,3 +539,6 @@ class NasaPowerRequest(BaseModel):
     end: date
     #: Store the result as a weather dataset of the plant (otherwise only a preview is returned).
     store: bool = False
+
+
+DatasetDetail.model_rebuild()

@@ -8,7 +8,7 @@ is recorded as UNKNOWN and treated accordingly by the engines.
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -72,6 +72,10 @@ class ChannelDeclaration(BaseModel):
     boundary: MeteringBoundary | None = None
     plane: IrradiancePlane | None = None
     soiling_method: SoilingMethod | None = None
+    #: Soiling channel only: whether the column holds the soiling ratio (1 = clean; also what is assumed when
+    #: nothing is said) or the measured soiling loss (0 = clean).  A loss is turned into the ratio the engines use:
+    #: ``ratio = 1 - loss``.
+    reported_as: Literal["RATIO", "LOSS"] | None = None
     notes: str | None = Field(default=None, max_length=1000)
 
     @model_validator(mode="after")
@@ -106,6 +110,46 @@ class ChannelDeclaration(BaseModel):
         )
 
 
+class EventsDeclaration(BaseModel):
+    """Columns of the file that hold events rather than quantities.
+
+    Events are not time-series values: each one becomes an evidence record attached to the dataset, with the
+    provenance declared here.  Like every evidence record they can only make the engine more cautious - a logged
+    fault is a reason to investigate, never a reason to clean.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    #: Column whose filled-in cells mark an interval in which the array was cleaned (``1``, ``yes``, ``x`` ...).
+    cleaning_column: str | None = Field(default=None, max_length=120)
+    #: Column holding the text or code of an equipment alarm or of an operational event; empty when nothing happened.
+    event_column: str | None = Field(default=None, max_length=120)
+    provenance: Provenance = Provenance.UNKNOWN
+    #: For synthetic events: the evidence class they stand in for in a demonstration.
+    emulates: Provenance | None = None
+    source: str = Field(default="", max_length=500)
+
+    @model_validator(mode="after")
+    def _check(self) -> EventsDeclaration:
+        if not self.cleaning_column and not self.event_column:
+            raise ValueError("'events' names no column: give 'cleaning_column', 'event_column' or both")
+        if self.cleaning_column and self.cleaning_column == self.event_column:
+            raise ValueError("'cleaning_column' and 'event_column' must be two different columns")
+        if self.emulates is not None and self.provenance is not Provenance.SYNTHETIC:
+            raise ValueError("'emulates' may only be declared for SYNTHETIC events")
+        if self.emulates is Provenance.SYNTHETIC:
+            raise ValueError("synthetic events cannot emulate SYNTHETIC")
+        return self
+
+    def tag(self, column: str) -> ProvenanceTag:
+        return ProvenanceTag(
+            provenance=self.provenance,
+            emulates=self.emulates,
+            source=self.source or ("origin not declared" if self.provenance is Provenance.UNKNOWN else ""),
+            method=f"column '{column}' of the imported file",
+        )
+
+
 class SyntheticDeclaration(BaseModel):
     """Reproducibility record of an artificial dataset."""
 
@@ -135,6 +179,8 @@ class DatasetMetadata(BaseModel):
     device_column: str = Field(default=DEFAULT_DEVICE_COLUMN, max_length=120)
     #: metric name -> declaration.  Keys are :class:`~solarwise.core.models.Metric` values.
     channels: dict[Metric, ChannelDeclaration] = Field(default_factory=dict)
+    #: Columns holding cleaning events and equipment or operational events, if the file has any.
+    events: EventsDeclaration | None = None
     #: What a supplied expected-energy channel does and does not account for.
     baseline: BaselineDescriptor | None = None
     #: Installed DC capacity the file refers to; checked against the plant configuration.
@@ -147,16 +193,25 @@ class DatasetMetadata(BaseModel):
     def _check(self) -> DatasetMetadata:
         if self.interval_minutes is not None and self.interval_minutes not in (15, 30, 60, 1440):
             raise ValueError("interval_minutes must be one of 15, 30, 60 or 1440")
-        any_synthetic = any(c.provenance is Provenance.SYNTHETIC for c in self.channels.values())
+        any_synthetic = any(c.provenance is Provenance.SYNTHETIC for c in self.channels.values()) or (
+            self.events is not None and self.events.provenance is Provenance.SYNTHETIC
+        )
         if any_synthetic and self.synthetic is None:
             raise ValueError(
                 "channels are declared SYNTHETIC but the 'synthetic' block (generator, version, statement) "
                 "is missing: a synthetic dataset must document how it was produced"
             )
+        for metric, channel in self.channels.items():
+            if channel.reported_as == "LOSS" and metric is not Metric.SOILING_RATIO:
+                raise ValueError(
+                    f"channel '{metric.value}': 'reported_as: LOSS' only applies to the soiling channel"
+                )
         return self
 
     @property
     def is_synthetic(self) -> bool:
-        return self.synthetic is not None or any(
-            c.provenance is Provenance.SYNTHETIC for c in self.channels.values()
+        return (
+            self.synthetic is not None
+            or any(c.provenance is Provenance.SYNTHETIC for c in self.channels.values())
+            or (self.events is not None and self.events.provenance is Provenance.SYNTHETIC)
         )

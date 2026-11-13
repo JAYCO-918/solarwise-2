@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import type { AnalysisResult } from "../../api/types";
 import { TabPanel, Tabs } from "../ui";
+import { AiAnalysisPanel } from "./AiAnalysisPanel";
 import { AttributionPanel } from "./AttributionPanel";
 import { DecisionPanel, GatesPanel } from "./DecisionPanel";
 import { EconomicsPanel } from "./EconomicsPanel";
@@ -12,6 +13,7 @@ import { ProvenancePanel, StagesStrip } from "./ProvenancePanel";
 
 const TABS = [
   { key: "decision", label: "Decision" },
+  { key: "ai", label: "AI analysis" },
   { key: "performance", label: "Performance" },
   { key: "attribution", label: "Attribution" },
   { key: "diagnosis", label: "Diagnosis" },
@@ -22,22 +24,25 @@ const TABS = [
 
 /**
  * One result of the engine. `analysisId` is `null` for advisory evaluations, which are not stored: they have no
- * report, no forecast and no rephrasing.
+ * report, no forecast, no interpretation and no rephrasing.
  */
 export function AnalysisView({ result, analysisId }: { result: AnalysisResult; analysisId: number | null }) {
   const [tab, setTab] = useState("decision");
+  // Every tab but one shows what the engine computed. The interpretation needs a stored analysis to refer to.
+  const tabs = analysisId === null ? TABS.filter((item) => item.key !== "ai") : TABS;
   return (
     <div>
       <div className="mb-6">
         <StagesStrip stages={result.stages} />
       </div>
-      <Tabs items={TABS} active={tab} onChange={setTab} label="Parts of the analysis" />
+      <Tabs items={tabs} active={tab} onChange={setTab} label="Parts of the analysis" />
       <TabPanel tab="decision" active={tab}>
         <div className="space-y-6">
           <DecisionPanel result={result} />
           <GatesPanel result={result} />
         </div>
       </TabPanel>
+      {analysisId !== null && <TabPanel tab="ai" active={tab}><AiAnalysisPanel result={result} analysisId={analysisId} /></TabPanel>}
       <TabPanel tab="performance" active={tab}><GapPanel result={result} analysisId={analysisId} /></TabPanel>
       <TabPanel tab="attribution" active={tab}><AttributionPanel result={result} /></TabPanel>
       <TabPanel tab="diagnosis" active={tab}><HypothesesPanel result={result} /></TabPanel>

@@ -1,12 +1,13 @@
+import { Upload } from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 
 import { endpoints } from "../api/endpoints";
 import { SimulatedTag } from "../components/badges";
-import { ErrorNote, Loading, Notice, PageHeader, TabPanel, Tabs } from "../components/ui";
+import { ErrorNote, LinkButton, Loading, Notice, PageHeader, TabPanel, Tabs } from "../components/ui";
 import { useAsync } from "../hooks/useAsync";
 import { fmtNumber, fmtPower, plural } from "../lib/format";
-import { ROLE_LABEL } from "../lib/labels";
+import { ROLE_LABEL, canEdit } from "../lib/labels";
 import { AccessTab } from "./plant/AccessTab";
 import { DatasetsTab } from "./plant/DatasetsTab";
 import { DescriptionTab } from "./plant/DescriptionTab";
@@ -43,6 +44,13 @@ export default function PlantPage() {
             {fmtPower(data.spec.capacity_dc_kwp, true)} · {fmtNumber(data.spec.latitude, 2)}°, {fmtNumber(data.spec.longitude, 2)}° ·{" "}
             {plural(data.dataset_count, "dataset")} · your access: {ROLE_LABEL[data.role] ?? data.role}
           </>
+        }
+        actions={
+          canEdit(data.role) ? (
+            <LinkButton to={`/plants/${data.id}/upload`} variant="primary">
+              <Upload className="size-4" aria-hidden /> Upload operational data
+            </LinkButton>
+          ) : undefined
         }
       />
       {data.is_demonstration && (

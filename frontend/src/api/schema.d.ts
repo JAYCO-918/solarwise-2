@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+    "/api/v1/ai/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Whether a language model is configured, and which
+         * @description Never contains the key. Without a model every feature below still answers, with the engine's own text.
+         */
+        get: operations["ai_status_api_v1_ai_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/analyses/{analysis_id}": {
         parameters: {
             query?: never;
@@ -53,6 +73,50 @@ export interface paths {
          * @description Persistence, moving average and robust linear trend. For orientation only: these projections are not validated, are not soiling forecasts and never enter a decision.
          */
         get: operations["forecast_api_v1_analyses__analysis_id__forecast_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analyses/{analysis_id}/insight": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The diagnostic analysis of an analysis
+         * @description The interpretation last generated for the analysis, with what wrote it and when. When none was generated yet, the deterministic engine's own is returned (`stored: false`): no model is called by a read.
+         */
+        get: operations["get_insight_api_v1_analyses__analysis_id__insight_get"];
+        put?: never;
+        /**
+         * Generate the diagnostic analysis
+         * @description Asks the configured language model to interpret the engine's findings: what they mean, how the evidence weighs for and against each possible cause, what is uncertain or missing, and what matters most among the steps the engine proposed. The decision, the gates, the support levels, the evidence and the figures are copied from the engine by the server; the model writes the narrative only, and its text is checked against the findings. Without a model, or when a check fails, the engine's own text is used. Whatever was produced is stored with its origin.
+         */
+        post: operations["create_insight_api_v1_analyses__analysis_id__insight_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analyses/{analysis_id}/operational-report.{fmt}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Export the operational report (HTML, PDF or JSON)
+         * @description The diagnostic analysis as a document of eight sections: executive summary, performance, anomalies, diagnostic analysis, data quality, economic implications, recommended actions, limitations. Each section says whether a language model or the engine wrote it; the decision, the gates and the annex tables are always the engine's. Built from the insight last generated - or from the engine's own when none was. No model is called by an export.
+         */
+        get: operations["operational_report_api_v1_analyses__analysis_id__operational_report__fmt__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -193,6 +257,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/datasets/{dataset_id}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The file the dataset was imported from, byte for byte
+         * @description Always sent as an attachment. 404 `NO_ORIGINAL_FILE` for a dataset that did not come from an upload (demonstration scenario, NASA POWER) or that was imported before files were kept.
+         */
+        get: operations["get_original_file_api_v1_datasets__dataset_id__file_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/datasets/{dataset_id}/rejected-rows.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The rows rejected when the dataset was imported, with the reasons (CSV)
+         * @description As recorded at import. A dataset in which nothing was rejected returns the header line only.
+         */
+        get: operations["get_rejected_rows_api_v1_datasets__dataset_id__rejected_rows_csv_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/datasets/{dataset_id}/series": {
         parameters: {
             query?: never;
@@ -202,6 +306,23 @@ export interface paths {
         };
         /** Plant-level time series in canonical units */
         get: operations["get_series_api_v1_datasets__dataset_id__series_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/datasets/{dataset_id}/validation-report.json": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The validation report and the declarations of a dataset (JSON) */
+        get: operations["get_validation_report_api_v1_datasets__dataset_id__validation_report_json_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -330,9 +451,69 @@ export interface paths {
         put?: never;
         /**
          * Import a file
-         * @description Step 2 of an import: the file is validated again and stored if it is acceptable. Stored datasets are immutable.
+         * @description Step 3 of an import: the file is validated again and stored if it is acceptable - the values, the declarations, the file itself byte for byte, and the events it carries as evidence records. Stored datasets are immutable.
          */
         post: operations["import_upload_api_v1_plants__plant_id__datasets_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plants/{plant_id}/datasets/ai-review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask the language model to review the proposed mapping of a file
+         * @description The model is given the column names, simple statistics and a few sample values - never the file - together with the deterministic proposal. It returns suggestions (another quantity or unit for a column), observations on the values, and context that is missing. Every suggestion is checked against the file and the accepted units; none is applied by the server, none names a provenance, and no value is ever changed. Without a model the answer says so and is empty.
+         */
+        post: operations["ai_review_api_v1_plants__plant_id__datasets_ai_review_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plants/{plant_id}/datasets/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Read a file and propose what its columns are
+         * @description Step 1 of an import. Returns the first rows as they are in the file, what each column probably is (quantity and unit, read from the header), and what looks odd in the values. The proposal is deterministic and never includes a provenance. Nothing is validated, declared or written.
+         */
+        post: operations["preview_upload_api_v1_plants__plant_id__datasets_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plants/{plant_id}/datasets/rejected-rows": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * The rows of a file that would be rejected, with the reasons (CSV)
+         * @description The rows that have a rejected cell, exactly as they are in the file, with the row number quoted in the validation report and the reason next to each. Nothing is written.
+         */
+        post: operations["rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -350,7 +531,7 @@ export interface paths {
         put?: never;
         /**
          * Validate a file without storing it
-         * @description Step 1 of an import. Returns the complete validation report. Nothing is written.
+         * @description Step 2 of an import. Returns the complete validation report. Nothing is written.
          */
         post: operations["validate_upload_api_v1_plants__plant_id__datasets_validate_post"];
         delete?: never;
@@ -592,6 +773,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/reference/templates/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download an upload template or example (CSV or JSON)
+         * @description The templates hold column names and no data. The examples hold invented values for a hypothetical plant: they show the format and describe no real installation.
+         */
+        get: operations["template_api_v1_reference_templates__name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users": {
         parameters: {
             query?: never;
@@ -655,6 +856,26 @@ export interface components {
             provider?: string | null;
             /** Text */
             text: string;
+        };
+        /**
+         * AiStatus
+         * @description Whether a language model is configured.  Never contains the key.
+         */
+        AiStatus: {
+            /** Capabilities */
+            capabilities: string[];
+            /** Enabled */
+            enabled: boolean;
+            /** Endpoint Host */
+            endpoint_host: string | null;
+            /** Fallback */
+            fallback: string;
+            /** Model */
+            model: string | null;
+            /** Provider */
+            provider: string | null;
+            /** Role */
+            role: string;
         };
         /** AnalysisDetail */
         AnalysisDetail: {
@@ -1059,8 +1280,37 @@ export interface components {
          * @enum {string}
          */
         BaselineStatus: "OK" | "UNAVAILABLE";
+        /** Body_ai_review_api_v1_plants__plant_id__datasets_ai_review_post */
+        Body_ai_review_api_v1_plants__plant_id__datasets_ai_review_post: {
+            /**
+             * File
+             * @description CSV or JSON file
+             */
+            file: string;
+        };
         /** Body_import_upload_api_v1_plants__plant_id__datasets_post */
         Body_import_upload_api_v1_plants__plant_id__datasets_post: {
+            /**
+             * File
+             * @description CSV or JSON file
+             */
+            file: string;
+            /**
+             * Metadata
+             * @description Dataset metadata (JSON), see /reference/schema
+             */
+            metadata?: string | null;
+        };
+        /** Body_preview_upload_api_v1_plants__plant_id__datasets_preview_post */
+        Body_preview_upload_api_v1_plants__plant_id__datasets_preview_post: {
+            /**
+             * File
+             * @description CSV or JSON file
+             */
+            file: string;
+        };
+        /** Body_rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post */
+        Body_rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post: {
             /**
              * File
              * @description CSV or JSON file
@@ -1101,6 +1351,8 @@ export interface components {
             plane?: components["schemas"]["IrradiancePlane"] | null;
             /** @default UNKNOWN */
             provenance: components["schemas"]["Provenance"];
+            /** Reported As */
+            reported_as?: ("RATIO" | "LOSS") | null;
             soiling_method?: components["schemas"]["SoilingMethod"] | null;
             /**
              * Source
@@ -1169,6 +1421,19 @@ export interface components {
             uncertainty_abs: number | null;
             /** Uncertainty Pct */
             uncertainty_pct: number | null;
+            /** Unit */
+            unit: string;
+        };
+        /** ChannelProposal */
+        ChannelProposal: {
+            /** Column */
+            column: string;
+            /**
+             * Reported As
+             * @default RATIO
+             * @enum {string}
+             */
+            reported_as: "RATIO" | "LOSS";
             /** Unit */
             unit: string;
         };
@@ -1269,6 +1534,57 @@ export interface components {
             /** Source Note */
             source_note?: string | null;
         };
+        /** ColumnPreview */
+        ColumnPreview: {
+            /** @default NONE */
+            confidence: components["schemas"]["Confidence"];
+            /**
+             * Empty
+             * @default 0
+             */
+            empty: number;
+            /**
+             * Filled
+             * @default 0
+             */
+            filled: number;
+            /** Maximum */
+            maximum?: number | null;
+            metric?: components["schemas"]["Metric"] | null;
+            /** Minimum */
+            minimum?: number | null;
+            /** Name */
+            name: string;
+            /**
+             * Numeric
+             * @default 0
+             */
+            numeric: number;
+            /**
+             * Reason
+             * @default
+             */
+            reason: string;
+            /** Reported As */
+            reported_as?: ("RATIO" | "LOSS") | null;
+            role: components["schemas"]["ColumnRole"];
+            /** Samples */
+            samples?: string[];
+            /** Unit */
+            unit?: string | null;
+            /** Unit Source */
+            unit_source?: ("HEADER" | "ASSUMED") | null;
+        };
+        /**
+         * ColumnRole
+         * @enum {string}
+         */
+        ColumnRole: "TIMESTAMP" | "DEVICE" | "QUANTITY" | "CLEANING" | "EVENTS" | "UNUSED";
+        /**
+         * Confidence
+         * @enum {string}
+         */
+        Confidence: "EXACT" | "NAME" | "AMBIGUOUS" | "NONE";
         /** Conflict */
         Conflict: {
             /** Code */
@@ -1322,6 +1638,15 @@ export interface components {
             missing_actual_slots: number;
             /** Missing Expected Slots */
             missing_expected_slots: number;
+        };
+        /** CurrentReading */
+        CurrentReading: {
+            /** Metric */
+            metric?: string | null;
+            /** Role */
+            role: string;
+            /** Unit */
+            unit?: string | null;
         };
         /** DailyAttribution */
         DailyAttribution: {
@@ -1391,6 +1716,32 @@ export interface components {
             /** Status */
             status: string;
         };
+        /**
+         * DataNote
+         * @description Something about the file the uploader should look at before importing it.
+         */
+        DataNote: {
+            /** Code */
+            code: string;
+            /** Column */
+            column?: string | null;
+            /** Message */
+            message: string;
+            /**
+             * Severity
+             * @enum {string}
+             */
+            severity: "WARNING" | "INFO";
+            /** Suggested Unit */
+            suggested_unit?: string | null;
+        };
+        /** DataObservation */
+        DataObservation: {
+            /** Column */
+            column?: string | null;
+            /** Text */
+            text: string;
+        };
         /** DataQualityReport */
         DataQualityReport: {
             /** Channels */
@@ -1411,6 +1762,71 @@ export interface components {
             /** Summary */
             summary: string;
         };
+        /** DataReview */
+        DataReview: {
+            /**
+             * Discarded
+             * @default []
+             */
+            discarded: string[];
+            /** Duration Ms */
+            duration_ms?: number | null;
+            /** Fallback Reason */
+            fallback_reason?: string | null;
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            /**
+             * Generated By
+             * @enum {string}
+             */
+            generated_by: "AI" | "DETERMINISTIC_ENGINE";
+            /**
+             * Missing Context
+             * @default []
+             */
+            missing_context: string[];
+            /** Model */
+            model?: string | null;
+            /** Notice */
+            notice: string;
+            /**
+             * Observations
+             * @default []
+             */
+            observations: components["schemas"]["DataObservation"][];
+            /**
+             * Prompt Version
+             * @default data-review-1
+             */
+            prompt_version: string;
+            /** Provider */
+            provider?: string | null;
+            /**
+             * Suggestions
+             * @default []
+             */
+            suggestions: components["schemas"]["DataSuggestion"][];
+        };
+        /**
+         * DataSuggestion
+         * @description A change of the mapping a language model proposes.  Checked; never applied without the uploader.
+         */
+        DataSuggestion: {
+            /** Column */
+            column: string;
+            current: components["schemas"]["CurrentReading"];
+            metric?: components["schemas"]["Metric"] | null;
+            /** Reason */
+            reason: string;
+            /** Reported As */
+            reported_as?: ("RATIO" | "LOSS") | null;
+            role: components["schemas"]["ColumnRole"];
+            /** Unit */
+            unit?: string | null;
+        };
         /** DatasetDetail */
         DatasetDetail: {
             /** Archived */
@@ -1430,6 +1846,11 @@ export interface components {
             description: string;
             /** Disclaimer */
             disclaimer: string | null;
+            /**
+             * Events
+             * @default []
+             */
+            events: components["schemas"]["EvidenceOut"][];
             /** File Format */
             file_format: string;
             /** File Name */
@@ -1445,6 +1866,7 @@ export interface components {
             latest_analysis?: components["schemas"]["AnalysisSummary"] | null;
             /** Name */
             name: string;
+            original_file?: components["schemas"]["OriginalFileOut"] | null;
             /**
              * Period End
              * Format: date
@@ -1493,6 +1915,7 @@ export interface components {
             device_column: string;
             /** Disclaimer */
             disclaimer?: string | null;
+            events?: components["schemas"]["EventsDeclaration"] | null;
             /** Interval Minutes */
             interval_minutes?: number | null;
             /** Name */
@@ -1881,6 +2304,57 @@ export interface components {
          * @enum {string}
          */
         EvaluationContext: "OPERATIONAL" | "DEMONSTRATION";
+        /**
+         * EventSummary
+         * @description One event read from an event column: it becomes an evidence record attached to the dataset.
+         */
+        EventSummary: {
+            /** Device Code */
+            device_code?: string | null;
+            evidence_type: components["schemas"]["EvidenceType"];
+            /**
+             * First Day
+             * Format: date
+             */
+            first_day: string;
+            /** Intervals */
+            intervals: number;
+            /**
+             * Last Day
+             * Format: date
+             */
+            last_day: string;
+            /** Open At End */
+            open_at_end: boolean;
+            /** Provenance */
+            provenance: string;
+            /** Reference */
+            reference: string;
+            /** Text */
+            text: string;
+        };
+        /**
+         * EventsDeclaration
+         * @description Columns of the file that hold events rather than quantities.
+         *
+         *     Events are not time-series values: each one becomes an evidence record attached to the dataset, with the
+         *     provenance declared here.  Like every evidence record they can only make the engine more cautious - a logged
+         *     fault is a reason to investigate, never a reason to clean.
+         */
+        EventsDeclaration: {
+            /** Cleaning Column */
+            cleaning_column?: string | null;
+            emulates?: components["schemas"]["Provenance"] | null;
+            /** Event Column */
+            event_column?: string | null;
+            /** @default UNKNOWN */
+            provenance: components["schemas"]["Provenance"];
+            /**
+             * Source
+             * @default
+             */
+            source: string;
+        };
         /** EvidenceAssessment */
         EvidenceAssessment: {
             /** Decisive Evidence */
@@ -2244,6 +2718,202 @@ export interface components {
             uncertainty_note?: string | null;
         };
         /**
+         * Insight
+         * @description An interpretation of one analysis.  Every field says whether the engine or the narrative produced it.
+         */
+        Insight: {
+            /** Anomalies */
+            anomalies: string[];
+            /** Causes */
+            causes: components["schemas"]["InsightCause"][];
+            /**
+             * Checks
+             * @default []
+             */
+            checks: components["schemas"]["GuardrailCheck"][];
+            /** Data Quality Assessment */
+            data_quality_assessment: string;
+            /** Data Quality Status */
+            data_quality_status: string;
+            decision: components["schemas"]["InsightDecision"];
+            /** Decision Rationale */
+            decision_rationale: string;
+            /** Decisive Evidence */
+            decisive_evidence: string[];
+            /** Duration Ms */
+            duration_ms?: number | null;
+            /** Economic Implications */
+            economic_implications: string;
+            /** Economics Decision Grade */
+            economics_decision_grade: boolean;
+            /** Economics Status */
+            economics_status: string;
+            /** Executive Summary */
+            executive_summary: string;
+            /** Fallback Reason */
+            fallback_reason?: string | null;
+            /** Gates */
+            gates: components["schemas"]["InsightGate"][];
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            /**
+             * Generated By
+             * @enum {string}
+             */
+            generated_by: "AI" | "DETERMINISTIC_ENGINE";
+            /** Limitations */
+            limitations: string[];
+            /** Missing Information */
+            missing_information: components["schemas"]["InsightItem"][];
+            /** Model */
+            model?: string | null;
+            /** Next Steps */
+            next_steps: components["schemas"]["InsightItem"][];
+            /** Notice */
+            notice: string;
+            /** Packet Sha256 */
+            packet_sha256: string;
+            /** Performance Overview */
+            performance_overview: string;
+            /**
+             * Prompt Version
+             * @default analyst-1
+             */
+            prompt_version: string;
+            /** Provider */
+            provider?: string | null;
+            /** Uncertainty */
+            uncertainty: string[];
+            /** What Would Change */
+            what_would_change: string[];
+        };
+        /** InsightCause */
+        InsightCause: {
+            /**
+             * Active Now
+             * @default false
+             */
+            active_now: boolean;
+            /** Category */
+            category: string;
+            /**
+             * Context
+             * @default []
+             */
+            context: string[];
+            /** Engine Summary */
+            engine_summary: string;
+            /** Engine Support */
+            engine_support: string;
+            /** Estimated Loss Kwh */
+            estimated_loss_kwh?: number | null;
+            /**
+             * Evidence Against
+             * @default []
+             */
+            evidence_against: string[];
+            /**
+             * Evidence For
+             * @default []
+             */
+            evidence_for: string[];
+            /** Interpretation */
+            interpretation?: string | null;
+            /**
+             * Missing Evidence
+             * @default []
+             */
+            missing_evidence: string[];
+            /** Share Of Gap Pct */
+            share_of_gap_pct?: number | null;
+            /** Title */
+            title: string;
+        };
+        /**
+         * InsightDecision
+         * @description The engine's decision, restated by code.
+         */
+        InsightDecision: {
+            /** Authorization Note */
+            authorization_note: string;
+            /** Headline */
+            headline: string;
+            /** Label */
+            label: string;
+            /** Operational Authorization */
+            operational_authorization: boolean;
+            /** Reason Code */
+            reason_code: string;
+            /** Rule */
+            rule: string;
+            /** Simulated */
+            simulated: boolean;
+            /** Statement */
+            statement: string;
+            /** Value */
+            value: string;
+        };
+        /** InsightGate */
+        InsightGate: {
+            /** Basis */
+            basis: string;
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** Passed */
+            passed: boolean | null;
+        };
+        /**
+         * InsightItem
+         * @description A step or a missing input: the text is the engine's, the reason is the narrative's.
+         */
+        InsightItem: {
+            /** Id */
+            id: string;
+            /** Text */
+            text: string;
+            /** Why */
+            why?: string | null;
+        };
+        /** InsightOut */
+        InsightOut: {
+            /**
+             * History
+             * @default []
+             */
+            history: components["schemas"]["InsightRecord"][];
+            /** Id */
+            id: number | null;
+            insight: components["schemas"]["Insight"];
+            /** Stored */
+            stored: boolean;
+        };
+        /**
+         * InsightRecord
+         * @description One stored insight, without its text.
+         */
+        InsightRecord: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Fell Back */
+            fell_back: boolean;
+            /** Generated By */
+            generated_by: string;
+            /** Id */
+            id: number;
+            /** Model */
+            model: string | null;
+            /** Provider */
+            provider: string | null;
+        };
+        /**
          * InspectionFinding
          * @enum {string}
          */
@@ -2341,6 +3011,23 @@ export interface components {
             period: components["schemas"]["AttributionScope"];
             window: components["schemas"]["AttributionScope"];
         };
+        /** MappingProposal */
+        MappingProposal: {
+            /** Channels */
+            channels?: {
+                [key: string]: components["schemas"]["ChannelProposal"];
+            };
+            /** Cleaning Column */
+            cleaning_column?: string | null;
+            /** Device Column */
+            device_column?: string | null;
+            /** Event Column */
+            event_column?: string | null;
+            /** Interval Minutes */
+            interval_minutes?: number | null;
+            /** Timestamp Column */
+            timestamp_column?: string | null;
+        };
         /**
          * MeteringBoundary
          * @enum {string}
@@ -2384,6 +3071,45 @@ export interface components {
              * @default false
              */
             store: boolean;
+        };
+        /**
+         * OriginalFileOut
+         * @description The uploaded file, kept byte for byte.
+         */
+        OriginalFileOut: {
+            /** Content Type */
+            content_type: string;
+            /** File Name */
+            file_name: string;
+            /**
+             * Rejections
+             * @default 0
+             */
+            rejections: number;
+            /** Sha256 */
+            sha256: string;
+            /** Size Bytes */
+            size_bytes: number;
+        };
+        /**
+         * OverlapOut
+         * @description A dataset of the plant that already covers some of the same days.
+         */
+        OverlapOut: {
+            /** Dataset Id */
+            dataset_id: number;
+            /** Name */
+            name: string;
+            /**
+             * Period End
+             * Format: date
+             */
+            period_end: string;
+            /**
+             * Period Start
+             * Format: date
+             */
+            period_start: string;
         };
         /** PerformanceForecast */
         PerformanceForecast: {
@@ -3047,12 +3773,71 @@ export interface components {
             declared_metadata: components["schemas"]["DatasetMetadata"];
             /** Duplicate Of */
             duplicate_of: number | null;
+            /**
+             * Events Stored
+             * @default 0
+             */
+            events_stored: number;
+            /**
+             * File Sha256
+             * @default
+             */
+            file_sha256: string;
+            /**
+             * Overlapping
+             * @default []
+             */
+            overlapping: components["schemas"]["OverlapOut"][];
             report: components["schemas"]["ValidationReport"];
+            /**
+             * Same File As
+             * @default []
+             */
+            same_file_as: number[];
             /**
              * Stored
              * @default false
              */
             stored: boolean;
+        };
+        /**
+         * UploadPreview
+         * @description What a file contains and what its columns probably are.  Nothing has been stored or declared.
+         */
+        UploadPreview: {
+            /** Columns */
+            columns: components["schemas"]["ColumnPreview"][];
+            /** Decimal Comma */
+            decimal_comma: boolean;
+            /** Embedded Metadata */
+            embedded_metadata: boolean;
+            /** File Format */
+            file_format: string;
+            /** Notes */
+            notes: components["schemas"]["DataNote"][];
+            proposal: components["schemas"]["MappingProposal"];
+            /** Rows Total */
+            rows_total: number;
+            /** Sample Rows */
+            sample_rows: string[][];
+        };
+        /**
+         * UploadPreviewOut
+         * @description A file as it was received, and what its columns probably are.  Nothing was validated or stored.
+         */
+        UploadPreviewOut: {
+            /** File Name */
+            file_name: string;
+            /** File Sha256 */
+            file_sha256: string;
+            preview: components["schemas"]["UploadPreview"];
+            /**
+             * Same File As
+             * @default []
+             */
+            same_file_as: number[];
+            /** Size Bytes */
+            size_bytes: number;
         };
         /** UserCreate */
         UserCreate: {
@@ -3121,6 +3906,8 @@ export interface components {
             count: number;
             /** Examples */
             examples?: string[];
+            /** Hint */
+            hint?: string | null;
             /** Message */
             message: string;
             severity: components["schemas"]["IssueSeverity"];
@@ -3135,6 +3922,8 @@ export interface components {
             dataset_name: string;
             /** Devices */
             devices: string[];
+            /** Events */
+            events?: components["schemas"]["EventSummary"][];
             /** File Format */
             file_format: string;
             /** First Local Day */
@@ -3153,6 +3942,11 @@ export interface components {
             period_end: string | null;
             /** Period Start */
             period_start: string | null;
+            /**
+             * Rejections Total
+             * @default 0
+             */
+            rejections_total: number;
             /** Rows Device */
             rows_device: number;
             /** Rows Plant */
@@ -3187,6 +3981,26 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    ai_status_api_v1_ai_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiStatus"];
+                };
+            };
+        };
+    };
     get_analysis_api_v1_analyses__analysis_id__get: {
         parameters: {
             query?: never;
@@ -3269,6 +4083,102 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ForecastResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_insight_api_v1_analyses__analysis_id__insight_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                analysis_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InsightOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_insight_api_v1_analyses__analysis_id__insight_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                analysis_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InsightOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    operational_report_api_v1_analyses__analysis_id__operational_report__fmt__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                analysis_id: number;
+                fmt: "html" | "pdf" | "json";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "application/pdf": unknown;
+                    "text/html": unknown;
                 };
             };
             /** @description Validation Error */
@@ -3518,6 +4428,68 @@ export interface operations {
             };
         };
     };
+    get_original_file_api_v1_datasets__dataset_id__file_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dataset_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_rejected_rows_api_v1_datasets__dataset_id__rejected_rows_csv_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dataset_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_series_api_v1_datasets__dataset_id__series_get: {
         parameters: {
             query?: never;
@@ -3538,6 +4510,37 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_validation_report_api_v1_datasets__dataset_id__validation_report_json_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dataset_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
@@ -3866,6 +4869,111 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UploadCheck"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ai_review_api_v1_plants__plant_id__datasets_ai_review_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plant_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_ai_review_api_v1_plants__plant_id__datasets_ai_review_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataReview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_upload_api_v1_plants__plant_id__datasets_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plant_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_preview_upload_api_v1_plants__plant_id__datasets_preview_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadPreviewOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plant_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
                 };
             };
             /** @description Validation Error */
@@ -4402,6 +5510,38 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+        };
+    };
+    template_api_v1_reference_templates__name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "text/csv": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

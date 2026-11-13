@@ -257,7 +257,13 @@ def cmd_check_config(args: argparse.Namespace) -> int:
         ("frame ancestors", settings.frame_ancestors),
         ("upload limit", f"{settings.max_upload_mb} MB"),
         ("external data", "NASA POWER and PVGIS on request" if settings.external_data_enabled else "disabled"),
-        ("language model", settings.ai_provider if settings.ai_provider != "none" else "off (engine text only)"),
+        ("language model",
+         f"{settings.ai_provider}, model {settings.ai_model}"
+         + (f", at {settings.ai_base_url}" if settings.ai_base_url else "")
+         + (", key configured" if settings.ai_api_key else ", no key")
+         if settings.ai_enabled
+         else ("off: a provider is set but no model is named (engine text only)" if settings.ai_provider != "none"
+               else "off (engine text only)")),
         ("web interface", str(settings.frontend_dist)),
     ]
     for name, value in rows:
@@ -512,7 +518,8 @@ def load_case(args: argparse.Namespace) -> tuple[ValidationReport, AnalysisInput
         device_observations=parsed.device_observations,
         devices=devices,
         device_tag=parsed.device_tag,
-        records=records,
+        # Evidence given with the case, and the events the file itself carries in its declared event columns.
+        records=[*records, *parsed.events],
         import_issues=import_issues_from(report.model_dump(mode="json")),
         dataset_name=metadata.name,
         dataset_disclaimer=metadata.disclaimer,

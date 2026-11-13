@@ -47,9 +47,11 @@ always give the same answer and every gate can be audited. And a production gap 
 from a fault, whatever the model: the missing information has to be measured. (Backup slide 12.)
 
 **What does the AI do, then?**
-It is optional and switched off by default. When it is on, a language model may only rephrase the explanation that
-the engine has already written. Its text is checked against the engine's figures before it is shown, and thrown
-away if a number or the decision does not match.
+It is optional and switched off by default. When it is on, a language model reads the engine's findings and
+explains them: what they mean, which causes the evidence supports, what is missing. It never decides. The decision,
+the gates and every figure are copied from the engine, and the model's text is checked against them before it is
+shown: if a number, the decision or a claim does not match, the whole text is thrown away and the engine's own text
+is shown. We have run this against a stand-in model only, not yet against a real provider.
 
 **What if the plant has no soiling sensor?**
 Then the software does not order a cleaning: it answers "Investigate" and says which measurement is missing. A

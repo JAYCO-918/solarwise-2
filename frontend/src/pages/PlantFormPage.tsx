@@ -45,7 +45,7 @@ export default function PlantFormPage() {
       <PageHeader
         eyebrow={<Link to="/plants" className="underline underline-offset-2">Plants</Link>}
         title="Register a plant"
-        description="The description is used by the engine to model what the plant should produce. Only the name, the capacity and the coordinates are required."
+        description="What the plant is: where it stands, how large it is, how it is built. The engine uses it to model what the plant should produce. Only the name, the capacity and the coordinates are required. What the plant measured - production, weather, soiling, events - is not typed in here: it is uploaded as a file once the plant is registered."
       />
       {user?.is_demo && (
         <Notice tone="simulated" className="mb-6" title="Demonstration session">

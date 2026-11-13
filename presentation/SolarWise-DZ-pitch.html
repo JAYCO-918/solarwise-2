@@ -271,7 +271,7 @@ html.flat .ui, html.plate .ui { display: none; }
 .s9 .browser { left: 72px; top: 150px; width: 664px; }
 .s9 .st { position: absolute; left: 776px; width: 432px; height: 100px; display: flex; gap: 18px; align-items: center; }
 .s9 .st + .st { border-top: 1px solid var(--ink-200); }
-.s9 .st .n { flex: none; width: 104px; font-size: 46px; line-height: 52px; font-weight: 700; color: var(--ink-950); }
+.s9 .st .n { flex: none; width: 124px; font-size: 46px; line-height: 52px; font-weight: 700; color: var(--ink-950); }
 .s9 .st p { font-size: 16px; line-height: 23px; color: var(--ink-700); }
 .s9 .st p b { color: var(--ink-950); }
 .s9 .honest { position: absolute; left: 776px; top: 566px; width: 432px; height: 68px; border-radius: 10px; border: 1px solid var(--violet-300); display: flex; align-items: center; gap: 12px; padding: 0 16px; color: var(--violet-900); font-size: 22px;
@@ -715,7 +715,7 @@ html.flat .ui, html.plate .ui { display: none; }
   <div class="card rule4" style="left:652px; top:150px"><span class="ico"><svg class="i"><use href="#i-badge-check"/></svg></span>
     <div><h3 data-tx class="nw">Every value has an origin</h3><p data-tx>Measured, modelled, synthetic or unknown: declared with the data and shown with every figure. Only measured data can justify a cleaning.</p></div></div>
   <div class="card rule4" style="left:72px; top:320px"><span class="ico"><svg class="i"><use href="#i-list-checks"/></svg></span>
-    <div><h3 data-tx class="nw">Rules decide. AI only explains.</h3><p data-tx>A deterministic rule engine decides. An optional language model may only rephrase the explanation, and its text is checked against the engine's figures.</p></div></div>
+    <div><h3 data-tx class="nw">Rules decide. AI only explains.</h3><p data-tx>A deterministic rule engine decides. An optional language model may only interpret its findings, and its text is checked against the engine's result.</p></div></div>
   <div class="card rule4" style="left:652px; top:320px"><span class="ico"><svg class="i"><use href="#i-circle-off"/></svg></span>
     <div><h3 data-tx class="nw">Missing stays missing</h3><p data-tx>A value that was not observed is never replaced by zero and never interpolated.</p></div></div>
 
@@ -729,7 +729,7 @@ html.flat .ui, html.plate .ui { display: none; }
   <div class="pageno"></div>
   <aside class="notes">
     <p>Why trust the answer? Because of four rules the software never breaks.</p>
-    <p>A gap is not a diagnosis. Every value carries its origin, and only measured data can justify a cleaning. Rules decide: an AI model may only rephrase the explanation. And a missing value stays missing: it is never replaced by zero.</p>
+    <p>A gap is not a diagnosis. Every value carries its origin, and only measured data can justify a cleaning. Rules decide: an AI model may only interpret and explain what the engine found. And a missing value stays missing: it is never replaced by zero.</p>
     <p class="cue">If you are short of time, this is the slide to shorten: read the four titles only.</p>
   </aside>
 </section>
@@ -745,15 +745,15 @@ html.flat .ui, html.plate .ui { display: none; }
   </div>
 
   <div class="st" style="top:142px"><div data-tx class="n nw">10</div><p data-tx><b>demonstration scenarios</b>, each one giving the decision it should</p></div>
-  <div class="st" style="top:242px"><div data-tx class="n nw">871</div><p data-tx><b>automated tests</b>: 788 on the engine and the API, 83 on the interface</p></div>
-  <div class="st" style="top:342px"><div data-tx class="n nw">43</div><p data-tx><b>API operations</b> behind a web interface, with accounts and roles</p></div>
+  <div class="st" style="top:242px"><div data-tx class="n nw">1,257</div><p data-tx><b>automated tests</b>: 1,135 on the engine and the API, 122 on the interface</p></div>
+  <div class="st" style="top:342px"><div data-tx class="n nw">54</div><p data-tx><b>API operations</b> behind a web interface, with accounts and roles</p></div>
   <div class="st" style="top:442px"><div data-tx class="n nw">4</div><p data-tx><b>report formats</b>: PDF, HTML, CSV and JSON. Every result is stored as issued</p></div>
   <div class="honest"><svg class="i"><use href="#i-flask-conical"/></svg><span data-tx>Validated on synthetic scenarios. It has not yet been run on the data of a real plant.</span></div>
 
   <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
   <div class="pageno"></div>
   <aside class="notes">
-    <p>And this is a working application, not a mock-up. A web interface and an API. Ten demonstration scenarios. More than eight hundred automated tests. Reports in four formats.</p>
+    <p>And this is a working application, not a mock-up. A web interface and an API. Ten demonstration scenarios. More than twelve hundred automated tests. Reports in four formats.</p>
     <p>We are also clear about its limit: so far, it has been validated on synthetic data only.</p>
     <p class="cue">If you may show the live demonstration, do it here: open the demonstration, then the plant, then the analysis “Confirmed soiling”.</p>
   </aside>
@@ -834,7 +834,7 @@ html.flat .ui, html.plate .ui { display: none; }
   <div data-tx class="tx eyebrow nw">Backup · Architecture</div>
   <h2 data-tx class="tx title nw">From a file to a decision, in five steps.</h2>
 
-  <div class="card box" style="left:72px"><span class="ico"><svg class="i"><use href="#i-file-spreadsheet"/></svg></span><h3 data-tx class="nw">Data in</h3><p data-tx>CSV or JSON files. Each column is declared: unit, origin, source.</p></div>
+  <div class="card box" style="left:72px"><span class="ico"><svg class="i"><use href="#i-file-spreadsheet"/></svg></span><h3 data-tx class="nw">Data in</h3><p data-tx>Plant exports in CSV or JSON. Each column: unit, origin, source.</p></div>
   <svg class="i arr" style="left:278px"><use href="#i-arrow-right"/></svg>
   <div class="card box" style="left:306px"><span class="ico"><svg class="i"><use href="#i-clipboard-check"/></svg></span><h3 data-tx class="nw">Validation</h3><p data-tx>Units, gaps, duplicates, completeness. Missing stays missing.</p></div>
   <svg class="i arr" style="left:512px"><use href="#i-arrow-right"/></svg>
@@ -845,15 +845,15 @@ html.flat .ui, html.plate .ui { display: none; }
   <div class="card box" style="left:1008px"><span class="ico"><svg class="i"><use href="#i-file-text"/></svg></span><h3 data-tx class="nw">Results</h3><p data-tx>Decision, explanation, reports in PDF, HTML, CSV and JSON.</p></div>
 
   <div class="fact" style="top:366px"><div data-tx class="k nw">Built with</div><div data-tx class="t">Python, FastAPI, SQLAlchemy, PostgreSQL or SQLite · React, TypeScript, ECharts</div></div>
-  <div class="fact" style="top:432px"><div data-tx class="k nw">Optional connections</div><div data-tx class="t">PVGIS typical year, NASA POWER weather, a language model that rephrases the explanation. All can stay switched off.</div></div>
+  <div class="fact" style="top:432px"><div data-tx class="k nw">Optional connections</div><div data-tx class="t">PVGIS typical year, NASA POWER weather, a language model that interprets the findings. All can stay switched off.</div></div>
   <div class="fact" style="top:498px"><div data-tx class="k nw">Access</div><div data-tx class="t">Sign-up, which can be switched off. Roles for each plant: owner, editor, viewer. Sign-ins and changes are recorded.</div></div>
-  <div class="fact" style="top:564px"><div data-tx class="k nw">Verified by</div><div data-tx class="t">788 tests on the engine and the API, 83 on the interface, static typing and linting on both sides.</div></div>
+  <div class="fact" style="top:564px"><div data-tx class="k nw">Verified by</div><div data-tx class="t">1,135 tests on the engine and the API, 122 on the interface, static typing and linting on both sides.</div></div>
 
   <div class="brand"><span class="mark"><svg class="i"><use href="#i-sun-medium"/></svg></span>SolarWise <span class="dz">DZ</span></div>
   <div class="pageno"></div>
   <aside class="notes">
     <p class="cue">Use it for technical questions: stack, deployment, security.</p>
-    <p>A file goes in with a declaration of each column. It is validated, then five engines compute the gap, the causes, the diagnosis, the recoverable energy and the economics. The rule engine decides. The result is stored as issued and can be exported as a report.</p>
+    <p>The operator uploads the plant's own export. Its columns are recognised, and the operator declares where each one comes from. It is validated, then five engines compute the gap, the causes, the diagnosis, the recoverable energy and the economics. The rule engine decides. The result is stored as issued and can be exported as a report.</p>
   </aside>
 </section>
 

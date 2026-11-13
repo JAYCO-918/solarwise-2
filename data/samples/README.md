@@ -1,11 +1,32 @@
 # Templates for your own data
 
-These files show the upload format. **They contain no data.** Every text to fill in starts with
+These files show the upload format. The **templates contain no data**: every text to fill in starts with
 `REPLACE` and every number to supply is `null`; the platform refuses a file that still contains a
-`REPLACE` marker, so a template cannot be imported by mistake.
+`REPLACE` marker, so a template cannot be imported by mistake. The two **examples** contain 14 days of
+**invented** values for a hypothetical 1 MWp plant, to show the format at work; they describe no real
+installation.
 
 For complete worked examples with values, see [`../demo`](../demo) - all of them synthetic and
 labelled as such.
+
+## Operational data, as an operator's system exports them
+
+The four files offered for download on the page **Upload operational data** (they are copies of the files the
+application serves; a test keeps them identical). Their columns carry their units in their names and are
+recognised at upload without any declaration: `timestamp`, `energy_kwh`, `expected_energy_kwh`,
+`poa_irradiance_w_m2`, `module_temp_c`, `ambient_temp_c`, `relative_humidity_pct`, `wind_speed_m_s`, `rainfall_mm`,
+`soiling_ratio`, `cleaning_event`, `alarm`. None of the columns but the first two is required.
+
+| File | Purpose |
+|---|---|
+| `solarwise-operational-data.template.csv` | the column names, and no row |
+| `solarwise-operational-data.example.csv` | 14 invented days, one cleaning, an inverter alarm over two days and a grid outage |
+| `solarwise-operational-data.template.json` | one record with every field and no value |
+| `solarwise-operational-data.example.json` | the same 14 invented days as JSON records |
+
+The steps of an upload are described in [`docs/data-upload.md`](../../docs/data-upload.md).
+
+## The canonical format, with its declaration file
 
 | File | Purpose |
 |---|---|

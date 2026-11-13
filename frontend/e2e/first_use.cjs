@@ -80,10 +80,10 @@ function summary(text) {
     expect(tabs.some((t) => t.startsWith("Access")), `it registers a plant and owns it: ${JSON.stringify(tabs)}`);
 
     // ---- the file of scenario 02, declared by its declaration file
-    await clickText(page, "a", "Add a dataset");
+    await clickText(page, "a", "Upload operational data");
     await page.waitForFunction(() => document.body.innerText.includes("1. The file"), { timeout: 15000 });
     await (await page.$('input[type="file"]')).uploadFile(CSV);
-    await page.waitForFunction(() => document.body.innerText.includes("2. The declaration"), { timeout: 15000 });
+    await page.waitForFunction(() => document.body.innerText.includes("3. What each column is"), { timeout: 15000 });
     await settle(page, 300);
     const hasField = () => page.evaluate(() => [...document.querySelectorAll("label")].some((l) => l.textContent.trim().startsWith("Declaration file")));
     const offered = await page.$$eval('input[name="declaration-mode"]', (all) => all.map((i) => i.closest("label").innerText.trim()));

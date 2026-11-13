@@ -1,9 +1,11 @@
-import { api } from "./client";
+import { api, download } from "./client";
 import type {
   AiExplanation,
+  AiStatus,
   AnalysisDetail,
   AnalysisOptionsIn,
   AnalysisSummary,
+  DataReview,
   Dataset,
   DatasetDetail,
   DatasetMetadataIn,
@@ -17,6 +19,7 @@ import type {
   EvidenceIn,
   EvidenceRow,
   ForecastResponse,
+  InsightOut,
   Meta,
   Permission,
   Plant,
@@ -27,6 +30,7 @@ import type {
   Series,
   Token,
   UploadCheck,
+  UploadPreviewOut,
   User,
   UserCreate,
   UserUpdate,
@@ -44,7 +48,7 @@ export interface EconomicsCalculation {
   cleaning_effectiveness?: number | null;
 }
 
-function uploadForm(file: File, metadata: DatasetMetadataIn | null): FormData {
+function uploadForm(file: File, metadata: DatasetMetadataIn | null = null): FormData {
   const form = new FormData();
   form.append("file", file, file.name);
   if (metadata !== null) form.append("metadata", JSON.stringify(metadata));
@@ -89,8 +93,17 @@ export const endpoints = {
   dataset: (id: number, signal?: Signal) => api.get<DatasetDetail>(`/datasets/${id}`, { signal }),
   series: (id: number, signal?: Signal) => api.get<Series>(`/datasets/${id}/series`, { signal }),
   archiveDataset: (id: number) => api.delete(`/datasets/${id}`),
+  /** A first look at a file: its first rows and what its columns probably are. Nothing is declared or stored. */
+  previewUpload: (plantId: number, file: File, signal?: Signal) =>
+    api.upload<UploadPreviewOut>(`/plants/${plantId}/datasets/preview`, uploadForm(file), { signal }),
+  /** Suggestions of the language model on the proposed mapping. Nothing is applied by the server. */
+  reviewUpload: (plantId: number, file: File) =>
+    api.upload<DataReview>(`/plants/${plantId}/datasets/ai-review`, uploadForm(file)),
   validateUpload: (plantId: number, file: File, metadata: DatasetMetadataIn | null) =>
     api.upload<UploadCheck>(`/plants/${plantId}/datasets/validate`, uploadForm(file, metadata)),
+  /** The rows that would be rejected, as they are in the file, with the reason next to each (CSV). */
+  downloadRejectedRows: (plantId: number, file: File, metadata: DatasetMetadataIn | null) =>
+    download(`/plants/${plantId}/datasets/rejected-rows`, "rejected-rows.csv", uploadForm(file, metadata)),
   importUpload: (plantId: number, file: File, metadata: DatasetMetadataIn | null) =>
     api.upload<UploadCheck>(`/plants/${plantId}/datasets`, uploadForm(file, metadata)),
 
@@ -103,6 +116,11 @@ export const endpoints = {
   runAnalysis: (datasetId: number, options: AnalysisOptionsIn, weatherDatasetId: number | null) =>
     api.post<AnalysisDetail>(`/datasets/${datasetId}/analyses`, { options, weather_dataset_id: weatherDatasetId }),
   explanation: (analysisId: number) => api.post<AiExplanation>(`/analyses/${analysisId}/explanation`),
+  aiStatus: (signal?: Signal) => api.get<AiStatus>("/ai/status", { signal }),
+  /** The interpretation last generated for the analysis - or the engine's own when none was. No model is called. */
+  insight: (analysisId: number, signal?: Signal) => api.get<InsightOut>(`/analyses/${analysisId}/insight`, { signal }),
+  /** Ask the language model (when one is configured) to interpret the analysis; the result is stored. */
+  generateInsight: (analysisId: number) => api.post<InsightOut>(`/analyses/${analysisId}/insight`),
   forecast: (analysisId: number, horizonDays: number, signal?: Signal) =>
     api.get<ForecastResponse>(`/analyses/${analysisId}/forecast`, { signal, query: { horizon_days: horizonDays } }),
 

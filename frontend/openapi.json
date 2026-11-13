@@ -74,6 +74,74 @@
         "title": "AiExplanation",
         "type": "object"
       },
+      "AiStatus": {
+        "description": "Whether a language model is configured.  Never contains the key.",
+        "properties": {
+          "capabilities": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Capabilities",
+            "type": "array"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "endpoint_host": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endpoint Host"
+          },
+          "fallback": {
+            "title": "Fallback",
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "provider",
+          "model",
+          "endpoint_host",
+          "capabilities",
+          "fallback",
+          "role"
+        ],
+        "title": "AiStatus",
+        "type": "object"
+      },
       "AnalysisDetail": {
         "properties": {
           "context": {
@@ -1187,6 +1255,21 @@
         "title": "BaselineStatus",
         "type": "string"
       },
+      "Body_ai_review_api_v1_plants__plant_id__datasets_ai_review_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "description": "CSV or JSON file",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_ai_review_api_v1_plants__plant_id__datasets_ai_review_post",
+        "type": "object"
+      },
       "Body_import_upload_api_v1_plants__plant_id__datasets_post": {
         "properties": {
           "file": {
@@ -1212,6 +1295,48 @@
           "file"
         ],
         "title": "Body_import_upload_api_v1_plants__plant_id__datasets_post",
+        "type": "object"
+      },
+      "Body_preview_upload_api_v1_plants__plant_id__datasets_preview_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "description": "CSV or JSON file",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_preview_upload_api_v1_plants__plant_id__datasets_preview_post",
+        "type": "object"
+      },
+      "Body_rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "description": "CSV or JSON file",
+            "title": "File",
+            "type": "string"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dataset metadata (JSON), see /reference/schema",
+            "title": "Metadata"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post",
         "type": "object"
       },
       "Body_validate_upload_api_v1_plants__plant_id__datasets_validate_post": {
@@ -1314,6 +1439,21 @@
           "provenance": {
             "$ref": "#/components/schemas/Provenance",
             "default": "UNKNOWN"
+          },
+          "reported_as": {
+            "anyOf": [
+              {
+                "enum": [
+                  "RATIO",
+                  "LOSS"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reported As"
           },
           "soiling_method": {
             "anyOf": [
@@ -1600,6 +1740,33 @@
           "notes"
         ],
         "title": "ChannelOut",
+        "type": "object"
+      },
+      "ChannelProposal": {
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "reported_as": {
+            "default": "RATIO",
+            "enum": [
+              "RATIO",
+              "LOSS"
+            ],
+            "title": "Reported As",
+            "type": "string"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "column",
+          "unit"
+        ],
+        "title": "ChannelProposal",
         "type": "object"
       },
       "ChannelProvenance": {
@@ -1958,6 +2125,149 @@
         "title": "CleaningAssumptions",
         "type": "object"
       },
+      "ColumnPreview": {
+        "properties": {
+          "confidence": {
+            "$ref": "#/components/schemas/Confidence",
+            "default": "NONE"
+          },
+          "empty": {
+            "default": 0,
+            "title": "Empty",
+            "type": "integer"
+          },
+          "filled": {
+            "default": 0,
+            "title": "Filled",
+            "type": "integer"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum"
+          },
+          "metric": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Metric"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "numeric": {
+            "default": 0,
+            "title": "Numeric",
+            "type": "integer"
+          },
+          "reason": {
+            "default": "",
+            "title": "Reason",
+            "type": "string"
+          },
+          "reported_as": {
+            "anyOf": [
+              {
+                "enum": [
+                  "RATIO",
+                  "LOSS"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reported As"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ColumnRole"
+          },
+          "samples": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Samples",
+            "type": "array"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "unit_source": {
+            "anyOf": [
+              {
+                "enum": [
+                  "HEADER",
+                  "ASSUMED"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit Source"
+          }
+        },
+        "required": [
+          "name",
+          "role"
+        ],
+        "title": "ColumnPreview",
+        "type": "object"
+      },
+      "ColumnRole": {
+        "enum": [
+          "TIMESTAMP",
+          "DEVICE",
+          "QUANTITY",
+          "CLEANING",
+          "EVENTS",
+          "UNUSED"
+        ],
+        "title": "ColumnRole",
+        "type": "string"
+      },
+      "Confidence": {
+        "enum": [
+          "EXACT",
+          "NAME",
+          "AMBIGUOUS",
+          "NONE"
+        ],
+        "title": "Confidence",
+        "type": "string"
+      },
       "Conflict": {
         "properties": {
           "code": {
@@ -2129,6 +2439,41 @@
           "missing_expected_slots"
         ],
         "title": "CoverageStats",
+        "type": "object"
+      },
+      "CurrentReading": {
+        "properties": {
+          "metric": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          }
+        },
+        "required": [
+          "role"
+        ],
+        "title": "CurrentReading",
         "type": "object"
       },
       "DailyAttribution": {
@@ -2450,6 +2795,80 @@
         "title": "DailyGap",
         "type": "object"
       },
+      "DataNote": {
+        "description": "Something about the file the uploader should look at before importing it.",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Column"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "WARNING",
+              "INFO"
+            ],
+            "title": "Severity",
+            "type": "string"
+          },
+          "suggested_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Suggested Unit"
+          }
+        },
+        "required": [
+          "code",
+          "severity",
+          "message"
+        ],
+        "title": "DataNote",
+        "type": "object"
+      },
+      "DataObservation": {
+        "properties": {
+          "column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Column"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "DataObservation",
+        "type": "object"
+      },
       "DataQualityReport": {
         "properties": {
           "channels": {
@@ -2512,6 +2931,178 @@
         "title": "DataQualityReport",
         "type": "object"
       },
+      "DataReview": {
+        "properties": {
+          "discarded": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Discarded",
+            "type": "array"
+          },
+          "duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Ms"
+          },
+          "fallback_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Reason"
+          },
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "generated_by": {
+            "enum": [
+              "AI",
+              "DETERMINISTIC_ENGINE"
+            ],
+            "title": "Generated By",
+            "type": "string"
+          },
+          "missing_context": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Context",
+            "type": "array"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "notice": {
+            "title": "Notice",
+            "type": "string"
+          },
+          "observations": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/DataObservation"
+            },
+            "title": "Observations",
+            "type": "array"
+          },
+          "prompt_version": {
+            "default": "data-review-1",
+            "title": "Prompt Version",
+            "type": "string"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "suggestions": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/DataSuggestion"
+            },
+            "title": "Suggestions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "generated_by",
+          "generated_at",
+          "notice"
+        ],
+        "title": "DataReview",
+        "type": "object"
+      },
+      "DataSuggestion": {
+        "description": "A change of the mapping a language model proposes.  Checked; never applied without the uploader.",
+        "properties": {
+          "column": {
+            "title": "Column",
+            "type": "string"
+          },
+          "current": {
+            "$ref": "#/components/schemas/CurrentReading"
+          },
+          "metric": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Metric"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "reported_as": {
+            "anyOf": [
+              {
+                "enum": [
+                  "RATIO",
+                  "LOSS"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reported As"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ColumnRole"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          }
+        },
+        "required": [
+          "column",
+          "role",
+          "reason",
+          "current"
+        ],
+        "title": "DataSuggestion",
+        "type": "object"
+      },
       "DatasetDetail": {
         "properties": {
           "archived": {
@@ -2562,6 +3153,14 @@
             ],
             "title": "Disclaimer"
           },
+          "events": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/EvidenceOut"
+            },
+            "title": "Events",
+            "type": "array"
+          },
           "file_format": {
             "title": "File Format",
             "type": "string"
@@ -2606,6 +3205,16 @@
           "name": {
             "title": "Name",
             "type": "string"
+          },
+          "original_file": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OriginalFileOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "period_end": {
             "format": "date",
@@ -2736,6 +3345,16 @@
               }
             ],
             "title": "Disclaimer"
+          },
+          "events": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EventsDeclaration"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "interval_minutes": {
             "anyOf": [
@@ -3942,6 +4561,119 @@
         "title": "EvaluationContext",
         "type": "string"
       },
+      "EventSummary": {
+        "description": "One event read from an event column: it becomes an evidence record attached to the dataset.",
+        "properties": {
+          "device_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Code"
+          },
+          "evidence_type": {
+            "$ref": "#/components/schemas/EvidenceType"
+          },
+          "first_day": {
+            "format": "date",
+            "title": "First Day",
+            "type": "string"
+          },
+          "intervals": {
+            "title": "Intervals",
+            "type": "integer"
+          },
+          "last_day": {
+            "format": "date",
+            "title": "Last Day",
+            "type": "string"
+          },
+          "open_at_end": {
+            "title": "Open At End",
+            "type": "boolean"
+          },
+          "provenance": {
+            "title": "Provenance",
+            "type": "string"
+          },
+          "reference": {
+            "title": "Reference",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_type",
+          "first_day",
+          "last_day",
+          "intervals",
+          "open_at_end",
+          "text",
+          "provenance"
+        ],
+        "title": "EventSummary",
+        "type": "object"
+      },
+      "EventsDeclaration": {
+        "additionalProperties": false,
+        "description": "Columns of the file that hold events rather than quantities.\n\nEvents are not time-series values: each one becomes an evidence record attached to the dataset, with the\nprovenance declared here.  Like every evidence record they can only make the engine more cautious - a logged\nfault is a reason to investigate, never a reason to clean.",
+        "properties": {
+          "cleaning_column": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cleaning Column"
+          },
+          "emulates": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Provenance"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "event_column": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Column"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance",
+            "default": "UNKNOWN"
+          },
+          "source": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "title": "EventsDeclaration",
+        "type": "object"
+      },
       "EvidenceAssessment": {
         "properties": {
           "decisive_evidence": {
@@ -5031,6 +5763,521 @@
         "title": "Hypothesis",
         "type": "object"
       },
+      "Insight": {
+        "description": "An interpretation of one analysis.  Every field says whether the engine or the narrative produced it.",
+        "properties": {
+          "anomalies": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Anomalies",
+            "type": "array"
+          },
+          "causes": {
+            "items": {
+              "$ref": "#/components/schemas/InsightCause"
+            },
+            "title": "Causes",
+            "type": "array"
+          },
+          "checks": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/GuardrailCheck"
+            },
+            "title": "Checks",
+            "type": "array"
+          },
+          "data_quality_assessment": {
+            "title": "Data Quality Assessment",
+            "type": "string"
+          },
+          "data_quality_status": {
+            "title": "Data Quality Status",
+            "type": "string"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/InsightDecision"
+          },
+          "decision_rationale": {
+            "title": "Decision Rationale",
+            "type": "string"
+          },
+          "decisive_evidence": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Decisive Evidence",
+            "type": "array"
+          },
+          "duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Ms"
+          },
+          "economic_implications": {
+            "title": "Economic Implications",
+            "type": "string"
+          },
+          "economics_decision_grade": {
+            "title": "Economics Decision Grade",
+            "type": "boolean"
+          },
+          "economics_status": {
+            "title": "Economics Status",
+            "type": "string"
+          },
+          "executive_summary": {
+            "title": "Executive Summary",
+            "type": "string"
+          },
+          "fallback_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Reason"
+          },
+          "gates": {
+            "items": {
+              "$ref": "#/components/schemas/InsightGate"
+            },
+            "title": "Gates",
+            "type": "array"
+          },
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "generated_by": {
+            "enum": [
+              "AI",
+              "DETERMINISTIC_ENGINE"
+            ],
+            "title": "Generated By",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "missing_information": {
+            "items": {
+              "$ref": "#/components/schemas/InsightItem"
+            },
+            "title": "Missing Information",
+            "type": "array"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "next_steps": {
+            "items": {
+              "$ref": "#/components/schemas/InsightItem"
+            },
+            "title": "Next Steps",
+            "type": "array"
+          },
+          "notice": {
+            "title": "Notice",
+            "type": "string"
+          },
+          "packet_sha256": {
+            "title": "Packet Sha256",
+            "type": "string"
+          },
+          "performance_overview": {
+            "title": "Performance Overview",
+            "type": "string"
+          },
+          "prompt_version": {
+            "default": "analyst-1",
+            "title": "Prompt Version",
+            "type": "string"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "uncertainty": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Uncertainty",
+            "type": "array"
+          },
+          "what_would_change": {
+            "items": {
+              "type": "string"
+            },
+            "title": "What Would Change",
+            "type": "array"
+          }
+        },
+        "required": [
+          "generated_by",
+          "generated_at",
+          "packet_sha256",
+          "notice",
+          "decision",
+          "gates",
+          "decisive_evidence",
+          "what_would_change",
+          "data_quality_status",
+          "economics_status",
+          "economics_decision_grade",
+          "executive_summary",
+          "performance_overview",
+          "anomalies",
+          "causes",
+          "data_quality_assessment",
+          "economic_implications",
+          "decision_rationale",
+          "uncertainty",
+          "next_steps",
+          "missing_information",
+          "limitations"
+        ],
+        "title": "Insight",
+        "type": "object"
+      },
+      "InsightCause": {
+        "properties": {
+          "active_now": {
+            "default": false,
+            "title": "Active Now",
+            "type": "boolean"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "context": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Context",
+            "type": "array"
+          },
+          "engine_summary": {
+            "title": "Engine Summary",
+            "type": "string"
+          },
+          "engine_support": {
+            "title": "Engine Support",
+            "type": "string"
+          },
+          "estimated_loss_kwh": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Loss Kwh"
+          },
+          "evidence_against": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Evidence Against",
+            "type": "array"
+          },
+          "evidence_for": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Evidence For",
+            "type": "array"
+          },
+          "interpretation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interpretation"
+          },
+          "missing_evidence": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Evidence",
+            "type": "array"
+          },
+          "share_of_gap_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share Of Gap Pct"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "category",
+          "title",
+          "engine_support",
+          "engine_summary"
+        ],
+        "title": "InsightCause",
+        "type": "object"
+      },
+      "InsightDecision": {
+        "description": "The engine's decision, restated by code.",
+        "properties": {
+          "authorization_note": {
+            "title": "Authorization Note",
+            "type": "string"
+          },
+          "headline": {
+            "title": "Headline",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "operational_authorization": {
+            "title": "Operational Authorization",
+            "type": "boolean"
+          },
+          "reason_code": {
+            "title": "Reason Code",
+            "type": "string"
+          },
+          "rule": {
+            "title": "Rule",
+            "type": "string"
+          },
+          "simulated": {
+            "title": "Simulated",
+            "type": "boolean"
+          },
+          "statement": {
+            "title": "Statement",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "label",
+          "rule",
+          "reason_code",
+          "headline",
+          "simulated",
+          "operational_authorization",
+          "statement",
+          "authorization_note"
+        ],
+        "title": "InsightDecision",
+        "type": "object"
+      },
+      "InsightGate": {
+        "properties": {
+          "basis": {
+            "title": "Basis",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "passed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passed"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "passed",
+          "basis"
+        ],
+        "title": "InsightGate",
+        "type": "object"
+      },
+      "InsightItem": {
+        "description": "A step or a missing input: the text is the engine's, the reason is the narrative's.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "why": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Why"
+          }
+        },
+        "required": [
+          "id",
+          "text"
+        ],
+        "title": "InsightItem",
+        "type": "object"
+      },
+      "InsightOut": {
+        "properties": {
+          "history": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/InsightRecord"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "insight": {
+            "$ref": "#/components/schemas/Insight"
+          },
+          "stored": {
+            "title": "Stored",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "stored",
+          "id",
+          "insight"
+        ],
+        "title": "InsightOut",
+        "type": "object"
+      },
+      "InsightRecord": {
+        "description": "One stored insight, without its text.",
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "fell_back": {
+            "title": "Fell Back",
+            "type": "boolean"
+          },
+          "generated_by": {
+            "title": "Generated By",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          }
+        },
+        "required": [
+          "id",
+          "created_at",
+          "generated_by",
+          "provider",
+          "model",
+          "fell_back"
+        ],
+        "title": "InsightRecord",
+        "type": "object"
+      },
       "InspectionFinding": {
         "enum": [
           "SOILING_HEAVY",
@@ -5301,6 +6548,77 @@
         "title": "LossAttribution",
         "type": "object"
       },
+      "MappingProposal": {
+        "properties": {
+          "channels": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ChannelProposal"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/Metric"
+            },
+            "title": "Channels",
+            "type": "object"
+          },
+          "cleaning_column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cleaning Column"
+          },
+          "device_column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Column"
+          },
+          "event_column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Column"
+          },
+          "interval_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Minutes"
+          },
+          "timestamp_column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timestamp Column"
+          }
+        },
+        "title": "MappingProposal",
+        "type": "object"
+      },
       "MeteringBoundary": {
         "enum": [
           "GRID_METER",
@@ -5400,6 +6718,71 @@
           "end"
         ],
         "title": "NasaPowerRequest",
+        "type": "object"
+      },
+      "OriginalFileOut": {
+        "description": "The uploaded file, kept byte for byte.",
+        "properties": {
+          "content_type": {
+            "title": "Content Type",
+            "type": "string"
+          },
+          "file_name": {
+            "title": "File Name",
+            "type": "string"
+          },
+          "rejections": {
+            "default": 0,
+            "title": "Rejections",
+            "type": "integer"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size_bytes": {
+            "title": "Size Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "file_name",
+          "content_type",
+          "size_bytes",
+          "sha256"
+        ],
+        "title": "OriginalFileOut",
+        "type": "object"
+      },
+      "OverlapOut": {
+        "description": "A dataset of the plant that already covers some of the same days.",
+        "properties": {
+          "dataset_id": {
+            "title": "Dataset Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "period_end": {
+            "format": "date",
+            "title": "Period End",
+            "type": "string"
+          },
+          "period_start": {
+            "format": "date",
+            "title": "Period Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataset_id",
+          "name",
+          "period_start",
+          "period_end"
+        ],
+        "title": "OverlapOut",
         "type": "object"
       },
       "PerformanceForecast": {
@@ -7294,8 +8677,34 @@
             ],
             "title": "Duplicate Of"
           },
+          "events_stored": {
+            "default": 0,
+            "title": "Events Stored",
+            "type": "integer"
+          },
+          "file_sha256": {
+            "default": "",
+            "title": "File Sha256",
+            "type": "string"
+          },
+          "overlapping": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/OverlapOut"
+            },
+            "title": "Overlapping",
+            "type": "array"
+          },
           "report": {
             "$ref": "#/components/schemas/ValidationReport"
+          },
+          "same_file_as": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Same File As",
+            "type": "array"
           },
           "stored": {
             "default": false,
@@ -7311,6 +8720,102 @@
           "report"
         ],
         "title": "UploadCheck",
+        "type": "object"
+      },
+      "UploadPreview": {
+        "description": "What a file contains and what its columns probably are.  Nothing has been stored or declared.",
+        "properties": {
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnPreview"
+            },
+            "title": "Columns",
+            "type": "array"
+          },
+          "decimal_comma": {
+            "title": "Decimal Comma",
+            "type": "boolean"
+          },
+          "embedded_metadata": {
+            "title": "Embedded Metadata",
+            "type": "boolean"
+          },
+          "file_format": {
+            "title": "File Format",
+            "type": "string"
+          },
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/DataNote"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "proposal": {
+            "$ref": "#/components/schemas/MappingProposal"
+          },
+          "rows_total": {
+            "title": "Rows Total",
+            "type": "integer"
+          },
+          "sample_rows": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Sample Rows",
+            "type": "array"
+          }
+        },
+        "required": [
+          "file_format",
+          "rows_total",
+          "columns",
+          "sample_rows",
+          "proposal",
+          "notes",
+          "embedded_metadata",
+          "decimal_comma"
+        ],
+        "title": "UploadPreview",
+        "type": "object"
+      },
+      "UploadPreviewOut": {
+        "description": "A file as it was received, and what its columns probably are.  Nothing was validated or stored.",
+        "properties": {
+          "file_name": {
+            "title": "File Name",
+            "type": "string"
+          },
+          "file_sha256": {
+            "title": "File Sha256",
+            "type": "string"
+          },
+          "preview": {
+            "$ref": "#/components/schemas/UploadPreview"
+          },
+          "same_file_as": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Same File As",
+            "type": "array"
+          },
+          "size_bytes": {
+            "title": "Size Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "file_name",
+          "size_bytes",
+          "file_sha256",
+          "preview"
+        ],
+        "title": "UploadPreviewOut",
         "type": "object"
       },
       "UserCreate": {
@@ -7493,6 +8998,17 @@
             "title": "Examples",
             "type": "array"
           },
+          "hint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hint"
+          },
           "message": {
             "title": "Message",
             "type": "string"
@@ -7531,6 +9047,13 @@
               "type": "string"
             },
             "title": "Devices",
+            "type": "array"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/EventSummary"
+            },
+            "title": "Events",
             "type": "array"
           },
           "file_format": {
@@ -7610,6 +9133,11 @@
               }
             ],
             "title": "Period Start"
+          },
+          "rejections_total": {
+            "default": 0,
+            "title": "Rejections Total",
+            "type": "integer"
           },
           "rows_device": {
             "title": "Rows Device",
@@ -7713,6 +9241,37 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/ai/status": {
+      "get": {
+        "description": "Never contains the key. Without a model every feature below still answers, with the engine's own text.",
+        "operationId": "ai_status_api_v1_ai_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "Whether a language model is configured, and which",
+        "tags": [
+          "analyses",
+          "language model"
+        ]
+      }
+    },
     "/api/v1/analyses/{analysis_id}": {
       "get": {
         "operationId": "get_analysis_api_v1_analyses__analysis_id__get",
@@ -7874,6 +9433,172 @@
         "summary": "Unvalidated reference projections of the performance index",
         "tags": [
           "analyses"
+        ]
+      }
+    },
+    "/api/v1/analyses/{analysis_id}/insight": {
+      "get": {
+        "description": "The interpretation last generated for the analysis, with what wrote it and when. When none was generated yet, the deterministic engine's own is returned (`stored: false`): no model is called by a read.",
+        "operationId": "get_insight_api_v1_analyses__analysis_id__insight_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "title": "Analysis Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsightOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "The diagnostic analysis of an analysis",
+        "tags": [
+          "analyses",
+          "language model"
+        ]
+      },
+      "post": {
+        "description": "Asks the configured language model to interpret the engine's findings: what they mean, how the evidence weighs for and against each possible cause, what is uncertain or missing, and what matters most among the steps the engine proposed. The decision, the gates, the support levels, the evidence and the figures are copied from the engine by the server; the model writes the narrative only, and its text is checked against the findings. Without a model, or when a check fails, the engine's own text is used. Whatever was produced is stored with its origin.",
+        "operationId": "create_insight_api_v1_analyses__analysis_id__insight_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "title": "Analysis Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsightOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "Generate the diagnostic analysis",
+        "tags": [
+          "analyses",
+          "language model"
+        ]
+      }
+    },
+    "/api/v1/analyses/{analysis_id}/operational-report.{fmt}": {
+      "get": {
+        "description": "The diagnostic analysis as a document of eight sections: executive summary, performance, anomalies, diagnostic analysis, data quality, economic implications, recommended actions, limitations. Each section says whether a language model or the engine wrote it; the decision, the gates and the annex tables are always the engine's. Built from the insight last generated - or from the engine's own when none was. No model is called by an export.",
+        "operationId": "operational_report_api_v1_analyses__analysis_id__operational_report__fmt__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "title": "Analysis Id",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "fmt",
+            "required": true,
+            "schema": {
+              "enum": [
+                "html",
+                "pdf",
+                "json"
+              ],
+              "title": "Fmt",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {},
+              "application/pdf": {},
+              "text/html": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "Export the operational report (HTML, PDF or JSON)",
+        "tags": [
+          "analyses",
+          "language model"
         ]
       }
     },
@@ -8228,6 +9953,100 @@
         ]
       }
     },
+    "/api/v1/datasets/{dataset_id}/file": {
+      "get": {
+        "description": "Always sent as an attachment. 404 `NO_ORIGINAL_FILE` for a dataset that did not come from an upload (demonstration scenario, NASA POWER) or that was imported before files were kept.",
+        "operationId": "get_original_file_api_v1_datasets__dataset_id__file_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataset_id",
+            "required": true,
+            "schema": {
+              "title": "Dataset Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/octet-stream": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "The file the dataset was imported from, byte for byte",
+        "tags": [
+          "datasets"
+        ]
+      }
+    },
+    "/api/v1/datasets/{dataset_id}/rejected-rows.csv": {
+      "get": {
+        "description": "As recorded at import. A dataset in which nothing was rejected returns the header line only.",
+        "operationId": "get_rejected_rows_api_v1_datasets__dataset_id__rejected_rows_csv_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataset_id",
+            "required": true,
+            "schema": {
+              "title": "Dataset Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/csv": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "The rows rejected when the dataset was imported, with the reasons (CSV)",
+        "tags": [
+          "datasets"
+        ]
+      }
+    },
     "/api/v1/datasets/{dataset_id}/series": {
       "get": {
         "operationId": "get_series_api_v1_datasets__dataset_id__series_get",
@@ -8275,6 +10094,52 @@
           }
         ],
         "summary": "Plant-level time series in canonical units",
+        "tags": [
+          "datasets"
+        ]
+      }
+    },
+    "/api/v1/datasets/{dataset_id}/validation-report.json": {
+      "get": {
+        "operationId": "get_validation_report_api_v1_datasets__dataset_id__validation_report_json_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataset_id",
+            "required": true,
+            "schema": {
+              "title": "Dataset Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "The validation report and the declarations of a dataset (JSON)",
         "tags": [
           "datasets"
         ]
@@ -8764,7 +10629,7 @@
         ]
       },
       "post": {
-        "description": "Step 2 of an import: the file is validated again and stored if it is acceptable. Stored datasets are immutable.",
+        "description": "Step 3 of an import: the file is validated again and stored if it is acceptable - the values, the declarations, the file itself byte for byte, and the events it carries as evidence records. Stored datasets are immutable.",
         "operationId": "import_upload_api_v1_plants__plant_id__datasets_post",
         "parameters": [
           {
@@ -8823,9 +10688,189 @@
         ]
       }
     },
+    "/api/v1/plants/{plant_id}/datasets/ai-review": {
+      "post": {
+        "description": "The model is given the column names, simple statistics and a few sample values - never the file - together with the deterministic proposal. It returns suggestions (another quantity or unit for a column), observations on the values, and context that is missing. Every suggestion is checked against the file and the accepted units; none is applied by the server, none names a provenance, and no value is ever changed. Without a model the answer says so and is empty.",
+        "operationId": "ai_review_api_v1_plants__plant_id__datasets_ai_review_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "plant_id",
+            "required": true,
+            "schema": {
+              "title": "Plant Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_ai_review_api_v1_plants__plant_id__datasets_ai_review_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataReview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "Ask the language model to review the proposed mapping of a file",
+        "tags": [
+          "datasets",
+          "language model"
+        ]
+      }
+    },
+    "/api/v1/plants/{plant_id}/datasets/preview": {
+      "post": {
+        "description": "Step 1 of an import. Returns the first rows as they are in the file, what each column probably is (quantity and unit, read from the header), and what looks odd in the values. The proposal is deterministic and never includes a provenance. Nothing is validated, declared or written.",
+        "operationId": "preview_upload_api_v1_plants__plant_id__datasets_preview_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "plant_id",
+            "required": true,
+            "schema": {
+              "title": "Plant Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_preview_upload_api_v1_plants__plant_id__datasets_preview_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadPreviewOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "Read a file and propose what its columns are",
+        "tags": [
+          "datasets"
+        ]
+      }
+    },
+    "/api/v1/plants/{plant_id}/datasets/rejected-rows": {
+      "post": {
+        "description": "The rows that have a rejected cell, exactly as they are in the file, with the row number quoted in the validation report and the reason next to each. Nothing is written.",
+        "operationId": "rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "plant_id",
+            "required": true,
+            "schema": {
+              "title": "Plant Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_rejected_rows_api_v1_plants__plant_id__datasets_rejected_rows_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/csv": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "The rows of a file that would be rejected, with the reasons (CSV)",
+        "tags": [
+          "datasets"
+        ]
+      }
+    },
     "/api/v1/plants/{plant_id}/datasets/validate": {
       "post": {
-        "description": "Step 1 of an import. Returns the complete validation report. Nothing is written.",
+        "description": "Step 2 of an import. Returns the complete validation report. Nothing is written.",
         "operationId": "validate_upload_api_v1_plants__plant_id__datasets_validate_post",
         "parameters": [
           {
@@ -9696,6 +11741,54 @@
           }
         ],
         "summary": "Data dictionary: columns, units, declarations",
+        "tags": [
+          "reference"
+        ]
+      }
+    },
+    "/api/v1/reference/templates/{name}": {
+      "get": {
+        "description": "The templates hold column names and no data. The examples hold invented values for a hypothetical plant: they show the format and describe no real installation.",
+        "operationId": "template_api_v1_reference_templates__name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {},
+              "text/csv": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "AccessTokenHeader": []
+          }
+        ],
+        "summary": "Download an upload template or example (CSV or JSON)",
         "tags": [
           "reference"
         ]

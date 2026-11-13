@@ -1,0 +1,51 @@
+{
+ "discarded": [
+  "'Operator': no cell of the column is a number, so it cannot hold a quantity",
+  "an observation quoting figures that are not in the file summary (12.5)"
+ ],
+ "duration_ms": 850,
+ "fallback_reason": null,
+ "generated_at": "2026-07-01T08:00:00Z",
+ "generated_by": "AI",
+ "missing_context": [
+  "Whether the irradiance sensor is in the plane of the modules should be confirmed."
+ ],
+ "model": "example-model",
+ "notice": "Each suggestion was checked against the file and against the units SolarWise accepts. None is applied until you accept it, and the file is validated in the same way whatever you accept.",
+ "observations": [
+  {
+   "column": "Energy (kWh)",
+   "text": "Energy (kWh) holds one cell that is not a number, 'abc'."
+  }
+ ],
+ "prompt_version": "data-review-1",
+ "provider": "openai-compatible",
+ "suggestions": [
+  {
+   "column": "T2",
+   "current": {
+    "metric": null,
+    "role": "UNUSED",
+    "unit": null
+   },
+   "metric": "ambient_temp",
+   "reason": "T2 stays below the module temperature on every row, as an air temperature does.",
+   "reported_as": null,
+   "role": "QUANTITY",
+   "unit": "degC"
+  },
+  {
+   "column": "Irradiance (W/m2)",
+   "current": {
+    "metric": "poa_irradiation",
+    "role": "QUANTITY",
+    "unit": "w/m2"
+   },
+   "metric": "ghi",
+   "reason": "The header does not name the plane; a horizontal pyranometer is a common default.",
+   "reported_as": null,
+   "role": "QUANTITY",
+   "unit": "w/m2"
+  }
+ ]
+}

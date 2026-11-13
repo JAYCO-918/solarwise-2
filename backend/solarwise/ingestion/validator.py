@@ -9,13 +9,17 @@ validation report.  The rules, in short:
 * problems that make the whole file unusable (unknown unit, no timestamp
   column, capacity mismatch ...) are ``BLOCKING`` and the import is refused;
 * what the uploader did not declare (provenance, baseline properties,
-  uncertainty) is reported and recorded as unknown.
+  uncertainty) is reported and recorded as unknown;
+* cleaning marks and alarm texts found in declared event columns become
+  evidence records attached to the dataset - they are never turned into
+  numbers, and they can only make the engine more cautious.
 """
 
 from __future__ import annotations
 
 import itertools
 import math
+import re
 from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -33,6 +37,8 @@ from solarwise.core.models import (
     ChannelMeta,
     DeviceObservation,
     DeviceSpec,
+    EvidenceRecord,
+    EvidenceType,
     Metric,
     Observation,
     PlantSpec,
@@ -48,6 +54,71 @@ MISSING_TOKENS = frozenset({"", "na", "n/a", "nan", "null", "none", "-", "--", "
 #: Margin above nameplate before an energy value is called inconsistent with capacity.
 CAPACITY_MARGIN = 1.05
 MAX_EXAMPLES = 5
+#: Mean irradiance above this is not physically plausible at ground level [W/m2].
+MAX_IRRADIANCE_W_M2 = 1600.0
+#: Rejected cells and rows listed in the "rejected rows" download.  A file with more is counted in full, listed up
+#: to here, and the download says so.
+MAX_REJECTIONS = 20_000
+#: Separate events one file may bring; more than this means the column is a status column, not an event log.
+MAX_EVENTS = 500
+#: Cells of an event column that mean "nothing happened".
+NO_EVENT_TOKENS = MISSING_TOKENS | frozenset(
+    {"0", "ok", "no", "non", "normal", "false", "faux", "aucun", "aucune", "ras", "no alarm", "no event", "running"}
+)
+#: Cells of a cleaning column that mean "cleaned in this interval".
+CLEANING_TOKENS = frozenset({"1", "x", "yes", "y", "oui", "true", "vrai", "cleaned", "cleaning", "nettoyage", "done"})
+
+#: How the text of an event is read.  First match wins; a text that matches nothing is recorded as OTHER, which the
+#: engine shows but does not act on - and the validation report says so.
+EVENT_VOCABULARY: tuple[tuple[EvidenceType, re.Pattern[str]], ...] = (
+    (EvidenceType.CLEANING_EVENT, re.compile(r"clean|wash|nettoy|lavage", re.IGNORECASE)),
+    (EvidenceType.CURTAILMENT_EVENT, re.compile(r"curtail|dispatch|limitation|[eé]cr[eê]t", re.IGNORECASE)),
+    (EvidenceType.GRID_OUTAGE, re.compile(r"grid|outage|blackout|r[eé]seau|coupure", re.IGNORECASE)),
+    (EvidenceType.SENSOR_FAULT, re.compile(r"sensor|pyranomet|capteur|logger|communication|\bcomm?s?\b", re.IGNORECASE)),
+    (EvidenceType.SHADING_OBSERVATION, re.compile(r"shad|ombr", re.IGNORECASE)),
+    (EvidenceType.INVERTER_FAULT, re.compile(r"inverter|onduleur|\binv\b|trip|tracker|fault|d[eé]faut|panne|failure", re.IGNORECASE)),
+)
+
+#: What to do about an issue, in the words of somebody who runs a plant.
+ISSUE_HINTS: dict[str, str] = {
+    "NO_TIMESTAMP_COLUMN": "Choose the column that holds the date or the date and time of each row.",
+    "NO_DATA_COLUMNS": "Say which column holds the energy produced. Without it there is nothing to analyse.",
+    "INVALID_UNIT": "Choose the unit the file really uses for this column.",
+    "UNKNOWN_TIMEZONE": "Use a zone name such as Africa/Algiers.",
+    "CAPACITY_MISMATCH": "Check that the file belongs to this plant, or correct the installed capacity of the plant.",
+    "INTERVAL_UNKNOWN": "A file with a single row has no interval: choose the interval yourself.",
+    "UNSUPPORTED_INTERVAL": "Export the data at 15, 30 or 60 minutes, or one row per day.",
+    "INTERVAL_MISMATCH": "Choose the interval the timestamps really have, or let it be read from the timestamps.",
+    "ENERGY_EXCEEDS_CAPACITY": "Most often the unit is wrong (Wh read as kWh, or a counter reading instead of the "
+                               "energy of each interval). Otherwise check the capacity of the plant.",
+    "NO_USABLE_DATA": "No row survived the checks above: correct the points listed first.",
+    "INVALID_TIMESTAMP": "Write dates as 2026-05-01 or 01/05/2026, with the time as 13:00 if the data are not daily.",
+    "MISALIGNED_TIMESTAMP": "Every row must start on the interval grid (for daily data: at midnight).",
+    "NON_NUMERIC": "These cells hold text where a number is expected. Correct them in the file, or leave them empty "
+                   "if the value is not known.",
+    "NON_FINITE": "Replace these cells by an empty cell if the value is not known.",
+    "NEGATIVE_VALUE": "A negative value here is a logger artefact. Leave the cell empty if the value is not known.",
+    "OUT_OF_RANGE": "Check the unit of the column and the sensor. Values outside the range are not used.",
+    "CONFLICTING_DUPLICATES": "Two rows give different values for the same moment. Remove the wrong one from the file.",
+    "DUPLICATE_ROWS": "Nothing to do: identical copies were merged.",
+    "DECLARED_COLUMN_MISSING": "The declaration names a column the file does not have. Check the spelling.",
+    "UNKNOWN_DEVICE": "Register these devices on the plant (tab Devices) and upload the file again.",
+    "PROVENANCE_NOT_DECLARED": "Say where the column comes from. Until then it cannot count as a measurement.",
+    "BASELINE_NOT_DESCRIBED": "Say how the expected energy was computed and what it already accounts for.",
+    "SOILING_METHOD_NOT_DECLARED": "Say how the soiling figure is obtained (soiling station, clean reference module ...).",
+    "IRRADIANCE_CONVERTED": "Check that the column really holds the mean over each interval. If it holds spot values "
+                            "or daylight-only means, supply the irradiation (kWh/m2) instead.",
+    "SOILING_LOSS_CONVERTED": "Nothing to do if the column really holds a loss (0 = clean).",
+    "EVENT_UNCLASSIFIED": "Use the words of the vocabulary (inverter fault, grid outage, curtailment, sensor fault, "
+                          "shading, cleaning) so that the event counts in the diagnosis.",
+    "TOO_MANY_EVENTS": "Map a column that is empty when nothing happens, not a status column.",
+    "TIME_GAPS": "Nothing to do if the data really are missing. Missing intervals are counted, never filled in.",
+    "EMPTY_CHANNEL": "The column is there but holds no usable value.",
+    "ALL_ZERO_PRODUCTION": "Check that the right column was chosen for the energy.",
+    "FUTURE_TIMESTAMP": "Check the year and the day/month order of the dates.",
+    "TIMEZONE_DIFFERS_FROM_PLANT": "Check which of the two time zones is right.",
+    "EXPECTED_EXCEEDS_CAPACITY": "Check that the expected energy refers to this plant and to the same unit.",
+}
 
 
 class IssueSeverity(StrEnum):
@@ -66,6 +137,34 @@ class ValidationIssue(BaseModel):
     column: str | None = None
     count: int = 1
     examples: list[str] = Field(default_factory=list)
+    #: What to do about it, in plain language (``None`` when the message says it all).
+    hint: str | None = None
+
+
+class EventSummary(BaseModel):
+    """One event read from an event column: it becomes an evidence record attached to the dataset."""
+
+    reference: str
+    evidence_type: EvidenceType
+    #: First and last local day the event is marked on.
+    first_day: date
+    last_day: date
+    intervals: int
+    #: Still marked on the last row of the file: treated as not closed.
+    open_at_end: bool
+    text: str
+    device_code: str | None = None
+    provenance: str
+
+
+class Rejection(BaseModel):
+    """One rejected cell or row, for the "rejected rows" download."""
+
+    row: int
+    column: str | None
+    value: str
+    code: str
+    problem: str
 
 
 class ChannelSummary(BaseModel):
@@ -104,6 +203,10 @@ class ValidationReport(BaseModel):
     devices: list[str]
     is_synthetic: bool
     issues: list[ValidationIssue]
+    #: Events read from the declared event columns (empty for a file without any).
+    events: list[EventSummary] = Field(default_factory=list)
+    #: Rejected cells and rows (every one of them, not only the examples quoted in the issues).
+    rejections_total: int = 0
 
 
 @dataclass
@@ -118,6 +221,8 @@ class ParsedDataset:
     channels: dict[Metric, ChannelMeta]
     device_tag: ProvenanceTag | None
     baseline: BaselineDescriptor | None
+    #: Evidence records built from the event columns of the file.
+    events: list[EvidenceRecord] = field(default_factory=list)
 
 
 class _Issues:
@@ -131,7 +236,9 @@ class _Issues:
         key = (code, column)
         issue = self._items.get(key)
         if issue is None:
-            issue = ValidationIssue(code=code, severity=severity, message=message, column=column, count=0)
+            issue = ValidationIssue(
+                code=code, severity=severity, message=message, column=column, count=0, hint=ISSUE_HINTS.get(code)
+            )
             self._items[key] = issue
         issue.count += count
         if example is not None and len(issue.examples) < MAX_EXAMPLES:
@@ -158,6 +265,8 @@ class _Mapped:
     rejected: int = 0
     minimum: float | None = None
     maximum: float | None = None
+    #: The column holds mean irradiance [W/m2]; it becomes irradiation once the interval is known.
+    irradiance: bool = False
 
     def seen(self, value: float) -> None:
         self.values += 1
@@ -171,6 +280,21 @@ class _Row:
     start_utc: datetime
     device: str | None
     values: dict[str, float | None] = field(default_factory=dict)
+    #: Text of the event column on this row, and whether the cleaning column is marked.
+    event: str | None = None
+    cleaned: bool = False
+
+
+def classify_event(text: str) -> EvidenceType:
+    """Evidence type of an event text, by the published vocabulary; ``OTHER`` when no word of it matches."""
+    for evidence_type, pattern in EVENT_VOCABULARY:
+        if pattern.search(text):
+            return evidence_type
+    return EvidenceType.OTHER
+
+
+def _cell_text(raw: Any) -> str:
+    return "" if raw is None else " ".join(str(raw).split())
 
 
 _DATE_FORMATS = ("%d/%m/%Y %H:%M:%S", "%d/%m/%Y %H:%M", "%d/%m/%Y")
@@ -245,12 +369,23 @@ def validate_table(
     plant: PlantSpec,
     known_devices: Mapping[str, DeviceSpec] | None = None,
     now: datetime | None = None,
+    rejections: list[Rejection] | None = None,
 ) -> tuple[ValidationReport, ParsedDataset | None]:
-    """Validate ``table`` against ``metadata`` and the plant configuration."""
+    """Validate ``table`` against ``metadata`` and the plant configuration.
+
+    ``rejections``, when given, receives every rejected cell and row (up to :data:`MAX_REJECTIONS`).
+    """
     issues = _Issues()
     known_devices = known_devices or {}
     now = now or datetime.now(UTC)
     columns = set(table.columns)
+    rejections_total = 0
+
+    def reject(row: int, column: str | None, value: Any, code: str, problem: str) -> None:
+        nonlocal rejections_total
+        rejections_total += 1
+        if rejections is not None and len(rejections) < MAX_REJECTIONS:
+            rejections.append(Rejection(row=row, column=column, value=_cell_text(value)[:200], code=code, problem=problem))
 
     def report(parsed: ParsedDataset | None, **stats: Any) -> tuple[ValidationReport, ParsedDataset | None]:
         blocking = issues.blocking
@@ -268,7 +403,7 @@ def validate_table(
             "rows_plant": 0, "rows_device": 0, "rows_rejected": 0, "values_rejected": 0,
             "interval_minutes": None, "timezone": None, "period_start": None, "period_end": None,
             "first_local_day": None, "last_local_day": None, "missing_intervals": 0,
-            "channels": [], "devices": [],
+            "channels": [], "devices": [], "events": [],
         }
         base.update(stats)
         return (
@@ -280,6 +415,7 @@ def validate_table(
                 rows_total=len(table.rows),
                 is_synthetic=metadata.is_synthetic,
                 issues=items,
+                rejections_total=rejections_total,
                 **base,
             ),
             None if blocking else parsed,
@@ -311,6 +447,21 @@ def validate_table(
     has_device_column = metadata.device_column in columns
     if has_device_column:
         used_columns.add(metadata.device_column)
+    events = metadata.events
+    cleaning_column = events.cleaning_column if events is not None else None
+    event_column = events.event_column if events is not None else None
+    for name in (cleaning_column, event_column):
+        if name is None:
+            continue
+        if name in columns:
+            used_columns.add(name)
+        else:
+            issues.add("DECLARED_COLUMN_MISSING", IssueSeverity.ERROR,
+                       f"The event column '{name}' is declared but is not in the file.", column=name)
+    if cleaning_column not in columns:
+        cleaning_column = None
+    if event_column not in columns:
+        event_column = None
     for metric in PLANT_LEVEL_METRICS:
         spec = METRIC_SPECS[metric]
         declaration = metadata.channels.get(metric)
@@ -327,13 +478,20 @@ def validate_table(
         except UnitError as exc:
             issues.add("INVALID_UNIT", IssueSeverity.BLOCKING, f"{source_column}: {exc}.", column=source_column)
             continue
-        if dimension != spec.dimension:
+        # Irradiance (a power per area) is accepted where irradiation (an energy per area) is stored: the mean over
+        # an interval times the length of the interval is the irradiation of that interval.
+        irradiance = dimension == "irradiance" and spec.dimension == "irradiation"
+        if dimension != spec.dimension and not irradiance:
             issues.add("INVALID_UNIT", IssueSeverity.BLOCKING,
                        f"{source_column}: unit '{unit_in}' is a unit of {dimension}, but this channel holds "
                        f"{spec.dimension} (stored in {spec.unit}).", column=source_column)
             continue
-        mapped[metric] = _Mapped(metric, source_column, unit_in, declaration or ChannelDeclaration())
+        mapped[metric] = _Mapped(metric, source_column, unit_in, declaration or ChannelDeclaration(), irradiance=irradiance)
         used_columns.add(source_column)
+        if metric is Metric.SOILING_RATIO and declaration is not None and declaration.reported_as == "LOSS":
+            issues.add("SOILING_LOSS_CONVERTED", IssueSeverity.INFO,
+                       f"Column '{source_column}' is declared as a soiling loss. It is stored as the soiling ratio "
+                       "the engine uses: ratio = 1 - loss.", column=source_column)
         if declaration is None or declaration.provenance is Provenance.UNKNOWN:
             issues.add("PROVENANCE_NOT_DECLARED", IssueSeverity.WARNING,
                        f"No provenance declared for '{source_column}': it is recorded as UNKNOWN and cannot "
@@ -374,6 +532,8 @@ def validate_table(
             issues.add("INVALID_TIMESTAMP", IssueSeverity.ERROR, "Rows with an unusable timestamp were rejected.",
                        column=metadata.timestamp_column,
                        example=f"row {number}: '{raw.get(metadata.timestamp_column)}' - {problem}")
+            reject(number, metadata.timestamp_column, raw.get(metadata.timestamp_column), "INVALID_TIMESTAMP",
+                   f"the whole row was rejected: {problem}")
             continue
         if problem == "AMBIGUOUS":
             issues.add("AMBIGUOUS_LOCAL_TIME", IssueSeverity.WARNING,
@@ -388,6 +548,18 @@ def validate_table(
             text = "" if cell is None else str(cell).strip()
             device = text or None
         row = _Row(number=number, start_utc=moment, device=device)
+        if event_column is not None:
+            text = _cell_text(raw.get(event_column))
+            if text.lower() not in NO_EVENT_TOKENS:
+                row.event = text
+        if cleaning_column is not None:
+            mark = _cell_text(raw.get(cleaning_column)).lower()
+            if mark in CLEANING_TOKENS:
+                row.cleaned = True
+            elif mark not in NO_EVENT_TOKENS:
+                issues.add("CLEANING_MARK_NOT_UNDERSTOOD", IssueSeverity.WARNING,
+                           f"Cells of '{cleaning_column}' that are neither a mark (1, yes, x ...) nor empty were not "
+                           "read as a cleaning.", column=cleaning_column, example=f"row {number}: '{mark[:40]}'")
 
         targets = [device_metric] if device is not None else list(mapped.values())
         for channel in targets:
@@ -396,19 +568,51 @@ def validate_table(
             if problem is not None:
                 channel.rejected += 1
                 values_rejected += 1
-                issues.add("NON_NUMERIC" if problem == "not a number" else "NON_FINITE", IssueSeverity.ERROR,
+                code = "NON_NUMERIC" if problem == "not a number" else "NON_FINITE"
+                issues.add(code, IssueSeverity.ERROR,
                            "Cells that are not finite numbers were rejected and stored as missing.",
                            column=channel.source_column,
                            example=f"row {number}: '{raw.get(channel.source_column)}'")
+                reject(number, channel.source_column, raw.get(channel.source_column), code,
+                       f"{problem}; stored as missing, not as zero")
                 row.values[spec.column] = None
                 continue
             if value is None:
                 channel.missing += 1
                 row.values[spec.column] = None
                 continue
-            converted = to_canonical(value, channel.unit_in, expected_dimension=spec.dimension)
+            if channel.irradiance:
+                # Kept in W/m2 for now: the irradiation follows once the interval is known.
+                converted = to_canonical(value, channel.unit_in, expected_dimension="irradiance")
+                if converted > MAX_IRRADIANCE_W_M2:
+                    channel.rejected += 1
+                    values_rejected += 1
+                    issues.add("OUT_OF_RANGE", IssueSeverity.ERROR,
+                               f"Values of '{channel.source_column}' above {MAX_IRRADIANCE_W_M2:g} W/m2 are not "
+                               "physically plausible at ground level; they were rejected and stored as missing.",
+                               column=channel.source_column, example=f"row {number}: {value:g}")
+                    reject(number, channel.source_column, raw.get(channel.source_column), "OUT_OF_RANGE",
+                           f"above {MAX_IRRADIANCE_W_M2:g} W/m2; stored as missing")
+                    row.values[spec.column] = None
+                    continue
+            else:
+                converted = to_canonical(value, channel.unit_in, expected_dimension=spec.dimension)
             if channel.metric is Metric.RELATIVE_HUMIDITY:
                 converted *= 100.0  # stored in percent
+            if channel.metric is Metric.SOILING_RATIO and channel.declaration.reported_as == "LOSS":
+                converted = 1.0 - converted
+                if not (spec.minimum or 0.0) <= converted <= (spec.maximum or 1.0):
+                    # Said in the terms of the file: the cell holds a loss, not the ratio it is turned into.
+                    channel.rejected += 1
+                    values_rejected += 1
+                    issues.add("OUT_OF_RANGE", IssueSeverity.ERROR,
+                               f"Values of '{channel.source_column}' that are not a possible soiling loss (between 0 and "
+                               "100 % of the output of a clean array) were rejected and stored as missing (not as zero).",
+                               column=channel.source_column, example=f"row {number}: {value:g}")
+                    reject(number, channel.source_column, raw.get(channel.source_column), "OUT_OF_RANGE",
+                           "not a possible soiling loss; stored as missing, not as zero")
+                    row.values[spec.column] = None
+                    continue
             if spec.minimum is not None and converted < spec.minimum:
                 channel.rejected += 1
                 values_rejected += 1
@@ -420,6 +624,9 @@ def validate_table(
                      f"Values of '{channel.source_column}' below {spec.minimum:g} {spec.unit} were rejected and stored as missing."),
                     column=channel.source_column, example=f"row {number}: {value:g}",
                 )
+                reject(number, channel.source_column, raw.get(channel.source_column),
+                       "NEGATIVE_VALUE" if negative else "OUT_OF_RANGE",
+                       ("negative value" if negative else f"below {spec.minimum:g} {spec.unit}") + "; stored as missing, not as zero")
                 row.values[spec.column] = None
                 continue
             if spec.maximum is not None and converted > spec.maximum:
@@ -429,12 +636,17 @@ def validate_table(
                            f"Values of '{channel.source_column}' above {spec.maximum:g} {spec.unit} are outside the "
                            "valid range of the sensor; they were rejected and stored as missing.",
                            column=channel.source_column, example=f"row {number}: {value:g}")
+                reject(number, channel.source_column, raw.get(channel.source_column), "OUT_OF_RANGE",
+                       f"above {spec.maximum:g} {spec.unit}; stored as missing")
                 row.values[spec.column] = None
                 continue
-            channel.seen(converted)
+            if not channel.irradiance:
+                channel.seen(converted)
             row.values[spec.column] = converted
         if device is not None and device not in known_devices:
             unknown_devices[device] += 1
+            reject(number, metadata.device_column, device, "UNKNOWN_DEVICE",
+                   "the whole row was ignored: the device is not registered for this plant")
             continue
         rows.append(row)
 
@@ -475,6 +687,27 @@ def validate_table(
                    f"{inferred} minutes apart.")
         return report(None, timezone=zone_name, rows_rejected=rejected_rows, values_rejected=values_rejected)
 
+    # ------------------------------------------------------------------ irradiance -> irradiation
+    interval_hours = 24.0 if interval == DAILY_MINUTES else interval / 60.0
+    for channel in mapped.values():
+        if not channel.irradiance:
+            continue
+        column = METRIC_SPECS[channel.metric].column
+        for r in rows:
+            watts = r.values.get(column)
+            if watts is None:
+                continue
+            irradiation = watts * interval_hours / 1000.0
+            r.values[column] = irradiation
+            channel.seen(irradiation)
+        issues.add(
+            "IRRADIANCE_CONVERTED", IssueSeverity.WARNING,
+            f"Column '{channel.source_column}' holds irradiance (W/m2). It was read as the mean over each "
+            f"interval and converted to irradiation: kWh/m2 = W/m2 x {interval_hours:g} h / 1000"
+            + (" (for daily rows: the mean over the 24 hours of the day)." if interval == DAILY_MINUTES else "."),
+            column=channel.source_column,
+        )
+
     # ------------------------------------------------------------------ alignment
     aligned: list[_Row] = []
     for r in rows:
@@ -491,6 +724,8 @@ def validate_table(
                        ("Daily rows must start at local midnight; other rows were rejected." if interval == DAILY_MINUTES
                         else f"Rows whose start is not on the {interval}-minute grid were rejected."),
                        column=metadata.timestamp_column, example=f"row {r.number}: {local.isoformat()}")
+            reject(r.number, metadata.timestamp_column, local.isoformat(), "MISALIGNED_TIMESTAMP",
+                   "the whole row was rejected: its start is not on the interval grid")
 
     # ------------------------------------------------------------------ duplicates
     by_key: dict[tuple[str | None, datetime], list[_Row]] = {}
@@ -501,7 +736,8 @@ def validate_table(
         if len(group) == 1:
             unique.append(group[0])
             continue
-        if all(g.values == group[0].values for g in group[1:]):
+        if all(g.values == group[0].values and g.event == group[0].event and g.cleaned == group[0].cleaned
+               for g in group[1:]):
             unique.append(group[0])
             issues.add("DUPLICATE_ROWS", IssueSeverity.WARNING,
                        "Identical duplicate rows were found; one copy was kept.",
@@ -514,6 +750,9 @@ def validate_table(
                        "between conflicting values.",
                        example=f"rows {', '.join(str(g.number) for g in group)} ({moment.astimezone(zone).isoformat()})",
                        count=len(group))
+            for g in group:
+                reject(g.number, metadata.timestamp_column, moment.astimezone(zone).isoformat(), "CONFLICTING_DUPLICATES",
+                       "the whole row was rejected: another row has the same timestamp and different values")
     unique.sort(key=lambda r: (r.device or "", r.start_utc))
     plant_rows = [r for r in unique if r.device is None]
     device_rows = [r for r in unique if r.device is not None]
@@ -606,6 +845,84 @@ def validate_table(
                        f"{missing_intervals} interval(s) between the first and last timestamp have no row. "
                        "They remain missing; nothing is interpolated.", count=missing_intervals)
 
+    # ------------------------------------------------------------------ events
+    event_records: list[EvidenceRecord] = []
+    event_summaries: list[EventSummary] = []
+    if events is not None and (cleaning_column is not None or event_column is not None):
+        step = timedelta(minutes=interval)
+        last_start = max(all_starts)
+
+        def add_event(kind: EvidenceType, group: list[_Row], text: str, column: str, prefix: str) -> None:
+            first_row, last_row = group[0], group[-1]
+            open_at_end = kind is not EvidenceType.CLEANING_EVENT and last_row.start_utc >= last_start
+            reference = f"{prefix}-{len(event_records) + 1:03d}"
+            where = f"row {first_row.number}" if len(group) == 1 else f"rows {first_row.number} to {last_row.number}"
+            description = (
+                f"Cleaning marked in column '{column}' of the imported file ({where})." if prefix == "F-CLEAN"
+                else f"{text[:300]} - from column '{column}' of the imported file ({where})."
+            )
+            event_records.append(
+                EvidenceRecord(
+                    reference=reference, evidence_type=kind, observed_start=first_row.start_utc,
+                    # An event still marked on the last row is not closed as far as the file tells.
+                    observed_end=None if open_at_end else last_row.start_utc,
+                    tag=events.tag(column), description=description, device_code=first_row.device,
+                )
+            )
+            event_summaries.append(
+                EventSummary(
+                    reference=reference, evidence_type=kind, first_day=first_row.start_utc.astimezone(zone).date(),
+                    last_day=last_row.start_utc.astimezone(zone).date(), intervals=len(group), open_at_end=open_at_end,
+                    text="cleaning" if prefix == "F-CLEAN" else text[:300], device_code=first_row.device,
+                    provenance=events.tag(column).label,
+                )
+            )
+
+        if cleaning_column is not None:
+            cleaned_days: set[date] = set()
+            for r in sorted((r for r in unique if r.cleaned), key=lambda r: r.start_utc):
+                day = r.start_utc.astimezone(zone).date()
+                if day not in cleaned_days:  # one record per local day, whatever the interval
+                    cleaned_days.add(day)
+                    add_event(EvidenceType.CLEANING_EVENT, [r], "cleaning", cleaning_column, "F-CLEAN")
+        if event_column is not None:
+            marked = sorted((r for r in unique if r.event), key=lambda r: (r.device or "", r.event or "", r.start_utc))
+            streaks: list[list[_Row]] = []
+            for r in marked:
+                previous = streaks[-1][-1] if streaks else None
+                if (previous is not None and previous.device == r.device and previous.event == r.event
+                        and r.start_utc - previous.start_utc <= step + timedelta(hours=1)):  # +1 h: daily rows across a clock change
+                    streaks[-1].append(r)
+                else:
+                    streaks.append([r])
+            streaks.sort(key=lambda streak: streak[0].start_utc)
+            if len(streaks) + len(event_records) > MAX_EVENTS:
+                issues.add("TOO_MANY_EVENTS", IssueSeverity.ERROR,
+                           f"Column '{event_column}' would produce {len(streaks):,} separate events, more than the "
+                           f"{MAX_EVENTS} one file may bring. The column was not read: it looks like a status column, "
+                           "not an event log.", column=event_column, count=len(streaks))
+            else:
+                for streak in streaks:
+                    wording = streak[0].event or ""
+                    kind = classify_event(wording)
+                    if kind is EvidenceType.OTHER:
+                        issues.add("EVENT_UNCLASSIFIED", IssueSeverity.WARNING,
+                                   f"Events of '{event_column}' whose text matches no word of the vocabulary are "
+                                   "recorded as 'other': they are shown with the analysis but do not enter the diagnosis.",
+                                   column=event_column, example=f"row {streak[0].number}: '{wording[:60]}'")
+                    add_event(kind, streak, wording, event_column, "F-EVT")
+        if event_records:
+            kinds = Counter(e.evidence_type.value for e in event_records)
+            listing = ", ".join(f"{n} {k.replace('_', ' ').lower()}" for k, n in sorted(kinds.items()))
+            issues.add("EVENTS_FOUND", IssueSeverity.INFO,
+                       f"{len(event_records)} event(s) were read from the event columns ({listing}). On import each becomes "
+                       f"an evidence record of this dataset, with the provenance declared for the events "
+                       f"({events.tag('').label}).", count=len(event_records))
+        if events.provenance is Provenance.UNKNOWN and event_records:
+            issues.add("PROVENANCE_NOT_DECLARED", IssueSeverity.WARNING,
+                       "No provenance declared for the events of the file: they are recorded as UNKNOWN and cannot "
+                       "serve as measured evidence.", column=event_column or cleaning_column)
+
     channels = {metric: m.declaration.to_meta(metric) for metric, m in mapped.items() if m.values > 0}
     empty = [m.source_column for m in mapped.values() if m.values == 0]
     for column in empty:
@@ -645,6 +962,7 @@ def validate_table(
         channels=channels,
         device_tag=device_tag,
         baseline=metadata.baseline if Metric.EXPECTED_ENERGY in channels else None,
+        events=event_records,
     )
     return report(
         parsed,
@@ -661,4 +979,5 @@ def validate_table(
         missing_intervals=missing_intervals,
         channels=summaries,
         devices=sorted(device_observations),
+        events=event_summaries,
     )

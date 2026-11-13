@@ -3,7 +3,7 @@
 The web interface uses the same API as any other client. Everything is under `/api/v1`.
 
 - Interactive description: `/api/docs` on a running server; machine-readable: `/api/openapi.json`.
-- The description committed in the repository is `frontend/openapi.json` (43 operations on 34 paths), written
+- The description committed in the repository is `frontend/openapi.json` (54 operations on 44 paths), written
   by `solarwise openapi`.
 
 ## Conventions
@@ -126,6 +126,7 @@ not something a client can choose: the server decides it.
 |---|---|
 | `GET /health` | Liveness and database check. No authentication |
 | `GET /meta` | Version, engine version, whether demonstration mode, sign-up, external data and the language model are on. No authentication |
+| `GET /ai/status` | Whether a language model is configured, which provider and model, on which host - never the key. See [ai.md](ai.md) |
 
 ### Accounts
 
@@ -152,11 +153,21 @@ not something a client can choose: the server decides it.
 | Method and path | Purpose |
 |---|---|
 | `GET /plants/{plant_id}/datasets` | Datasets of a plant |
-| `POST /plants/{plant_id}/datasets/validate` | Validate a file without storing it |
-| `POST /plants/{plant_id}/datasets` | Import a file |
-| `GET /datasets/{dataset_id}` | One dataset with its declarations and its validation report |
+| `POST /plants/{plant_id}/datasets/preview` | First look at a file: its first rows as they are, what each column probably is (quantity and unit, read from the header), what looks odd in the values. Deterministic; never proposes a provenance. Nothing is declared or stored |
+| `POST /plants/{plant_id}/datasets/ai-review` | Suggestions of the language model on that proposal. Checked by the server, applied by nobody but the uploader. Without a model: an empty answer that says so |
+| `POST /plants/{plant_id}/datasets/validate` | Validate a file with its declaration, without storing it: the complete report, the events it carries, exact duplicate, same file under another declaration, datasets covering the same days |
+| `POST /plants/{plant_id}/datasets/rejected-rows` | The rows that would have something rejected, as they are in the file, with the reason next to each (CSV) |
+| `POST /plants/{plant_id}/datasets` | Import a file: values, declarations, the file itself byte for byte, and its events as evidence records |
+| `GET /datasets/{dataset_id}` | One dataset with its declarations, its validation report, the file it came from and its events |
 | `GET /datasets/{dataset_id}/series` | Plant-level time series in canonical units, for charts and export |
+| `GET /datasets/{dataset_id}/file` | The file as it was uploaded, byte for byte (attachment). 404 `NO_ORIGINAL_FILE` for a dataset that did not come from an upload |
+| `GET /datasets/{dataset_id}/rejected-rows.csv` | The rows rejected when the dataset was imported, with the reasons |
+| `GET /datasets/{dataset_id}/validation-report.json` | The validation report and the declarations, as a file |
 | `DELETE /datasets/{dataset_id}` | Archive a dataset |
+
+The five `POST` operations that take a file use `multipart/form-data`: the part `file`, and - except for `preview`
+and `ai-review` - the part `metadata` with the declaration as JSON. The steps are described in
+[data-upload.md](data-upload.md).
 
 ### Evidence
 
@@ -187,6 +198,9 @@ A record is sent flat - `provenance`, `source` and `method` are plain fields:
 | `GET /analyses/{analysis_id}/report.{fmt}` | Export it: `html`, `pdf`, `csv` or `json` |
 | `GET /analyses/{analysis_id}/forecast` | Unvalidated reference projections of the performance index |
 | `POST /analyses/{analysis_id}/explanation` | Plain-language explanation (the engine's text, or a model's rephrasing when configured and accepted) |
+| `GET /analyses/{analysis_id}/insight` | The diagnostic analysis last generated for the analysis, with what wrote it and when; when none was generated, the engine's own (`stored: false`). Calls no model |
+| `POST /analyses/{analysis_id}/insight` | Generate the diagnostic analysis: a language model writes the narrative when one is configured and its answer passes every check; otherwise the engine's text. Stored with its origin. The analysis itself is never changed |
+| `GET /analyses/{analysis_id}/operational-report.{fmt}` | The diagnostic analysis as a document of eight sections: `html`, `pdf` or `json`. Calls no model |
 
 ### Advisory calculations
 
@@ -212,7 +226,8 @@ labelled `MODELLED`. A failure is reported as such: no substitute data are ever 
 | Method and path | Purpose |
 |---|---|
 | `GET /reference/decision-rules` | The decision rules, gates and thresholds |
-| `GET /reference/schema` | Data dictionary: columns, units, declarations |
+| `GET /reference/schema` | Data dictionary: columns, units accepted for each quantity, declarations, the vocabulary of event columns, the templates |
+| `GET /reference/templates/{name}` | Download an upload template or example (CSV or JSON) |
 | `GET /reference/economic` | Documented economic references |
 
 ## Limits
@@ -224,7 +239,9 @@ labelled `MODELLED`. A failure is reported as such: no substitute data are ever 
 | Failed sign-ins | 5 per account and address in 5 minutes, then 429; the account locks for 15 minutes |
 | Sign-up | 20 attempts per address in 10 minutes, refused ones included, then 429 |
 | Demonstration session | 3 plants, 8 datasets per plant, removed after 24 hours |
-| External data and model rephrasing, from demonstration sessions | 20 requests per 10 minutes per address |
+| External data, and calls to the language model, from demonstration sessions | 20 requests per 10 minutes per address; beyond it a model call is answered with the engine's text |
+| Insights kept per analysis | the 10 latest |
+| Events one file may bring | 500 |
 
 ## Keeping clients in step
 

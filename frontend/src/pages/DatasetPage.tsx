@@ -1,8 +1,9 @@
-import { Play } from "lucide-react";
+import { Download, Play } from "lucide-react";
 import { useMemo, useState } from "react";
-import type { FormEvent } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import type { FormEvent, ReactNode } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 
+import { download } from "../api/client";
 import { endpoints } from "../api/endpoints";
 import type { DatasetDetail, Plant } from "../api/types";
 import { scenarioOf } from "../api/types";
@@ -17,8 +18,8 @@ import { toApiError, useAsync } from "../hooks/useAsync";
 import { assumptionsFrom, emptyAssumptions, hasErrors, parseAssumptions, toAnalysisOptions } from "../lib/assumptions";
 import { focusFirstInvalid } from "../lib/forms";
 import type { AssumptionErrors } from "../lib/assumptions";
-import { fmtInstant, fmtInterval, fmtPct, fmtPeriod, humanize } from "../lib/format";
-import { DECISION_LABEL, canEdit } from "../lib/labels";
+import { fmtDay, fmtInstant, fmtInterval, fmtNumber, fmtPct, fmtPeriod, humanize } from "../lib/format";
+import { DECISION_LABEL, canEdit, metricLabel, unitLabel } from "../lib/labels";
 
 function SeriesCard({ datasetId }: { datasetId: number }) {
   const series = useAsync((signal) => endpoints.series(datasetId, signal), [datasetId]);
@@ -127,9 +128,61 @@ function RunCard({ dataset, plant }: { dataset: DatasetDetail; plant: Plant | nu
   );
 }
 
+/** The column of the uploaded file a quantity was read from, when the declaration names one. */
+function sourceColumn(dataset: DatasetDetail, metric: string): string | null {
+  const channels = dataset.declared_metadata.channels as Record<string, { column: string | null } | undefined> | null;
+  return channels?.[metric]?.column ?? null;
+}
+
+/** The file exactly as it was uploaded, the rows rejected at import, and the validation report. */
+function Downloads({ dataset }: { dataset: DatasetDetail }) {
+  const [busy, setBusy] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const original = dataset.original_file;
+
+  async function save(key: string, path: string, name: string) {
+    setBusy(key);
+    setError(null);
+    try {
+      await download(path, name);
+    } catch (cause) {
+      setError(toApiError(cause));
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  return (
+    <div className="no-print">
+      <div role="group" aria-label="Download what was imported" className="flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 text-sm text-ink-600"><Download className="size-4" aria-hidden /> Download</span>
+        <Button size="sm" busy={busy === "file"} disabled={busy !== null || original === null}
+                onClick={() => void save("file", `/datasets/${dataset.id}/file`, original?.file_name || `dataset-${dataset.id}`)}>
+          The file as uploaded
+        </Button>
+        <Button size="sm" busy={busy === "rejected"} disabled={busy !== null || original === null || original.rejections === 0}
+                onClick={() => void save("rejected", `/datasets/${dataset.id}/rejected-rows.csv`, `rejected-rows-dataset-${dataset.id}.csv`)}>
+          Rejected rows (CSV){original && original.rejections > 0 ? ` · ${fmtNumber(original.rejections)}` : ""}
+        </Button>
+        <Button size="sm" busy={busy === "report"} disabled={busy !== null}
+                onClick={() => void save("report", `/datasets/${dataset.id}/validation-report.json`, `validation-report-dataset-${dataset.id}.json`)}>
+          Validation report (JSON)
+        </Button>
+      </div>
+      {original === null && (
+        <p className="mt-2 text-xs text-ink-500">This dataset did not come from an uploaded file, so there is no file to give back.</p>
+      )}
+      {error && <div className="mt-2"><ErrorNote error={error} /></div>}
+    </div>
+  );
+}
+
 export default function DatasetPage() {
   const datasetId = Number(useParams().datasetId);
   const navigate = useNavigate();
+  const location = useLocation();
+  // Set by the upload page when the dataset was imported but its first analysis could not be run.
+  const analysisError = (location.state as { analysisError?: string } | null)?.analysisError ?? null;
   const dataset = useAsync((signal) => endpoints.dataset(datasetId, signal), [datasetId]);
   const plantId = dataset.data?.plant_id ?? null;
   const plant = useAsync((signal) => (plantId === null ? Promise.resolve(null) : endpoints.plant(plantId, signal)), [plantId]);
@@ -169,6 +222,11 @@ export default function DatasetPage() {
         actions={editable && !data.is_synthetic ? <Button variant="danger" size="sm" onClick={archive}>Archive</Button> : undefined}
       />
       {error && <ErrorNote error={error} />}
+      {analysisError && (
+        <Notice tone="warning" title="The dataset was imported; the analysis could not be run yet">
+          {analysisError}. Complete what is missing, then run the analysis from this page.
+        </Notice>
+      )}
       {data.disclaimer && <Notice tone="simulated" title="Statement attached to this dataset">{data.disclaimer}</Notice>}
 
       {scenario && (
@@ -226,11 +284,15 @@ export default function DatasetPage() {
             {data.channels.map((channel) => (
               <tr key={channel.metric}>
                 <Td>
-                  <span className="font-medium">{humanize(channel.metric)}</span>
+                  <span className="font-medium">{metricLabel(channel.metric)}</span>
                   <span className="block text-xs text-ink-500">{channel.description}</span>
                 </Td>
-                <Td className="font-mono text-xs">{channel.column}</Td>
-                <Td className="font-mono text-xs">{channel.original_unit && channel.original_unit !== channel.unit ? `${channel.original_unit}, converted to ${channel.unit}` : channel.unit}</Td>
+                <Td className="font-mono text-xs">{sourceColumn(data, channel.metric) ?? channel.column}</Td>
+                <Td className="text-xs">
+                  {channel.original_unit && channel.original_unit.toLowerCase() !== channel.unit.toLowerCase()
+                    ? `${unitLabel(channel.original_unit)}, converted to ${unitLabel(channel.unit)}`
+                    : unitLabel(channel.unit)}
+                </Td>
                 <Td><ProvenanceBadge label={channel.provenance_label} /></Td>
                 <Td className="max-w-sm text-ink-700">
                   {channel.source || "not declared"}
@@ -250,12 +312,47 @@ export default function DatasetPage() {
               ["File", data.file_name ?? "not from a file"],
               ["Imported", fmtInstant(data.created_at)],
               ["Time zone", data.timezone],
-              ["SHA-256 of the content", <span key="sha" className="break-all font-mono text-xs">{data.content_sha256}</span>],
+              ["Kept as uploaded", data.original_file
+                ? `${fmtNumber(data.original_file.size_bytes / 1024, 0)} kB, byte for byte`
+                : "no uploaded file (demonstration scenario or fetched data)"],
+              ...(data.original_file
+                ? [["SHA-256 of the uploaded file", <span key="file-sha" className="break-all font-mono text-xs">{data.original_file.sha256}</span>] as [string, ReactNode]]
+                : []),
+              ["SHA-256 of file and declaration", <span key="sha" className="break-all font-mono text-xs">{data.content_sha256}</span>],
               ["Baseline declared", data.baseline ? `${humanize(data.baseline.method)}${data.baseline.description ? ` - ${data.baseline.description}` : ""}` : "none"],
             ]}
           />
+          <div className="mt-5 border-t border-ink-100 pt-4"><Downloads dataset={data} /></div>
         </div>
       </Card>
+
+      {data.events.length > 0 && (
+        <Card aria-labelledby="events-title">
+          <CardHeader
+            id="events-title"
+            title="Events that came with this dataset"
+            description="Cleaning marks and alarms of the file, or events of a demonstration scenario. They are evidence records of this dataset only, and they enter its analyses. A logged fault is a reason to investigate, never a reason to clean."
+          />
+          <Table>
+            <thead><tr><Th>Reference</Th><Th>Kind</Th><Th>When</Th><Th>What</Th><Th>Provenance</Th></tr></thead>
+            <tbody>
+              {data.events.map((event) => (
+                <tr key={event.id}>
+                  <Td className="font-mono text-xs">{event.record.reference}</Td>
+                  <Td className="font-medium">{humanize(event.record.evidence_type)}</Td>
+                  <Td className="whitespace-nowrap">
+                    {fmtDay(event.record.observed_start.slice(0, 10))}
+                    {event.record.observed_end && event.record.observed_end.slice(0, 10) !== event.record.observed_start.slice(0, 10)
+                      ? ` – ${fmtDay(event.record.observed_end.slice(0, 10))}` : ""}
+                  </Td>
+                  <Td className="max-w-md break-words text-ink-700">{event.record.description || "no description"}</Td>
+                  <Td><ProvenanceBadge label={event.provenance_label} /></Td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Card>
+      )}
 
       <Card aria-labelledby="validation-title">
         <CardHeader id="validation-title" title="Validation report at import" />

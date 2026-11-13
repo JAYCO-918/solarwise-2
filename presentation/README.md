@@ -59,7 +59,7 @@ Two figures come from outside, with their source on slide 2:
 - El Foulia (300 MWp, inaugurated on 26 October 2026) and the 15,000 MW planned for 2035: pv magazine France,
   28 October 2026.
 
-The test counts on slides 9 and 13 (788 and 80) are the results of the test suites on the day the slides were
+The test counts on slides 9 and 13 (1,135 and 122) are the results of the test suites on the day the slides were
 built. Run the suites again and correct the slides if you present a later version of the code.
 
 ## Changing the slides
